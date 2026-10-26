@@ -2395,7 +2395,7 @@ targets.
 Tim Hastie Tuner
 SPDX: MIT
 Used in: modules/tuner
-Notice source: https://github.com/timhastie/octatrick-modules/blob/243bcc89be87c1ad5be4ad3c6f75407ec033c1ce/LICENSE
+Notice source: https://github.com/timhastie/octatrick-modules/blob/fd18f5530989be348e6aa4c6e38f93beba555e6d/LICENSE
 
 MIT License
 
