@@ -92,3 +92,24 @@ The open window/input layer retains callbacks into module memory. No safe hot-re
 Untested on physical MKI or MKII hardware for this integration. Current code/data/padding, loader overhead, maximum stack, frame-copy cost, UI detector cost and worst-case load are unmeasured. Historical upstream results are not substituted for current qualification.
 
 Before exact-current-source qualification, build and identify the final source commit and artifact, then collect the actual device/model, test configuration and observed results. The hardware sheet covers UP-first entry, a known 440 Hz tone through the selected THRU track, note/octave/cents/needle response, all closure routes and ordinary tempo gestures. The real catalogue-generation diagnostics must be mapped to those collection items or the necessary software build/evidence work; this document does not pre-fill them as passes or waivers.
+
+## ORDER073 local-check checkpoint — 26 October 2026
+
+**PARTIAL.** These results checked source `87f2be3c04bb232ee3ed3fa935b4b61a98177739` before this documentation appendix. [local-checks-order-073.json](evidence/local-checks-order-073.json) records each completed leaf, its full receipt identity and source pin. Historical evidence above is unchanged.
+
+| Leaf | Result | Boundary |
+| --- | --- | --- |
+| D01 Docker source packages | FAIL | ours; exit 125; owned container absent |
+| L03 Module catalogue qualification | FAIL | qualification; exit 1 |
+| L06 Compatibility pairs | PASS | exit 0 |
+| L07 Changelog | FAIL | ours; missing prepared input, exit 1 |
+| L14 Vitest | NOT_RUN | Pending setup decision |
+| L16 Bundle | NOT_RUN | Pending setup decision |
+
+The pair table was generated once successfully and committed as `87f2be3c04bb232ee3ed3fa935b4b61a98177739`; L06 then passed. L03 still fails publication qualification. L07 remains **ours**, because ignored preparation inputs are missing; it is not a qualification-only refusal.
+
+Both D01 failures are ours; the owned processes were reaped, stream drains completed and container cleanup recorded absence. No successful source-package build is claimed.
+
+The private dependency copies omitted ignored prepared catalogue/changelog inputs and `public/module-media`. The first draft media generation failed once with exit 1 before any media was produced; its exact error was not retained. Source review found that generation lacked an approved base reference, and local `origin/main` metadata has since been restored to `4e2226f1be6347f74d51a0d5b99ee572ba3a82bb` without contacting a remote. That correction does not turn the failed attempt into a pass. The media/setup decision remains unresolved, so L14 and L16 are **NOT_RUN**.
+
+Canonical firmware is unchanged. No USB lifecycle change, emulator session, physical-device test, hardware qualification, cycle measurement or memory-bound measurement is claimed by this checkpoint.
