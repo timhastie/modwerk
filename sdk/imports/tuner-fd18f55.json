@@ -3,7 +3,7 @@
   "repository": "https://github.com/timhastie/octatrick-modules",
   "revision": "fd18f5530989be348e6aa4c6e38f93beba555e6d",
   "moduleVersion": "0.1.0-experimental",
-  "root": "sdk/drafts/tuner",
+  "root": "sdk/octabam/modules/tuner",
   "modules": [
     "tuner"
   ],
@@ -17,7 +17,7 @@
     "LICENSE is copied unchanged from the same repository root. Local documentation and the adapter do not inherit upstream hardware qualification.",
     "Historical captures and build evidence remain attributed to the prior v2.19/card-sdk integration; no build, test, generator or runtime was run for this re-vendor."
   ],
-  "status": "Unqualified card-only v2.20 draft rebased onto Modwerk 4e2226f1be6347f74d51a0d5b99ee572ba3a82bb. Current-source build and checks are pending; all earlier build/capture evidence remains historical.",
+  "status": "Unqualified card-only v2.20 production proposal, based on draft 5a56f1f8d4c1c426c07195c26e552c677a8c44ac and main 4e2226f1be6347f74d51a0d5b99ee572ba3a82bb. Current-source checks and catalogue generation are pending. All earlier build and capture evidence remains historical.",
   "authorPin": {
     "repository": "https://github.com/timhastie/octatrick-modules",
     "revision": "fd18f5530989be348e6aa4c6e38f93beba555e6d"
