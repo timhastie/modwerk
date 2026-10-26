@@ -1,6 +1,6 @@
 # Tuner
 
-Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged as an unqualified Modwerk draft from the exact v2.19 source.
+Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged as an unqualified Modwerk draft from the exact v2.20 source.
 
 ## Overview
 
@@ -8,7 +8,7 @@ Hold **UP first, then press TEMPO** to open a pitch readout for the selected aud
 
 **Card builds only: the base has no removal refusal for ordinary modules.** USB support is optional future work; the earlier admission proposal is retained in [evidence/usb-admission.md](evidence/usb-admission.md), not implemented or required for this card-only draft.
 
-The preserved native candidate builds and has seven reviewed emulator UI captures. It was **not rebuilt from current main or the new guard wrapper**. Exact-current-source build, hardware, live pitch, timing and resource qualification remain pending. [TESTING.md](TESTING.md) separates those gaps from the observed window behavior.
+The preserved v2.19/card-sdk candidate has a successful historical build and seven reviewed emulator UI captures. It was **not rebuilt from this v2.20 source or current main**. Exact-current-source build, hardware, live pitch, timing and resource qualification remain pending. [TESTING.md](TESTING.md) separates those gaps from the observed window behavior.
 
 ## Controls
 
@@ -67,6 +67,6 @@ Current code/data/padding, loader overhead, maximum stack, worst-case cycles, pi
 
 ## Authorship and licences
 
-Tuner is by **Tim Hastie (@timhastie)**, from `timhastie/octatrick-modules` tag `v2.19`, commit `243bcc89be87c1ad5be4ad3c6f75407ec033c1ce`. The three files in `upstream/` are unchanged. The local wrapper preserves the upstream runtime/source declarations and replaces the three detour expectations with verified Modwerk-form hash guards; [guard provenance](evidence/guard-provenance.json) records that adapter change. The preserved card image predates it.
+Tuner is by **Tim Hastie (@timhastie)**, from `timhastie/octatrick-modules` tag `v2.20`, commit `fd18f5530989be348e6aa4c6e38f93beba555e6d`. All four files in `upstream/` are unchanged. The local wrapper preserves the upstream runtime/source declarations and replaces the three detour expectations with verified Modwerk-form hash guards; [guard provenance](evidence/guard-provenance.json) records that adapter change. The preserved card image predates both that adapter and this source update. The immutable upstream reader needs the build working directory's local MAIN section before manifest import; the Modwerk wrapper then replaces the three expectations with lazy digest guards. No current-source build or check was run during the re-vendor.
 
 The upstream MIT terms remain in [LICENSE](LICENSE). Octabam supplies the native platform. Documentary screenshots retain the underlying interface rights; firmware is not included. No hardware endorsement or affiliation is asserted.

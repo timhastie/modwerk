@@ -3,12 +3,20 @@
 ## Identity and qualification boundary
 
 - Draft module: `tuner`, `0.1.0-experimental`, under `sdk/drafts/tuner`.
-- Author source: `timhastie/octatrick-modules` v2.19, commit `243bcc89be87c1ad5be4ad3c6f75407ec033c1ce`; the three upstream files remain unchanged.
-- Current documentation/draft base: Modwerk `98f17ed6e19ca6a81f12372b9ea3b435c736443d`.
+- Current author source: `timhastie/octatrick-modules` v2.20, commit `fd18f5530989be348e6aa4c6e38f93beba555e6d`; all four upstream files, including the stock-guard reader, are copied unchanged.
+- Current documentation/draft base: Modwerk `4e2226f1be6347f74d51a0d5b99ee572ba3a82bb`.
 - Preserved native candidate build baseline: `916ce01bbfc60f3aedd7156066354fedb521e6f4`, private `relay-tuner` facade, Tuner only, stock FX and static stock DSP; no USB base.
-- The delivered BIN/bus have **not** been rebuilt from current main, the new hash-guard wrapper, or the forthcoming draft/promotion commit. They are historical candidate evidence, not exact-current-commit qualification.
+- The delivered BIN/bus have **not** been rebuilt from this v2.20 source, current main, the hash-guard wrapper, or the new draft/promotion commit. They are historical candidate evidence, not exact-current-commit qualification.
 
 The wrapper now preserves the upstream runtime/source declarations while replacing its three detour expectations with verified Modwerk-form guards. [guard-provenance.json](evidence/guard-provenance.json) records the adapter change. It is not a rebuilt-image result. No hardware, resource, timing or publication qualification object is fabricated.
+
+## Source update, not a test result
+
+The v2.20 source copy is recorded in [source-revendor.json](evidence/source-revendor.json). No build, manifest import, test, generator or runtime was run during this update. The immutable upstream reader requires `out/raw/section_3_MAIN_OS.bin` relative to the build working directory when its manifest is imported. The wrapper preserves Modwerk-form digest guards.
+
+Source inspection of `sdk/tests/test_requested_imports.py:39–55` shows that the named lazy-fingerprint check only parses paths listed in the separate `octabam-363861e.json` import record, which does not select Tuner. No predicted two-argument rejection by that named check is claimed; no test was executed. This does not establish that other no-firmware manifest-import paths accept the new eager upstream reader.
+
+All build, compatibility, USB-source and capture records below remain historical. In particular, the seven PNGs belong to the v2.19/card-sdk image with bus hash `91bf159e…`, not this source update.
 
 ## Observed outcomes
 
@@ -22,7 +30,7 @@ The wrapper now preserves the upstream runtime/source declarations while replaci
 | Candidate capture with substituted tooling | Seven images captured and visually reviewed; window navigation observed. No live pitch, audio or needle-response qualification. |
 | Standalone 2.19 reference | Exited 1 before UI commands; zero screenshots, no paired comparison. Cause unresolved. |
 | Earlier draft check | Overall exit 1 in application tests; not a successful readiness gate. |
-| Current promotion/catalogue run | Pending the separately ordered single attempt; record its actual diagnostics without inventing qualification. |
+| Earlier promotion/catalogue run | The prior 7b33f608 promotion failed its one catalogue attempt because qualification was missing. No catalogue run has been made for this v2.20 update. |
 
 ## Preserved native build
 

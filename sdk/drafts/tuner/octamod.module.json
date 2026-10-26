@@ -7,12 +7,12 @@
   "category": "system",
   "source": {
     "repository": "https://github.com/timhastie/octatrick-modules",
-    "revision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce",
+    "revision": "fd18f5530989be348e6aa4c6e38f93beba555e6d",
     "path": "tuner"
   },
   "build": {
     "status": "pending",
-    "reason": "The preserved private native card candidate built and has reviewed emulator UI captures. It was not rebuilt from current main or the new guard wrapper; exact-build release and hardware qualification remain pending."
+    "reason": "Current source is v2.20 at fd18f553, rebased onto current main. No current-source build or checks have run; preserved UI and build records belong to the earlier v2.19 integration."
   },
   "author": {
     "github": "timhastie",
@@ -26,7 +26,7 @@
   "presentation": {
     "label": "Pitch readout on UP + TEMPO",
     "family": "Track utilities",
-    "summary": "Hold UP and press TEMPO to read the selected audio track’s note, octave, cents and frequency in a tuner window.",
+    "summary": "Hold UP and press TEMPO to read the selected audio track\u2019s note, octave, cents and frequency in a tuner window.",
     "overview": "Tuner reads the selected audio track after its effects and before its fader. Its note, octave, cents, frequency and needle are designed to help tune a steady pitched sound. It uses no effect slot. This draft offers card builds only; the captured older candidate demonstrates window navigation, not live pitch or hardware qualification.",
     "highlights": [
       "UP then TEMPO opens and closes the tuner window.",
@@ -65,7 +65,7 @@
       "key:UP+TEMPO"
     ],
     "limitations": [
-      "The preserved native candidate built and its seven emulator screenshots were reviewed. It was not rebuilt from the current draft or hash-guard wrapper; hardware and exact-build qualification remain pending.",
+      "Current v2.20 source is unbuilt and untested. The preserved seven UI screenshots and prior native build belong to the older v2.19/card-sdk image and do not qualify this revision.",
       "The signal is taken after track effects and before the track fader. It is a monophonic pitch estimate; complex, noisy or inharmonic sounds can wander or select an octave.",
       "Below the signal or confidence threshold, the last valid reading is held. A held reading does not indicate the current pitch.",
       "A4 is fixed at 440 Hz. No calibration control, parameter locks, LFO destination or saved project setting is added.",
@@ -119,9 +119,9 @@
   },
   "tests": {
     "report": "TESTING.md",
-    "summary": "Preserved native candidate and declaration compatibility passed; seven candidate UI captures reviewed with substituted tooling. Reference capture failed before commands. Current-draft exact-build, hardware, timing and resource qualification are pending.",
+    "summary": "Current v2.20 source update is unbuilt and untested. Historical v2.19 card-sdk build and UI observations remain separately attributed; hardware, timing and resource qualification remain pending.",
     "hardwareStatus": "untested",
-    "evidenceRevision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce",
+    "evidenceRevision": "fd18f5530989be348e6aa4c6e38f93beba555e6d",
     "gates": []
   },
   "license": {
@@ -144,7 +144,7 @@
         "firmware": "1.40C",
         "moduleVersion": "0.1.0-experimental",
         "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
-        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Historical v2.19/card-sdk capture; not rebuilt from current v2.20 source or main 4e2226f1. No live pitch/audio qualification."
       }
     },
     {
@@ -161,7 +161,7 @@
         "firmware": "1.40C",
         "moduleVersion": "0.1.0-experimental",
         "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
-        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Historical v2.19/card-sdk capture; not rebuilt from current v2.20 source or main 4e2226f1. No live pitch/audio qualification."
       }
     },
     {
@@ -178,7 +178,7 @@
         "firmware": "1.40C",
         "moduleVersion": "0.1.0-experimental",
         "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
-        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Historical v2.19/card-sdk capture; not rebuilt from current v2.20 source or main 4e2226f1. No live pitch/audio qualification."
       }
     },
     {
@@ -195,7 +195,7 @@
         "firmware": "1.40C",
         "moduleVersion": "0.1.0-experimental",
         "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
-        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Historical v2.19/card-sdk capture; not rebuilt from current v2.20 source or main 4e2226f1. No live pitch/audio qualification."
       }
     },
     {
@@ -212,7 +212,7 @@
         "firmware": "1.40C",
         "moduleVersion": "0.1.0-experimental",
         "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
-        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Historical v2.19/card-sdk capture; not rebuilt from current v2.20 source or main 4e2226f1. No live pitch/audio qualification."
       }
     }
   ]

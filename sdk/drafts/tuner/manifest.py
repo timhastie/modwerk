@@ -1,9 +1,11 @@
 """Tuner: retain the author's source, with local credits and stock guards.
 
-The upstream directory is an immutable copy of Tim Hastie's v2.19 Tuner.
+The upstream directory is an immutable copy of Tim Hastie's v2.20 Tuner.
 Its manifest derives its linked source path from its own file location, so
 the native card build resolves that same source. The local wrapper replaces
 only detour expectations with Modwerk guards; USB loading is unsupported.
+The unchanged upstream reader requires the build working directory to contain
+the local MAIN section before this wrapper can replace the expectations.
 Qualification is recorded in TESTING.md.
 """
 import dataclasses
