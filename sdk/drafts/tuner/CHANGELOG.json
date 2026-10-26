@@ -1,0 +1,12 @@
+[
+  {
+    "version": "0.1.0-experimental",
+    "date": "2026-10-25",
+    "changes": [
+      "Repackages Tim Hastie’s Tuner with its original pitch detector and UP + TEMPO gesture.",
+      "Read the selected audio track’s note, cents and frequency without using an effect slot.",
+      "Card builds only for this first draft.",
+      "Known issue: this Modwerk integration has not yet been qualified on hardware."
+    ]
+  }
+]

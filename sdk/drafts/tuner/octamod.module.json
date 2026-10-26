@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 2,
+  "id": "tuner",
+  "key": "TUNER",
+  "name": "Tuner",
+  "version": "0.1.0-experimental",
+  "category": "system",
+  "source": {
+    "repository": "https://github.com/timhastie/octatrick-modules",
+    "revision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce",
+    "path": "tuner"
+  },
+  "build": {
+    "status": "pending",
+    "reason": "The preserved private native card candidate built and has reviewed emulator UI captures. It was not rebuilt from current main or the new guard wrapper; exact-build release and hardware qualification remain pending."
+  },
+  "author": {
+    "github": "timhastie",
+    "name": "Tim Hastie",
+    "credits": [
+      "Tim Hastie: Tuner design, ColdFire implementation and upstream documentation; MIT.",
+      "Octabam supplies the native module platform. Local packaging and documentation retain the upstream source unchanged."
+    ]
+  },
+  "nativeManifest": "manifest.py",
+  "presentation": {
+    "label": "Pitch readout on UP + TEMPO",
+    "family": "Track utilities",
+    "summary": "Hold UP and press TEMPO to read the selected audio track’s note, octave, cents and frequency in a tuner window.",
+    "overview": "Tuner reads the selected audio track after its effects and before its fader. Its note, octave, cents, frequency and needle are designed to help tune a steady pitched sound. It uses no effect slot. This draft offers card builds only; the captured older candidate demonstrates window navigation, not live pitch or hardware qualification.",
+    "highlights": [
+      "UP then TEMPO opens and closes the tuner window.",
+      "Follows the selected audio track; no effect slot or parameter assignment.",
+      "Fixed A4 = 440 Hz, with a cents needle and frequency readout.",
+      "Source behavior retains the last reading when the signal is too quiet or uncertain."
+    ],
+    "usage": [
+      "Include Tuner in a reviewed build and select an audio track with a steady pitched sound. No effect slot is required.",
+      "Hold UP first, then press TEMPO. The tuner window shows the selected track, note, octave, cents and frequency.",
+      "Adjust the sound at its source while watching the needle. Near the centre the measured pitch approaches the displayed note, with A4 fixed at 440 Hz.",
+      "Press TEMPO, YES or NO to close the window. Hold UP and press TEMPO again to toggle it back on."
+    ]
+  },
+  "access": {
+    "location": "Front panel: hold UP first, then press TEMPO.",
+    "steps": [
+      "Include Tuner in a reviewed build and select an audio track with a steady pitched sound. No effect slot is required.",
+      "Hold UP first, then press TEMPO. The tuner window shows the selected track, note, octave, cents and frequency.",
+      "Adjust the sound at its source while watching the needle. Near the centre the measured pitch approaches the displayed note, with A4 fixed at 440 Hz.",
+      "Press TEMPO, YES or NO to close the window. Hold UP and press TEMPO again to toggle it back on."
+    ],
+    "screenshots": [
+      "media/01-track-page.png",
+      "media/02-tuner-open.png",
+      "media/05-closed-tempo.png"
+    ]
+  },
+  "controls": [],
+  "compatibility": {
+    "firmware": "1.40C",
+    "effectId": null,
+    "location": "Audio tracks",
+    "conflicts": [],
+    "uiClaims": [
+      "key:UP+TEMPO"
+    ],
+    "limitations": [
+      "The preserved native candidate built and its seven emulator screenshots were reviewed. It was not rebuilt from the current draft or hash-guard wrapper; hardware and exact-build qualification remain pending.",
+      "The signal is taken after track effects and before the track fader. It is a monophonic pitch estimate; complex, noisy or inharmonic sounds can wander or select an octave.",
+      "Below the signal or confidence threshold, the last valid reading is held. A held reading does not indicate the current pitch.",
+      "A4 is fixed at 440 Hz. No calibration control, parameter locks, LFO destination or saved project setting is added.",
+      "Hold UP before TEMPO. Pressing TEMPO first follows the ordinary tempo-window path.",
+      "Card builds only: the base has no removal refusal for ordinary modules.",
+      "The standalone 2.19 reference exited before capture, so paired visual equivalence is unavailable. No live pitch, needle response or audio result is claimed.",
+      "The retained older emulator fault is in its DSP write callback; the triggering image property remains unresolved."
+    ]
+  },
+  "resources": {
+    "recorded": "26 October 2026; current hardware timing and resource qualification remain unmeasured",
+    "storage": {
+      "label": "ColdFire code and working memory",
+      "display": "Current allocation unmeasured",
+      "value": null,
+      "unit": "bytes",
+      "method": "unmeasured",
+      "conditions": "One global tuner instance with a sample ring and detector workspace in DRAM. Exact current code, data, stack, loader and alignment totals require the named build.",
+      "source": "TESTING.md"
+    },
+    "processing": {
+      "label": "ColdFire pitch analysis",
+      "display": "Current worst-case cycles unmeasured",
+      "value": null,
+      "unit": "cycles/event",
+      "method": "unmeasured",
+      "conditions": "While open, the frame hook copies selected-track samples and the UI task analyses them approximately seven times a second. No detector runs in the interrupt. Current chip timing and maximum-load behavior remain unmeasured.",
+      "source": "TESTING.md"
+    },
+    "impact": {
+      "conditions": "One open tuner on the selected audio track. Estimates describe source structure, not measured hardware headroom.",
+      "cpu": {
+        "level": "moderate",
+        "basis": "source-estimate",
+        "rationale": "A bounded sample-copy hook runs each audio block while open; the UI task periodically performs autocorrelation and pitch refinement. Current worst-case cycles and scheduling impact are unmeasured.",
+        "source": "upstream/tuner.s"
+      },
+      "dsp": {
+        "level": "minimal",
+        "basis": "source-estimate",
+        "rationale": "No DSP program, effect slot or DSP state is added. The tuner reads the existing audio read-back arena.",
+        "source": "upstream/manifest.py"
+      },
+      "memory": {
+        "level": "low",
+        "basis": "source-estimate",
+        "rationale": "One global sample ring and detector workspace; no per-track allocation or new sample storage. Current linked allocation, loader overhead and stack maximum are unmeasured.",
+        "source": "upstream/tuner.s"
+      }
+    }
+  },
+  "tests": {
+    "report": "TESTING.md",
+    "summary": "Preserved native candidate and declaration compatibility passed; seven candidate UI captures reviewed with substituted tooling. Reference capture failed before commands. Current-draft exact-build, hardware, timing and resource qualification are pending.",
+    "hardwareStatus": "untested",
+    "evidenceRevision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce",
+    "gates": []
+  },
+  "license": {
+    "spdx": "MIT",
+    "file": "LICENSE",
+    "declaration": "The exact upstream source and its MIT terms are retained. The licence covers authored source and documentation; it grants no rights to Elektron firmware and asserts no hardware qualification."
+  },
+  "media": [
+    {
+      "path": "media/01-track-page.png",
+      "captureType": "emulator",
+      "caption": "Select an audio track before opening Tuner. This page is the starting point; hold UP first and then press TEMPO to open the tuner window.",
+      "alt": "Track source-parameter page with six dial graphics and no modal window.",
+      "credit": "Tuner by Tim Hastie; documentary emulator capture; underlying interface by Elektron Music Machines.",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "Track source page",
+        "shows": "location",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+      }
+    },
+    {
+      "path": "media/02-tuner-open.png",
+      "captureType": "emulator",
+      "caption": "Hold UP first, then press TEMPO to open Tuner for the selected track. This stopped capture has no populated pitch reading; use a steady pitched sound for the hardware check, whose result remains pending.",
+      "alt": "Tuner overlay with a pitch ruler and center mark; the pitch readout is unpopulated.",
+      "credit": "Tuner by Tim Hastie; documentary emulator capture; underlying interface by Elektron Music Machines.",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "Tuner window",
+        "shows": "location-and-controls",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+      }
+    },
+    {
+      "path": "media/05-closed-tempo.png",
+      "captureType": "emulator",
+      "caption": "Press TEMPO while Tuner is open to return to the track page. YES and NO provide alternate close paths, recorded in the supplementary captures.",
+      "alt": "Track source-parameter page with the tuner overlay absent.",
+      "credit": "Tuner by Tim Hastie; documentary emulator capture; underlying interface by Elektron Music Machines.",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "Track source page after closure",
+        "shows": "location",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+      }
+    },
+    {
+      "path": "media/06-normal-tempo.png",
+      "captureType": "emulator",
+      "caption": "With Tuner closed and UP released, press TEMPO alone. The ordinary tempo dialog remains available; this picture does not test timing or audio.",
+      "alt": "Ordinary tempo popup over the track page, without a tuner overlay.",
+      "credit": "Tuner by Tim Hastie; documentary emulator capture; underlying interface by Elektron Music Machines.",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "Ordinary tempo dialog",
+        "shows": "location",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+      }
+    },
+    {
+      "path": "media/07-func-tempo.png",
+      "captureType": "emulator",
+      "caption": "With Tuner closed, use FUNC + TEMPO for the ordinary tapping gesture. Record the tempo before and after a hardware check because tapping can change it.",
+      "alt": "Centered tempo-tapping dialog with four beat-indicator boxes over the track page.",
+      "credit": "Tuner by Tim Hastie; documentary emulator capture; underlying interface by Elektron Music Machines.",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "Tempo tapping dialog",
+        "shows": "location",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
+        "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Not rebuilt from current draft main 98f17ed6 or the new guard wrapper; no live pitch/audio qualification."
+      }
+    }
+  ]
+}

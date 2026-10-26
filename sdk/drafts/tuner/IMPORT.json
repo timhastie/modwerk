@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "repository": "https://github.com/timhastie/octatrick-modules",
+  "revision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce",
+  "moduleVersion": "0.1.0-experimental",
+  "root": "sdk/drafts/tuner",
+  "modules": [
+    "tuner"
+  ],
+  "excluded": [
+    "Unrelated modules and repository tools",
+    "Firmware images, device/card data and generated packages"
+  ],
+  "notes": [
+    "The upstream directory contains exactly the three original Tuner files, copied byte-for-byte from v2.19.",
+    "The original manifest and source are retained under the unmodified-upstream exception. The local adapter wraps the three detours in Modwerk-form digest guards derived from the verified local OS; raw expectations are not added to the adapter. See evidence/guard-provenance.json.",
+    "LICENSE is copied unchanged from the same repository root. Local README, TESTING, metadata, thumbnail and adapter describe this port and do not inherit upstream qualification."
+  ],
+  "status": "Unqualified card-only draft. Preserved native candidate and declaration compatibility passed; seven candidate UI screenshots reviewed. Reference capture failed before commands. Exact-current-draft build, hardware, timing and resource qualification remain pending.",
+  "authorPin": {
+    "repository": "https://github.com/timhastie/octatrick-modules",
+    "revision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce"
+  },
+  "files": [
+    {
+      "path": "upstream/README.md",
+      "repository": "https://github.com/timhastie/octatrick-modules",
+      "revision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce",
+      "sourcePath": "tuner/README.md",
+      "sourceBytes": 8525,
+      "sourceGitBlob": "1f47bc29adf4cfee1874fce06c4d628c96ca2e0f",
+      "sourceSha256": "2989765c64d1f1084fadffda0c34dcf33d4d31742267b5d02c513faec4eebde2",
+      "vendoredSha256": "2989765c64d1f1084fadffda0c34dcf33d4d31742267b5d02c513faec4eebde2"
+    },
+    {
+      "path": "upstream/manifest.py",
+      "repository": "https://github.com/timhastie/octatrick-modules",
+      "revision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce",
+      "sourcePath": "tuner/manifest.py",
+      "sourceBytes": 2356,
+      "sourceGitBlob": "e3fa9aded3233b20271915f26e56e225ed9492b1",
+      "sourceSha256": "f01785aa15f62049700820d6f797f38a15e6a4ecede5939c4581559adf1d8a40",
+      "vendoredSha256": "f01785aa15f62049700820d6f797f38a15e6a4ecede5939c4581559adf1d8a40"
+    },
+    {
+      "path": "upstream/tuner.s",
+      "repository": "https://github.com/timhastie/octatrick-modules",
+      "revision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce",
+      "sourcePath": "tuner/tuner.s",
+      "sourceBytes": 30817,
+      "sourceGitBlob": "e8195a7d6cfd9f9a84498f19aed7232a8d529bcb",
+      "sourceSha256": "5239642eb3439a7838757e4e2391a0773f1aeff3fa1df010855009101a770a45",
+      "vendoredSha256": "5239642eb3439a7838757e4e2391a0773f1aeff3fa1df010855009101a770a45"
+    },
+    {
+      "path": "LICENSE",
+      "repository": "https://github.com/timhastie/octatrick-modules",
+      "revision": "243bcc89be87c1ad5be4ad3c6f75407ec033c1ce",
+      "sourcePath": "LICENSE",
+      "sourceBytes": 5068,
+      "sourceGitBlob": "abff1c76e215ecd0c0b20e46a9e71913c77942cc",
+      "sourceSha256": "9895a0c9da98720fec21e348456c9716ca81ca6438b7f046eca1fb2f456b24a7",
+      "vendoredSha256": "9895a0c9da98720fec21e348456c9716ca81ca6438b7f046eca1fb2f456b24a7"
+    }
+  ]
+}
