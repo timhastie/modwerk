@@ -113,3 +113,22 @@ Both D01 failures are ours; the owned processes were reaped, stream drains compl
 The private dependency copies omitted ignored prepared catalogue/changelog inputs and `public/module-media`. The first draft media generation failed once with exit 1 before any media was produced; its exact error was not retained. Source review found that generation lacked an approved base reference, and local `origin/main` metadata has since been restored to `4e2226f1be6347f74d51a0d5b99ee572ba3a82bb` without contacting a remote. That correction does not turn the failed attempt into a pass. The media/setup decision remains unresolved, so L14 and L16 are **NOT_RUN**.
 
 Canonical firmware is unchanged. No USB lifecycle change, emulator session, physical-device test, hardware qualification, cycle measurement or memory-bound measurement is claimed by this checkpoint.
+
+## ORDER074 local-check outcomes — 26 October 2026
+
+**PARTIAL.** Normal preparation passed. The one corrected D01 source-package build passed at `be883d845d36dba7d7bbf77f35a996c5fd3a2107`, and the development importer passed. The imported source/package identities were committed as `4d6b96025e756ca9ce941425c1f8aa30827af7c3`; this is not a new canonical firmware build or Tuner publication qualification.
+
+| Check | Recorded outcome and source |
+| --- | --- |
+| L07 changelog | FAIL at `be883d845d36dba7d7bbf77f35a996c5fd3a2107`; Tuner's existing notes are outside the generated qualified catalogue |
+| L14 Vitest | FAIL at `4d6b96025e756ca9ce941425c1f8aa30827af7c3`; 2,588 passed, 14 failed out of 2,602 |
+| L16 bundle | PASS at `4d6b96025e756ca9ce941425c1f8aa30827af7c3` |
+| Prior L03 | Qualification FAIL retained from ORDER073; not rerun |
+
+The 14 failed assertions occur in seven file records. Source-based classification identifies **13 qualification/build-readiness dependencies, one ours, and zero owner-only**; the reporter's 13 failed suite nodes are not 13 files. Qualified generated catalogue data has 31 entries while the SDK catalogue lists 32 including Tuner. Tuner remains `build.pending` and correctly absent from compiled module versions, although its authored inputs are covered by the complete source fingerprint. A successful package import or hardware evidence alone does not establish browser build readiness or resolve that mismatch.
+
+The independent failure that is ours is the Analog BD proof's stale `moduleSourceTreeSha256` binding against the newly imported package source-tree identity. It is not merely a source-commit mismatch. The proof has not been regenerated, edited or retagged; its failing assertion is preserved. L07's newly retained category is catalogue/qualification-dependent, unlike the earlier ORDER073 missing-preparation failure, which remains historical.
+
+The setup used 251 unchanged published assets copied from the successful draft media generation after catalogue and corresponding input equivalence. Tuner was excluded. No generated qualification catalogue or waiver was changed. The earlier failed generation and D01 receipts remain preserved; the corrected attempts do not erase them.
+
+Both branches remain based on main `4e2226f1be6347f74d51a0d5b99ee572ba3a82bb`, not newer main `814f6c556e6d518ba7cac77ac3cecc9f15cadf68`. [local-checks-order-074.json](evidence/local-checks-order-074.json) contains the per-leaf source pins, full receipt hashes, import binding and assertion-by-assertion analysis. This later documentation was not part of the checked commits. Canonical firmware and the runtime USB mechanism are unchanged. No new hardware, cycle, complete-memory or runtime qualification is claimed.
