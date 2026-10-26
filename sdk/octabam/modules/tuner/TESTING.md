@@ -11,6 +11,12 @@
 
 The wrapper now preserves the upstream runtime/source declarations while replacing its three detour expectations with verified Modwerk-form guards. [guard-provenance.json](evidence/guard-provenance.json) records the adapter change. It is not a rebuilt-image result. No hardware, resource, timing or publication qualification object is fabricated.
 
+## Immutable source pin after the tag update
+
+The integration intentionally retains immutable upstream commit `fd18f5530989be348e6aa4c6e38f93beba555e6d`. ORDER-069 records that the movable v2.20 tag subsequently points to `9b62d5d` (tag object `609b4a92`), a synth README-only change with identical `tuner/` content. The lead will repin all three PRs to the final tag at submission. This note does not change the vendored files or import pin.
+
+The canonical OCTAMOD79 artifact was built from promotion commit `ab3db4f570f1ad869686ad20d03fd227bb97de22`; a later documentation-only commit is not the artifact's built source. No build, test or runtime is rerun for this note.
+
 ## Source update, not a test result
 
 The v2.20 source copy is recorded in [source-revendor.json](evidence/source-revendor.json). No build, manifest import, test, generator or runtime was run during this update. The immutable upstream reader requires `out/raw/section_3_MAIN_OS.bin` relative to the build working directory when its manifest is imported. The wrapper preserves Modwerk-form digest guards.
