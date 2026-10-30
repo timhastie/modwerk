@@ -4,6 +4,19 @@ FM Synth 0.1.4-experimental is the author’s Octatrick 2.21 line (`timhastie/oc
 
 **Card builds only for now.** 0.1.4 installs with a card build. Its USB package is not built (see USB package below); the published 0.1.2 USB package stays as it is with a declared lag (`lagsBehind: 0.1.4-experimental`).
 
+## Beside Scale Quantizer: one quantizer (30 October 2026)
+
+`upstream/` re-vendored from the author's `be2810f994587abadd74b75f97183cd324c8b9e7` (local, not yet published): v2.21's engine and machine list, his quantizer with the TRACK / FOLLOW rows (`990eff8`, the source Scale Quantizer 0.1.4 carries, byte for byte) and `poly.s` exporting `sy_state` whenever the quantizer's panel transaction is assembled (no code byte changes; his remix of SYNTH MACHINE + SCALE QUANTIZER without SY DRUM did not link without it). The wrapper no longer exports `sy_state` itself; FM Synth alone still shows SCALE, ROOT and GLIDE (`pea` 3 + 3).
+
+Beside Scale Quantizer the card build keeps one quantizer: the octabam SDK's composition rule `shared_supply` (`tools/remix/machine_composition.py`, pending the owner's review; it is not on this branch) aims Scale Quantizer's declaration (28 hooks, five SEQUENCER rows) at this module's `fm_qz*` units, which assemble the same files, links none of Scale Quantizer's own units, and leaves out this module's own quantizer hooks, rows and row count. `conflicts` no longer names `quantizer`.
+
+| Image (native exporter, emulator) | Upgrade file | MAIN OS |
+| --- | --- | --- |
+| FM Synth alone (TEST6) | 483,780 B `4b779cf6545ed8dad29025d26d03e2aa5bfa1337df5f4b25ef9350aaa9aab8c3` | `c5039cffab34d45db5838eabcdcdfb6d429f6bed6880814f3d69811dbea211d1` |
+| FM Synth + Scale Quantizer | 483,804 B `d091b3c0cffc622f2cdc607d32169df1ae47caad05e0243dfcbc2a4563d47f51` | `dbf73edfb56b55537a3411862327c49d9525c5b8a829eed6e9fc460629d56ce4` |
+
+The two runtimes are byte-identical; the images differ in 108 bytes of the stock section: Scale Quantizer's seven hooks that FM Synth alone leaves stock, the SEQUENCER row count (6 -> 8) and the relocated SEQUENCER tables. Emulator (ot_emu, 30 October 2026): FM Synth alone repeats the 2.21 cut's walk exactly (the same chord, MIDI, sample-track, LFO SETUP and trig-mute results; 46 LCD screens byte-identical to TEST5's) and the first chord after power-on in PROJECT 261028 on MKI and MKII (every START 4 / 34). With Scale Quantizer: the same chords and first chord; SEQUENCER shows SCALE, ROOT, GLIDE, TRACK, FOLLOW once; a MIDI track's NOTE steps C 3 -> D 3; a FLEX trig's PTCH is snapped as it plays; FOLLOW OFF takes the FM SYNTH track (its chromatic keys play unquantized) and a MIDI track (C 3 -> C#3) out; the saved project's lines are byte-identical to 2.21's. ColdFire load in the emulator equals FM Synth alone's (playing with an FM SYNTH track at VOIC 4: 46.39 % vs 46.40 %). The media were re-captured from TEST6: all six byte-identical. Untested on hardware.
+
 ## What changed from the 2.20 cut
 
 - **The author’s 2.21.** `upstream/` re-vendored from `v2.21`: chords on the chromatic keys keep their notes with a scale however close together the keys are pressed (the author’s panel transaction, `synth/panel_transaction.inc.s` and `quantizer/panel_transaction.inc.s`, new files), the first chord after power-on in a saved project keeps its step locks, and setup values survive a power-off. 2.21’s own manifest links the PLAYBACK page as a DRAM unit and keeps the 16 bytes after the stock DELAY’s table stock, which this wrapper did for 2.20 after Jannik Aßfalg’s [#895](https://github.com/repeat98/modwerk/pull/895); the wrapper’s copy of that is gone.
