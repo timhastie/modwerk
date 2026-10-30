@@ -64,7 +64,20 @@ Not run on this build: scene locks on ATK / HOLD / REL, MIDI input, the selectio
 
 ## Modwerk checks (main `1bbc8b46`)
 
-Run at the documentation commit; the results are recorded in the next commit.
+Run on 30 October 2026 at `6b4b2d20` (the documentation commit) and, for the release-notes and package checks, at `eaaf0bb3`, in this checkout (Node 24.21.0, Python 3.13.7); the developer’s MAIN OS section in `sdk/octabam/out/raw` only for the USB package check. The failures marked *owner* need the owner’s records, as for the 2.20 cut.
+
+| Check | Result |
+| --- | --- |
+| `lint`, `typecheck`, `licenses:check`, `machines:check`, `elekloader:check`, `sdk:imports:check` | pass |
+| `modules:check` | FAILED (*owner*): “synth: owner-approved update does not cover this module version” (`sdk/synth-build-approval.json` covers 0.1.2). |
+| `modules:generate` | FAILED (*owner*): the same approval record; nothing written. |
+| `npm run check` | FAILED at `modules:check` (the row above); prepare, `licenses:check` and `machines:check` pass before it. |
+| `modules:compat -- synth` | 3 problems (above): Euclid’s copy at `0x4002b657`, `fl_io_dispatch` on the base’s job hook, POLY8’s composition record (*owner* / base). |
+| `sdk:check` | 492 tests: 19 failures, 7 errors, 26 skipped. The compat problems (16 combination subtests and `test_repository_passes`); POLY8’s composition record and the 0.1.2-era USB adapter `fm_runtime` (the 7 errors and `test_changed_quantizer_layout_is_not_silently_supplied_by_fm`); `test_experimental_release` (*owner*: the approval record’s version). `test_machine_events` and `test_synth_release`’s other tests pass. |
+| `test` (vitest) | 53 of 2749 fail in 9 files: `module-pages` 37 and `utility-releases` 1 (both also fail on main `1bbc8b46`), `src/tooling/check` 8, `synth-release` 2, `module-qualification` 1 and `module-doctor` 1 (the approval record), `native-comparisons` 1 (the record is 0.1.2’s), `module-changelogs` 1 (“Changelog version is newer than the catalog”: the generated catalogue is 0.1.2’s because `modules:generate` stops at the approval record), `module-source` 1 (the committed packages’ source fingerprint). |
+| `octatrack:module-packages -- --check` (USB, with the OS and the Elekloader checkout) | 24 packages rebuild identical; FM Synth kept at 0.1.2 by its declared lag, Play Modes by its own (#764); the run then stops at a DSP package for want of a built `dsp_asm` on this Mac (environment). |
+| Card-build packages (`scripts/build-modules-isolated.sh`, image `modwerk-source-tools` `0db04819`, from a clean checkout of `6b4b2d20`) | FAILED, as for the 2.20 cut: “Compiled requested package scope differs from the verified baseline” (0.1.4 has no `fmmachine` / `fmregistration` units of 0.1.2’s; *owner*). The DSP, POLY8 and requested-object steps before it pass. |
+| Native comparison (`module:verify`) | Not run. |
 
 ## USB package
 

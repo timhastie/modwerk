@@ -215,7 +215,7 @@
       "sha256": "6e5716540d78b652b272c364ddf398f688eb9dff7e2b926b2895e250341aaca7",
       "path": "octatrack-modules/synth/0.1.2-experimental.mwrm",
       "lagsBehind": "0.1.4-experimental",
-      "lagReason": "0.1.4 is the author's 2.20 engine: its four DRAM regions (2 MiB work table, 32 KiB scene table, 2.5 KiB + 256 KiB migration) and generated includes are refused in a runtime package (sdk/runtime/loader/build.py), so 0.1.4 ships as card builds only until the base can give a package that memory"
+      "lagReason": "0.1.4 is the author's 2.21 engine: its four DRAM regions (2 MiB work table, 32 KiB scene table, 2.5 KiB + 256 KiB migration) and generated includes are refused in a runtime package (sdk/runtime/loader/build.py), so 0.1.4 ships as card builds only until the base can give a package that memory"
     },
     {
       "id": "quantizer",
