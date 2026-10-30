@@ -192,18 +192,17 @@
     "effectId": null,
     "location": "Track machine",
     "conflicts": [
-      "analog-bassdrum",
-      "quantizer"
+      "analog-bassdrum"
     ],
     "limitations": [
       "Parts store stock FLEX kind 1 plus FM/1 in unused NEIGHBOR control bytes. A stock build reads the track as FLEX; it does not synthesize FM. Choose stock explicitly before downgrading.",
       "VOIC and CHRD sit in the PLAYBACK SETUP page's LOOP and SLIC boxes; LFOs and scenes reach them (PMTR VOIC / CHRD), and they are latched at a note's START.",
       "A Part holds at most two FM SYNTH tracks; the voices are capped so the Part stays within the CPU budget (the VOIC shown is the Part's). A choice past the limit is refused with a message.",
       "An LFO on PTCH moves the pitch 0.2 semitone per unit of depth, as on FLEX. FLEX's PTCH stops at +-12.8 semitones; an FM SYNTH track's range goes further.",
-      "The matching quantizer is bundled privately because the engine shares its mailbox and fixed scale accessor. With FM Synth alone, MIDI tracks are not quantized, and on STATIC / FLEX tracks the PTCH knob, PTCH locks and chromatic keys step through the scale but a trig's PTCH is not snapped as it plays, and the chromatic keyboard marks the key pressed, not the note sounded: those are Scale Quantizer's, which cannot be selected beside FM Synth today.",
+      "The matching quantizer is bundled privately because the engine shares its mailbox and fixed scale accessor. With FM Synth alone, MIDI tracks are not quantized, and on STATIC / FLEX tracks the PTCH knob, PTCH locks and chromatic keys step through the scale but a trig's PTCH is not snapped as it plays, and the chromatic keyboard marks the key pressed, not the note sounded: those are Scale Quantizer's. Beside Scale Quantizer the card build keeps one quantizer: Scale Quantizer's hooks and rows on this module's bundled copy of the same source (octabam tools/remix/machine_composition.py shared_supply, pending owner review).",
       "LFO SETUP names an FM SYNTH track's six PLAYBACK destinations with FLEX's names (PTCH STRT LEN RATE RTRG RTIM; checked in the emulator). Which FM control each one modulates follows the author's LFO routing, which this version keeps; giving the entries their FM names is the base's (#589).",
-      "A project saved with Scale Quantizer or Octatrick (#SEQUENCER_AUDIO_SCALE_OFF) keeps those tracks out of the scale under FM Synth, which has no per-track rows to change it.",
-      "Cannot combine with Analog BD or the public Scale Quantizer because their native hooks overlap.",
+      "A project saved with Scale Quantizer or Octatrick (#SEQUENCER_AUDIO_SCALE_OFF) keeps those tracks out of the scale under FM Synth; FM Synth alone has no per-track rows to change it, Scale Quantizer beside it has TRACK and FOLLOW.",
+      "Cannot combine with Analog BD because their native hooks overlap.",
       "About 12 dB louder than 0.1.2 at identical mixer settings (6 dB of headroom instead of 18); AMP VOL 0 is the reference and VOL above it can clip a full-scale voice.",
       "Card builds only: the Octatrack base's USB package for this version cannot be built yet (DRAM regions and generated includes; TESTING.md).",
       "Emulator-checked (boot, the machine list, chords at VOIC 4 with a scale, the first chord after power-on, SEQUENCER rows, LFO SETUP); external MIDI traffic, maximum loads and hardware timing are untested on this build."
