@@ -190,5 +190,5 @@
     "staticStock": true
   },
   "releaseProvenance": "Captures from the native card build of FM Synth 0.1.4 on the author's v2.21 (9e4d34a; Modwerk exporter, Synth alone, stock FX2 kept; MAIN 8d89d596), taken on 30 October 2026 with the 26 October plan less its per-track rows capture: all six are byte-identical to the 2.20 cut's captures from MAIN d036ed7d. ot-track-rows.png is gone (SEQUENCER has no MIDI / AUDIO n SCALE rows in this version). The native source these captures are bound to (sourceSha256) is this version's. Software captures confer no hardware verification.",
-  "sourceSha256": "34e217f75e6a902681119cd6e303ae28cd793ee844d3a67420e960222946d80f"
+  "sourceSha256": "8fdf8d3462ed1135e84002f907e725ea46f125b27d41dda22d73df647f1d30b8"
 }
