@@ -4,16 +4,16 @@
 
 - Production proposal: `tuner`, `0.1.0-experimental`, under `sdk/octabam/modules/tuner` on `tuner-0.1-promotion`.
 - Preserved refreshed draft on `tuner-0.1`: `5a56f1f8d4c1c426c07195c26e552c677a8c44ac`. The location change does not establish publication qualification.
-- Current author source: `timhastie/octatrick-modules` v2.20, commit `fd18f5530989be348e6aa4c6e38f93beba555e6d`; all four upstream files, including the stock-guard reader, are copied unchanged.
+- Current author source: `timhastie/octatrick-modules` commit `03202050464576b58961093bcc09de783be1f7bd` (v2.21 + the DC-offset fix, 30 Oct 2026; see the 30 Oct section below); all upstream files, including the stock-guard reader, are copied unchanged. Earlier pins below (v2.20 `fd18f553`) are history.
 - Current documentation/draft base: Modwerk `4e2226f1be6347f74d51a0d5b99ee572ba3a82bb`.
 - Preserved native candidate build baseline: `916ce01bbfc60f3aedd7156066354fedb521e6f4`, private `relay-tuner` facade, Tuner only, stock FX and static stock DSP; no USB base.
 - The delivered BIN/bus have **not** been rebuilt from this v2.20 source, current main, the hash-guard wrapper, or the new draft/promotion commit. They are historical candidate evidence, not exact-current-commit qualification.
 
 The wrapper now preserves the upstream runtime/source declarations while replacing its three detour expectations with verified Modwerk-form guards. [guard-provenance.json](evidence/guard-provenance.json) records the adapter change. It is not a rebuilt-image result. No hardware, resource, timing or publication qualification object is fabricated.
 
-## Immutable source pin after the tag update
+## Source pin before 30 Oct 2026 (history)
 
-The integration intentionally retains immutable upstream commit `fd18f5530989be348e6aa4c6e38f93beba555e6d`. ORDER-069 records that the movable v2.20 tag subsequently points to `9b62d5d` (tag object `609b4a92`), a synth README-only change with identical `tuner/` content. The lead will repin all three PRs to the final tag at submission. This note does not change the vendored files or import pin.
+Until 30 Oct 2026 the integration retained upstream commit `fd18f5530989be348e6aa4c6e38f93beba555e6d`; the v2.20 tag later pointed to `9b62d5d` (tag object `609b4a92`), a synth README-only change with identical `tuner/` content. The current pin is given at the top. This note does not change the vendored files or import pin.
 
 The canonical OCTAMOD79 artifact was built from promotion commit `ab3db4f570f1ad869686ad20d03fd227bb97de22`; a later documentation-only commit is not the artifact's built source. No build, test or runtime is rerun for this note.
 
