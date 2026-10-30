@@ -7,6 +7,12 @@ macOS with Node 24.21.0, Python 3.13, m68k-elf binutils 2.47, and the `modwerk-s
 image `sha256:0db04819ba7c59e422ac32a5a519ba2c19760ac73f46a30bf94018d10edb7ac7` (colima).
 No firmware, stock bytes, card images or raw renders are committed.
 
+## Beside FM Synth: one quantizer (30 October 2026)
+
+FM Synth 0.1.4 now bundles this module's author source byte for byte (`be2810f`, whose `quantizer/` equals `990eff8`'s). `composition.json` names its units' copies in FM Synth (`supplied.units`) and the signature of this declaration (`687ed9a8...`); with the octabam SDK's composition rule `shared_supply` (`tools/remix/machine_composition.py`, pending the owner's review; not on this branch) the card build of both keeps one quantizer: this module's 28 hooks and five rows aimed at FM Synth's copy, this module's units not linked, FM Synth's own quantizer hooks and rows left out. This module alone is unchanged: card image TEST2 (`ec4b811f...`, MAIN `22541cd6...`) rebuilds byte-identical.
+
+Emulator, the image of both (upgrade file `d091b3c0cffc622f2cdc607d32169df1ae47caad05e0243dfcbc2a4563d47f51`, MAIN `dbf73edfb56b55537a3411862327c49d9525c5b8a829eed6e9fc460629d56ce4`): this module's card walk (rows, TRACK / FOLLOW, the setting acting at play, SAVE, power cycle, the load of a 2.21-saved project) gives the same NV bytes and PTCH words as on TEST2, 38 of its 40 screens byte-identical (the other two differ in timing-dependent pixels), and a `project.work` byte-identical to 2.21's. FM SYNTH tracks keep FM Synth's chords and first chord after power-on. Untested on hardware.
+
 ## This cut: 2.21 + TRACK / FOLLOW (29 October 2026)
 
 What changed against the v2.20 cut below:
