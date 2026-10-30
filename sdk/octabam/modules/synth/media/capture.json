@@ -1,6 +1,6 @@
 {
   "firmware": "1.40C",
-  "imageSha256": "c5039cffab34d45db5838eabcdcdfb6d429f6bed6880814f3d69811dbea211d1",
+  "imageSha256": "265308da8e8e62a9daa7538b6f886198170578005737cd96cd3b16e06f586589",
   "emulatorSha256": "07a7c08e3d4562f7b51ee5985bd2595cced383f1b8090995f1dfecfb404f092d",
   "setup": "Headless ot_emu; MKII panel; stopped transport; 128×64 LCD at integer scale 6.",
   "palette": {
@@ -189,6 +189,6 @@
     "keepStockFx2": true,
     "staticStock": true
   },
-  "releaseProvenance": "Captures from the native card build of FM Synth 0.1.4 on the author's be2810f (2.21 engine, the TRACK / FOLLOW quantizer source; Modwerk exporter, Synth alone, stock FX2 kept; MAIN c5039cff), taken on 30 October 2026 with the plan of the 2.21 cut: all six are byte-identical to the captures from MAIN 8d89d596 (v2.21). The native source these captures are bound to (sourceSha256) is this version's. Software captures confer no hardware verification.",
-  "sourceSha256": "7a5e01b5f6d7397c59342829677b0259d08d4b440efe1fa90574deecc51b8a06"
+  "releaseProvenance": "Captures from the native card build of FM Synth 0.1.4 on the author's 3531b8e (2.21 engine, the TRACK / FOLLOW quantizer source, poly.s reading the scale as OFF on an FM SYNTH track whose FOLLOW is OFF; Modwerk exporter, Synth alone, stock FX2 kept; MAIN 265308da), taken on 30 October 2026 with the plan of the 2.21 cut: all six are byte-identical to the captures from MAIN c5039cff (be2810f) and MAIN 8d89d596 (v2.21). The native source these captures are bound to (sourceSha256) is this version's. Software captures confer no hardware verification.",
+  "sourceSha256": "c597e6dfc53c8c8438d5e35156f25a437df66499ba25c244792eef32dc8b4fdf"
 }
