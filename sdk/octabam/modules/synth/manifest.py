@@ -248,9 +248,10 @@ if {g.address for g in _READ_ONLY} != {site for hooks in _DROPPED.values() for s
     raise ValueError('FM Synth: _READ_ONLY answers exactly the dropped hooks\' reads')
 
 # SEQUENCER: the stock three rows, then SCALE, ROOT and GLIDE (the first three entries the
-# author's tables add); his row-count poke (pea 22) becomes pea 6.
+# author's tables add); his row-count poke, pea of 3 + 19 rows, becomes pea of 3 + 3.
 _SEQ_ROWS = 3
-_SEQ_COUNT = (bytes.fromhex('48780016'), bytes.fromhex('48780006'))
+_PEA_W = bytes.fromhex('4878')                  # pea (xxx).w: the row count's push
+_SEQ_COUNT = (_PEA_W + (3 + 19).to_bytes(2, 'big'), _PEA_W + (3 + _SEQ_ROWS).to_bytes(2, 'big'))
 
 
 def _guard(site, length):

@@ -72,7 +72,7 @@ class SynthRelease(unittest.TestCase):
         capture = json.loads((FOLDER/'media/capture.json').read_text())
         image = capture['imageSha256']
         screenshots = [media for media in doc['media'] if 'otUi' in media]
-        self.assertEqual(len(screenshots), 7)
+        self.assertEqual(len(screenshots), 6)
         for media in screenshots:
             self.assertEqual(media['otUi']['imageSha256'], image)
             self.assertEqual(sha(FOLDER/media['path']), capture['screenshots'][Path(media['path']).name])

@@ -1,10 +1,88 @@
 # FM Synth 0.1.4 testing
 
+FM Synth 0.1.4-experimental is the author’s Octatrick 2.21 line (`timhastie/octatrick-modules` `9e4d34adc63fbb1732b125697d6738262e1eae85`, tag `v2.21`; its code is `4d8d088`, the two commits after it change the author’s READMEs only), on Modwerk main `1bbc8b46`. Tested on 29 October 2026 in the emulator. **This cut has not been tested on hardware.** The author’s TEST4 report of 26 October 2026 (below, kept for the record) was for the 2.20 cut. Chip worst-case timing and complete memory bounds are not measured here; the author’s own load budget (machine_limits.inc, fitted to PROCESSOR LOAD readings on his MKI) caps the voices per Part.
+
+**Card builds only for now.** 0.1.4 installs with a card build. Its USB package is not built (see USB package below); the published 0.1.2 USB package stays as it is with a declared lag (`lagsBehind: 0.1.4-experimental`).
+
+## What changed from the 2.20 cut
+
+- **The author’s 2.21.** `upstream/` re-vendored from `v2.21`: chords on the chromatic keys keep their notes with a scale however close together the keys are pressed (the author’s panel transaction, `synth/panel_transaction.inc.s` and `quantizer/panel_transaction.inc.s`, new files), the first chord after power-on in a saved project keeps its step locks, and setup values survive a power-off. 2.21’s own manifest links the PLAYBACK page as a DRAM unit and keeps the 16 bytes after the stock DELAY’s table stock, which this wrapper did for 2.20 after Jannik Aßfalg’s [#895](https://github.com/repeat98/modwerk/pull/895); the wrapper’s copy of that is gone.
+- **Eight of the author’s hooks left out** (`manifest.py` `_DROPPED`), as agreed with Jannik on [#555](https://github.com/repeat98/modwerk/issues/555): the bundled quantizer’s `qz_mknob` (`0x40055382`), `qz_mplock` (`0x40050b98`), `qz_mkey` (`0x400436a8`), `qz_mnote` (`0x4009fb80`), `qz_mprev` (`0x400439d6`) on MIDI tracks, `qz_atrig` (`0x4000c614`, a sample track’s PTCH snapped as its trig plays) and `qz_heldmark` (`0x40044abc`, the chromatic keyboard’s mark on an audio track): these are Scale Quantizer’s. And the LFO SETUP names hook `po_lfdname` (`0x4003bff2`), which starts 2 bytes before the base’s `0x4003bff4`. The image keeps those eight spans stock (checked byte for byte against the 1.40C section). FM SYNTH tracks keep their quantizing (the engine’s, and the bundled quantizer’s PTCH knob, lock and chromatic-key hooks); those three also act on STATIC / FLEX tracks, as in the author’s source.
+- **SEQUENCER:** SCALE, ROOT and GLIDE after the stock three rows; the MIDI 1..8 SCALE and AUDIO 1..8 SCALE rows are out of the tables and the row count (`0x40065c7c`: 3 → 6 rows).
+- **`sy_state` exported** from the poly unit’s object (`Linked.exports`, no code byte changes): 2.21’s quantizer panel transaction names it, and `poly.s` exports it only with SY DRUM in the remix, so FM Synth alone did not link without it.
+- **Machine record** (`machine-ports.json`): LIST added; the base’s ten chooser clamps and its track-window column replace the author’s `ml_clamp1..5` and `fm_chooser_col` (below).
+- Removed screenshot: `ot-track-rows.png` (no per-track rows). `tests.hardwareStatus` is `untested` for this cut.
+
+## Source
+
+- `upstream/synth` and `upstream/quantizer`: 39 files, each byte-identical to the author’s blob at `9e4d34a` (`sdk/imports/synth-9e4d34a.json`). `synth/page_montage.png` is not vendored (a picture; no build reads it).
+- `manifest.py` (this folder) loads both author manifests. They read every span they guard through their `stock_guard.py` (address and length); the wrapper answers those reads from its own tables: 158 declared as Modwerk’s `stock_guard(address, length, sha256)` (136 for the synth units, including the DELAY tail the author keeps; 22 for the bundled quantizer), the same rows in `stock-guards.json`, and 8 answered but declared by nothing (`_READ_ONLY`, the dropped hooks’ spans, which the author’s manifests read while they build their tables). The digests were computed from the developer’s verified 1.40C MAIN OS section (`164f3122…`): the 157 of the 2.20 cut are unchanged, and the 9 new spans are 2.21’s six frame-builder transaction sites (`0x4000b540` + 14, `0x4000b906`, `0x4000bd74`, `0x4000bdc0`, `0x4000be4e`, `0x4000cb2a` + 8), its two quantizer transaction sites (`0x4004fc84` + 16, `0x40005162` + 8) and the DELAY tail (`0x400d24d0` + 16). The wrapper bundles the quantizer privately (`fm_*` units), counts it as present in each unit’s `remix.inc` (so `HAVE_PANEL_TRANSACTION` is 1 in the poly, machine and quantizer units), assembles the author’s trig-mute rule (2.19, `po_mm_*`) over two words of `port.s`, and clears `conflicts` (declared in `octamod.module.json`: Analog BD and Scale Quantizer, as before).
+- `port.s`: unchanged from the 2.20 cut (the base’s machine-record callbacks; `fm_port_render` asks the base’s raised event `ev_trig_muted`, #912, before `sy_render`).
+
+## The machine record on the base (`machine-ports.json`)
+
+One `ot_machines` row (FM SYNTH, signature `FM`/1), as for the 2.20 cut: `port.s`’s defaults, `admit_track`, `assign`, `ui_tick`, `track_page` and `render`, and `fm_main_commit` left to the base’s chooser commit (`dropDetours`). The flags are a choice for each machine ([machines.md](../../../../docs/module-guides/machines.md), [HOOKS.md](../../../machines/octatrack/HOOKS.md)):
+
+| Flag | Set | Why |
+| --- | --- | --- |
+| `PROTECT` | yes | An FM SYNTH track keeps its patch in the twelve FLEX bytes; stock’s validator must not reset them. |
+| `RENDER_FLEX` | yes | `sy_render` is also the renderer of FLEX tracks no machine owns, as the author’s kind table makes it. |
+| `LIST` | yes (new) | The author’s 2.18 `fm_chooser_col`: the track key pressed twice on an FM SYNTH track opens SELECT MACHINE TYPE, as on THRU / NEIGHBOR / PICKUP, not the empty slot list. On the base, `0x400788c4` does that for a LIST machine, so `fm_chooser_col` is now among the record’s `replaces`. |
+| `SETUP_ALL` | no | FM’s SRC SETUP uses encoders A and B (VOIC, CHRD); slots 8–11 have no boxes, so encoder E stays read-only. |
+| `SETUP_PAGE` | no (open) | Over USB, VOIC and CHRD need it: a `setup_page` / `setup_knob` pair over the author’s `fm_setup_draw6` and `po_setup_edit`, which the base’s SRC SETUP seams replace. 0.1.4 has no USB package to run it in (below), so the pair is left for the package that can carry it rather than written untested. |
+
+Also new in `replaces`: the author’s five row clamps `ml_clamp1..5` (`0x40078c22`, `0x40078cb0`, `0x40078d2e`, `0x40078dee`, `0x40078e7c`), which main’s base now owns with the other chooser clamps. `modules:compat -- synth` reports 3 problems, all three as for the 2.20 cut: Euclid’s recipe copy inside the step-lock clip hook (`0x4002b654`), `fl_io_dispatch` (`0x4008485e`) on the base’s own job hook, and POLY8’s composition record (`0x400786c8`). The 2.20 cut’s `po_lfdname` lines are gone with the hook.
+
+## Card build (native exporter)
+
+`scripts/export-composition-proofs.py <private SDK copy> <out> --app . --vendored-sdk --static-stock --modules synth --select synth:true --menus <defaultChoosers for synth:true> --stock-bin <OS 1.40C upgrade file> --image-dir <private dir>`, on macOS, as for the 2.20 cut. Upgrade file input `34695b60…`, MAIN OS section `164f3122…`.
+
+| Output | Bytes | SHA-256 |
+| --- | --- | --- |
+| Image (`image.bin`, the MAIN OS a report cites) | 1,146,521 | `8d89d59696c70d5c8e4a96d6e637eaa84c2aeb7bfbd0458127563bf8929bdadd` |
+| Upgrade file (`update.bin`, OCTAMOD79) | 483,680 | `51b71261ad3ad1e2453f5e59787e75bfc1b47cf64ab30ca061099faac01ce358` |
+| Container | 483,664 | `a34e40c36cc53407b37f3842197e419e4e4e9d08e777303e6afb9569bb8f779c` |
+| Proof `osSha256` (module-owned image before platform writes) | | `030c051557e9d2854f75659c50f91615f11da3c360d3ceca09a935ab199852a4` |
+| Runtime ELF (the DRAM units) | | `8608da4600eaac71640723e0b93e61f8e42729b8f7c1c07eae8e18d6af7333bb` |
+
+Built on 29 October 2026 at `a8a91c05` (the module commit) and again at the documentation commit after it, byte-identical (the documents, media and records do not feed the build). In the image, the eight dropped hooks’ spans are the stock bytes, the kept quantizer and transaction sites are patched, and `0x40065c7c` (the SEQUENCER row count) is `pea 6`; 1,667 bytes differ from the stock section in all.
+
+## Emulator (ot_emu, one session at a time, 29–30 October 2026)
+
+| Gate | Result |
+| --- | --- |
+| Boot, the machine list, FM SYNTH chosen (MKII, a FLEX project, T1) | PASS. FUNC + SRC on T1: STATIC FLEX THRU NEIGHBOR PICKUP FM SYNTH; DOWN past FM SYNTH stays on it; YES chooses it; SRC shows PTCH RATO INDX FINE FDBK DEC; encoder A sets VOIC 4 (Part byte read back). The track key twice opens SELECT MACHINE TYPE on FM SYNTH. |
+| Chords at VOIC 4 with SCALE PHRYGN, ROOT E (CHROMATIC mode, four keys) | PASS. Eight presses of the four keys in one key scan and four presses 20 ms apart: every time the same four voices, each key on the same note (V_ROOT words 0x4000 0x4a00 0x5400 0x5900: 0, 10, 20 and 25 semitones from the lowest, all Phrygian degrees from it). With SCALE OFF the same keys give 0x2c00 0x3600 0x4000 0x4a00: the FM track is quantized. |
+| The first chord after power-on (the author’s PROJECT 261028, his card copy; MKI and MKII) | PASS. Cold boot, first PLAY: every START, the first included, plays VOIC 4 / CHRD 34 (the chord), as on the author’s tested 2.21 build; STOP / PLAY again the same. |
+| SEQUENCER | PASS. CHAIN AFTER, SILENCE TRACKS, LFO AUTO CHANGE, then SCALE, ROOT, GLIDE; DOWN past GLIDE leaves the screen unchanged. |
+| MIDI and sample tracks with FM Synth alone (SCALE MAJOR, ROOT C) | PASS. A MIDI track’s NOTE steps C 3 → C#3 → D 3 one detent at a time (the author’s 2.21 on the same steps: C 3 → D 3). A FLEX track with PTCH +5 plays its trigs at PTCH word 0x4500 for 3 s (2.21: 0x4000, snapped). |
+| LFO SETUP on the FM SYNTH track | Captured: PMTR steps SRC PTCH, STRT, LEN, RATE, RTRG, RTIM, then AMP ATK, HOLD: FLEX’s names (the 2.20 cut showed FM’s with `po_lfdname`). LFO 1 at depth 40, PLAY 3 s, STOP: the unit keeps running. |
+| `ev_trig_muted`, FM’s side | PASS on the emulator with the base’s install simulated: the kind table’s FLEX entry pointed at `fm_port_render` and `raise_ev_trig_muted` at a routine answering T1. T1’s trigs: 7 STARTs with no answer; 0 STARTs and 7 dropped with the answer (`fm_mm_mode` 2, `fm_mm_state` 0x100); 8 STARTs again with the answer withdrawn. Not tested with Mute Modes: a card build has no base to carry its answer, 0.1.4 has no USB package, and Mute Modes 0.2.1 does not answer `ev_trig_muted` yet (#777). |
+| UI captures (`scripts/capture-module-ui.py`, empty scratch card, MKII) | The six PNGs in `media/`, byte-identical to the 2.20 cut’s (`media/capture.json`). |
+
+Not run on this build: scene locks on ATK / HOLD / REL, MIDI input, the selection guard and the paraphonic path under an LFO, playback render level (the author’s 2.21 records cover them on his own image).
+
+## Modwerk checks (main `1bbc8b46`)
+
+Run at the documentation commit; the results are recorded in the next commit.
+
+## USB package
+
+Not built, as for the 2.20 cut: the runtime package refuses the engine’s four DRAM regions (2,097,152 + 32,768 + 2,560 + 262,144 bytes) and the units’ generated includes, and `fm_runtime.py`’s exact-text rewrites are written for 0.1.2’s `quantizer.s`. The base needs a way to give a runtime package that memory before 0.1.4 can install over USB.
+
+## Stock bytes
+
+The files this version authors (the wrapper, `port.s`, `stock-guards.json`, the JSON records, tests and docs) were scanned with the author’s `tools/stock_scan.py` (16-byte windows): no stock run. The wrapper carries no 4-byte stock-equal literal: the SEQUENCER row count’s new `pea` is built from its opcode and the count. The files carry SHA-256 digests of stock windows (Modwerk’s guard form) and OS addresses. The vendored `upstream/` is the author’s published form at `9e4d34a`: its manifests carry no stock bytes.
+
+## The 2.20 cut (TEST4), for the record
+
+The sections below are the record of 0.1.4 on the author’s 2.20 (`9b62d5d`), whose image TEST4 the author tested on 26 October 2026. They describe that image and source, not this one.
+
 FM Synth 0.1.4-experimental is the author’s Octatrick 2.20 line (`timhastie/octatrick-modules` `9b62d5d96bdd21f846ec1b365ba36e8c78f2ef63`, tag `v2.20`; the author re-cut the tag four times as source cleanups that build the same bytes: `efbb192`, then `a0e8df4`, then `7cca7a2`, then `fd18f55` and `9b62d5d`, which change his READMEs only). Tested on 25 October 2026 in the emulator, and again on 26 October 2026 after the SRC page moved into DRAM (Jannik Aßfalg’s [#895](https://github.com/repeat98/modwerk/pull/895), below) and after the machine record took over the chooser commit (below). **Hardware has an author-reported functional result, with limitations and a later chord report recorded below.** Chip worst-case timing and complete memory bounds are not measured here; the author’s own load budget (machine_limits.inc, fitted to PROCESSOR LOAD readings on his MKI) caps the voices per Part.
 
 **Card builds only for now.** 0.1.4 installs with a card build. Its USB package is not built (see USB package below); the published 0.1.2 USB package stays as it is with a declared lag (`lagsBehind: 0.1.4-experimental`).
 
-## Hardware report — 26 October 2026
+### Hardware report — 26 October 2026
 
 Reported by the author, Tim Hastie, on an Octatrack MKI running OS 1.40C. This is a functional report for FM Synth 0.1.4 TEST4:
 
@@ -18,14 +96,14 @@ Tim reported PASS for every checklist item on the TEST4 hardware sheet. This inc
 
 The sheet's power-cycle, track-limit and MIDI scale-control cases are included in Tim's reported PASS. Quantified duration, exhaustive simultaneous track/voice stress, chip worst-case cycles, complete memory bounds and USB install/Keep/Undo remain unmeasured or outside these card checks. The report does not qualify the later machine-port, machine-recipe and `synth/runtime.json` declaration changes at `c0e02dd3d9191724dda6dd25662f0520cb44e012`, or replace the owner approval record. `tests.hardwareStatus` is `reported`; the historical software `evidenceRevision` remains unchanged. No incomplete `tests.qualification` object or publication approval is added. Earlier software results below retain their original source and date.
 
-## Source
+### Source
 
 - `upstream/synth` and `upstream/quantizer`: 37 files, each byte-identical to the author’s blob at that commit (`sdk/imports/synth-9b62d5d.json`). `synth/page_montage.png` is not vendored (a picture; no build reads it).
 - `manifest.py` (this folder) loads both author manifests. Both read every span they guard through their `stock_guard.py` (address and length); the wrapper answers those reads from its own table, so every span, and the page resolver’s site, is declared as Modwerk’s `stock_guard(address, length, sha256)`: 157 sites, the same rows in `stock-guards.json` (25 of them, the bundled quantizer’s 24 detours and its SEQUENCER poke, kept as their own restated table). The digests were computed once from the developer’s verified 1.40C MAIN OS section (`164f3122…`); reading a span checks it against that image again. It bundles the quantizer privately (`fm_*` units), links the PLAYBACK page into DRAM (Jannik Aßfalg’s #895: not at the author’s cave `0x400d24d0`, whose first 16 bytes the stock DELAY reads past its table) and compares a copy linked at the author’s address with the page he ratified by length and SHA-256 (`PAGE_LEN` 1,752, `PAGE_SHA256` `2dd08c91…`), writes each unit’s `remix.inc` for a remix without SY DRUM (with `FM_DESC`, the author’s page address, equated to the page’s `fm_descriptor`, so machine.s’s FM SYNTH row reaches the page by symbol; the unit exports `fm_descriptor`, which 2.20’s `page.s` no longer marks global), assembles the author’s trig-mute rule (2.19, `po_mm_*`) over two words of `port.s`, and clears `conflicts` (declared in octamod.module.json).
 - `port.s`: the base’s machine-record callbacks (the author’s FM defaults; `admit_track`, his selection guard on the Part the base names, with its popup; `assign`, his row choice and machine-change init; `ui_tick`, the init of a stock machine other than FLEX once the commit has stored it; his page as `track_page` (by the symbol `fm_descriptor` since #895); `fm_port_render` as `render`). `fm_choose`, `ml_guard_p` and `ml_toast` are exported from the author’s `fmmachine` unit for them (no code byte changes). `fm_port_render` asks the base’s raised event `ev_trig_muted` (#912) through `raise_ev_trig_muted` when the loader has filled it, keeps the answer in the two words the trig-mute rule reads, then runs `sy_render`. The `raise` is now declared in `runtime.json`. Runtime behavior follows when Mute Modes answers the query over USB; current Mute Modes has no responder. Native card builds install no raise pointer, so the declaration does not activate this behavior in the card image. No base or Mute Modes change or event-driven AFTER pass is claimed; TEST4 remains the supplied card candidate.
 - Verified with the developer’s OS: all 157 guards equal the SHA-256 of their 1.40C windows. The declaration loaded from the 7cca7a2 files equals the one from a0e8df4’s and efbb192’s (the fd18f55 and 9b62d5d re-vendors change READMEs only, no file the declaration reads) (the same 157 guards, sites, units, symbols, pokes and page digest).
 
-## Card build (native exporter)
+### Card build (native exporter)
 
 `scripts/export-composition-proofs.py <private SDK copy> <out> --app . --vendored-sdk --static-stock --modules synth --select synth:true --menus <defaultChoosers for synth:true> --stock-bin <OS 1.40C upgrade file> --image-dir <private dir>`, on macOS (the private SDK copy is byte-identical to the checkout, which the script verifies; the packing tool is elektron-firmware-tool `c20868b9`). Upgrade file input `34695b60…`, MAIN OS section `164f3122…`.
 
@@ -43,7 +121,7 @@ Built on 26 October 2026 from a clean clone at `70f26ae0` (the machine record’
 - The upgrade file decodes (magic and checksum correct) to the exporter’s container (481,577 B, `821b9a8b…`) behind a 4-byte header, word-padded (`79b3b1da`’s: 481,473 B, `48fee1fc…`, the same way).
 - The same build with only the guard change (before `ev_trig_muted`) is byte-identical to the earlier 0.1.4 image (`ab6a084d…`, upgrade `0325d706…`): the guard form changes no byte. The trig-mute words add 228 bytes; `poly.s` assembled with its `remix.inc` carries three absolute references to them (two to the mode word, one to the state word).
 
-## The SRC page in DRAM (#895)
+### The SRC page in DRAM (#895)
 
 Jannik Aßfalg found for 0.1.3 ([#895](https://github.com/repeat98/modwerk/pull/895)) that the stock DELAY looks up `0x400d1ce0 + 4 * (x >> 6)` in a 508-entry table that ends at `0x400d24d0`, and that at a slow tempo with a long TIME its index passes the end and reads the next 16 bytes, which are zero on a stock unit. 0.1.4 linked the author’s page cave there. As #895 does for 0.1.3, the page is now a DRAM unit and its users reach it by symbol (`machine.s`’s FM SYNTH row through `FM_DESC`, `port.s`’s `fm_port_page`); `upstream/` is unchanged.
 
@@ -53,7 +131,7 @@ Jannik Aßfalg found for 0.1.3 ([#895](https://github.com/repeat98/modwerk/pull/
 - **Screens:** the seven captures taken again from `c6ce3ac1` with the recorded plan are byte-identical to the committed PNGs, including `ot-controls`, the SRC page the moved code draws. `media/capture.json` names the new image and native source.
 - **Not heard:** the DELAY difference itself has not been listened for, in the emulator or on a unit; the gate is the image bytes.
 
-## The chooser commit on the base (Jannik Aßfalg’s answer on #555)
+### The chooser commit on the base (Jannik Aßfalg’s answer on #555)
 
 The base owns the machine chooser’s commit (`0x4007981c`, which calls a machine’s `admit_track` and `assign`); the author’s machine-window hook `fm_main_commit` (`0x40079816`, 8 bytes) starts 6 bytes before it. In a package, FM Synth’s `ot_machines` record now does that hook’s job, and the port leaves the hook out (`machine-ports.json` `dropDetours`, applied by `machine_ports.py`; a card build keeps it):
 
@@ -68,7 +146,7 @@ These callbacks run only on the base (no package can be built yet; USB package b
 - **Plays:** the test project on the gate card (MAIN `d036ed7d`): loaded, SETUP `041c`, 154,489 frames, first sound at frame 4508, RMS 2202.26, peak 7189, the engine clock advances (`c6ce3ac1`: RMS 2201.98, peak 7189).
 - **Screens:** the seven captures taken again from `d036ed7d` with the recorded plan are byte-identical to the committed PNGs; `media/capture.json` names the new image and native source.
 
-## Beside POLY8 (#941)
+### Beside POLY8 (#941)
 
 The machine list was checked beside POLY8 ([#941](https://github.com/repeat98/modwerk/issues/941): FM SYNTH missing from SELECT MACHINE TYPE, DOWN past POLY8 back to PICKUP), in the emulator on a new project (empty scratch card, T1 pressed twice 50 ms apart, then LEFT, then DOWN and UP; and FUNC + SRC):
 
@@ -81,7 +159,7 @@ The machine list was checked beside POLY8 ([#941](https://github.com/repeat98/mo
 
 With POLY8 in a selection, Modwerk’s machine composition (`sdk/octabam/tools/remix/machine_composition.py`, `effective_modules`, with `sdk/octabam/modules/poly8/composition.json`) takes FM Synth’s reviewed machine-list sites away and lets POLY8’s shared registry (`modules/poly8/shared-machine.c`) own the list: its six pokes of the two lists’ row counts and the row bounds are set for 5 + the machine modules present (7 rows with FM SYNTH: `mr_row` puts POLY8 at row 5 and FM SYNTH at row 6). The machine window still draws its six visible rows without a scroll offset, and its five row clamps after a list move are stock (0..5; checked in the image), so the seventh row is never drawn and the cursor cannot stay on it (the author’s 2.11 list fixes these with `ml_draw_bound` and `ml_clamp1..5`). 0.1.4 does not build beside POLY8 because the record reviews 0.1.2’s sites: `0x400786c8` is now a 6-byte detour (record: 4), `0x4005221e` calls `fm_tick` (record: `fm_tick_hook`), and the six count sites are the author’s `ml_*` detours where the record expects 0.1.2’s pokes; the registry also finds FM Synth through 0.1.2’s `registration.c` globals (`fm_type`, `fm_admit_track`, `fm_ui_tick`, `fm_track_page`, `fm_defaults`), which 0.1.4 does not export (the author’s `machine.s` keeps its own list). Both are the owner’s composition record; the finding is in the pull request.
 
-## Emulator (ot_emu `07a7c08e`, one session at a time)
+### Emulator (ot_emu `07a7c08e`, one session at a time)
 
 | Session | Image | Result |
 | --- | --- | --- |
@@ -92,7 +170,7 @@ With POLY8 in a selection, Modwerk’s machine composition (`sdk/octabam/tools/r
 
 Not run on this build: scene locks on ATK / HOLD / REL, MIDI, the selection guard and the paraphonic path under an LFO (the author’s 2.20 records cover them on his own image), and the `ev_trig_muted` response over USB (the declaration is present, but current Mute Modes has no responder).
 
-## Modwerk checks (main `98f17ed6`)
+### Modwerk checks (main `98f17ed6`)
 
 Run on 25 October 2026 at `779bdbed` (this version’s source; the commit after it changes only this file), one step at a time, as `npm run check` runs them, in a clean clone without firmware (as CI runs) and again in a clean clone with the developer’s MAIN OS section in `sdk/octabam/out/raw` (and the Elekloader checkout named by `ELEKLOADER_UPSTREAM` / `MODWERK_UPSTREAM`). Node 24.21.0, Python 3.13.7. The results are the same with and without the OS (the digests are committed, so a checkout without firmware sees the guards the image has) apart from the environment-only line in `sdk:check`; the generators that run leave the tree unchanged.
 
@@ -120,10 +198,10 @@ At `07c4f2a2` (the machine record’s chooser commit `70f26ae0` with its capture
 
 Docker at `9571befc` (a verifier’s run on 26 October 2026, image `modwerk-source-tools` `0db04819`): the isolated card-package build stops at the same baseline scope (“Compiled requested package scope differs from the verified baseline”); `module:verify -- synth --os <1.40C> --jobs 6` stops at POLY8’s composition record (`0x400786c8`) after 18 reported (16 built, 2 refused beside VECTOR), as at the earlier heads. Not re-run at `70f26ae0`: the card packages and the POLY8 stop do not depend on the machine record.
 
-## USB package
+### USB package
 
 Not built. `sdk/runtime/loader/build.py --octabam-machine synth` stops in `fm_runtime.py` (its exact-text rewrites are written for 0.1.2’s `quantizer.s`). Past that, the runtime package refuses the engine’s four DRAM regions (2,097,152 + 32,768 + 2,560 + 262,144 bytes) and the units’ generated includes. The base needs a way to give a runtime package that memory before 0.1.4 can install over USB.
 
-## Stock bytes
+### Stock bytes
 
 The files this version authors (the wrapper, `port.s`, `stock-guards.json`, the JSON records, tests and docs) were scanned with the author’s `tools/stock_scan.py` (16-byte windows) and a 4-byte check of every hex literal they add: no stock run, no stock-equal literal. They carry SHA-256 digests of stock windows (Modwerk’s guard form) and OS addresses. The vendored `upstream/` is the author’s published form at `9b62d5d`: its manifests carry no stock bytes (every guard is read through `stock_guard.py`, the page is ratified by length and SHA-256), the comments in its manifests and `.s` files describe the stock instructions at the hook sites in words (the comments that quoted them as assembly in `machine.s`, `poly.s` and `page.s` are rewritten; the three assembly-like comment spans left quote the author’s own page call and two stack-argument offsets), and its text scans clean (0 runs). Since `fd18f55` its READMEs describe each hook site in words too, and since `9b62d5d` the synth README describes the stock page records’ multi-byte fields (enable nibbles, defaults) by what they set: no displaced bytes in hex, no multi-byte field value of a stock record, no stock instruction quoted, no disassembly (they name OS addresses, offsets, lengths, stock UI screens and a few single values, such as a nibble, a count or a key code); by the stock-byte scan’s criterion (literals of 4 bytes or more and instruction quotes checked against the OS at the sites they name) the vendored `upstream/` has 0 raw stock literals and 0 stock-instruction quotes, where main’s vendored 0.1.2 copies have 21 and 142 (in the READMEs, the manifests and `page.s` / `poly.s` / `quantizer.s` comments).

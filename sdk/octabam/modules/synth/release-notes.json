@@ -1,11 +1,12 @@
 {
   "version": "0.1.4-experimental",
-  "date": "2026-10-25",
+  "date": "2026-10-29",
   "changes": [
-    "Updates to the author's Octatrick 2.20: step and scene locks on every FM control, a selection guard and voice cap per Part, init on a machine change; the quantizer follows MIDI and audio tracks too.",
-    "Fixes the click at note start and end (#557), a chord's first trig ignoring the AMP envelope (#710), a CHRD scene change keeping the old chord (#751) and FLEX names on LFO1/LFO2 (#589).",
+    "Updates to the author's Octatrick 2.21: step and scene locks on every FM control, a selection guard and voice cap per Part, init on a machine change; chords on the chromatic keys keep their notes with a scale, and the first chord after power-on in a saved project plays as a chord.",
+    "Fixes the click at note start and end (#557), a chord's first trig ignoring the AMP envelope (#710) and a CHRD scene change keeping the old chord (#751).",
     "LFOs and scene locks on AMP ATK, HOLD and REL now shape the sound, and an LFO on PTCH moves the pitch as far as on FLEX, following Jan Kolkmeier's report and fix (#883, #884).",
-    "Card builds keep the SRC page out of the 16 bytes the stock DELAY reads past its table at a slow tempo with a long TIME (0.1.2 kept page code there), as Jannik Aßfalg's #895 did.",
-    "About 12 dB louder than 0.1.2: the engine keeps 6 dB of headroom instead of 18; AMP VOL 0 is the reference. Known issue: not tested on hardware; card builds only, no USB package yet."
+    "Card builds keep the SRC page out of the 16 bytes the stock DELAY reads past its table at a slow tempo with a long TIME (0.1.2 kept page code there), as Jannik Aßfalg's #895 did; the author's 2.21 does the same.",
+    "The bundled scale quantizer follows the scale on FM tracks; MIDI tracks are Scale Quantizer's (#555). SEQUENCER shows SCALE, ROOT and GLIDE.",
+    "About 12 dB louder than 0.1.2: the engine keeps 6 dB of headroom instead of 18; AMP VOL 0 is the reference. Known issues: LFO SETUP shows FLEX's destination names on an FM track (#589); not tested on hardware; card builds only, no USB package yet."
   ]
 }
