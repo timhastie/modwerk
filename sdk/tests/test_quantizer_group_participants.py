@@ -79,9 +79,11 @@ class ParticipantTests(unittest.TestCase):
                 self.assertIn('.set    SCALE_AT, qz_scale_at', changed)
                 self.assertNotIn('movea.l #sy_render', changed)
                 self.assertIn('KIND_FLEX', changed)
-                # A standalone package is the author's remix without SY DRUM.
+                # A standalone package is the author's remix without SY DRUM and without FM Synth: 2.21's
+                # remix.inc is two-pass (the flags, then the panel adapters), written at both include sites.
                 self.assertNotIn('.include "remix.inc"', changed)
-                self.assertEqual(changed.count('        .set HAVE_SYDRUM, 0 '), 1)
+                self.assertEqual(changed.count('        .set HAVE_SYDRUM, 0\n'), 2)
+                self.assertEqual(changed.count('        .set HAVE_PANEL_TRANSACTION, 0\n'), 2)
                 with self.assertRaisesRegex(ValueError, 'remix.inc seam changed'):
                     quantizer.source_variant(name, original)
                 with self.assertRaisesRegex(ValueError, 'standalone include changed'):
