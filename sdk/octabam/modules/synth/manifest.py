@@ -1,6 +1,9 @@
 """FM SYNTH: Tim Hastie's FM engine, machine list and bundled scale quantizer (octatrick 2.21).
 
-`upstream/synth` and `upstream/quantizer` are the author's files at release 2.21, byte for byte.
+`upstream/synth` and `upstream/quantizer` are the author's files at be2810f, byte for byte: release
+2.21's engine and machine list, his quantizer with the per-track switches as the SEQUENCER rows TRACK
+and FOLLOW (990eff8, the source Scale Quantizer 0.1.4 carries), and poly.s exporting the engine state
+the quantizer's panel transaction reads in a remix without SY DRUM (be2810f; no code byte changes).
 This wrapper adds only what the Modwerk build needs:
 
 - Stock guards in Modwerk's form: `stock_guard(address, length, sha256)` for every site the
@@ -19,8 +22,12 @@ This wrapper adds only what the Modwerk build needs:
   quantizing in the engine), and the LFO SETUP names hook po_lfdname (0x4003bff2, which meets the
   base's 0x4003bff4). The author's manifests still read those spans while they build their
   tables, so `_READ_ONLY` answers the reads; nothing declares or patches them.
-- SEQUENCER: SCALE, ROOT and GLIDE after the stock three (`_SEQ_ROWS`); the author's per-track
-  MIDI n SCALE and AUDIO n SCALE rows are left out of the tables and the row count.
+- SEQUENCER: SCALE, ROOT and GLIDE after the stock three (`_SEQ_ROWS`); the author's TRACK and
+  FOLLOW rows are left out of the tables and the row count.
+- Beside Scale Quantizer, which carries the same quantizer source, the card build keeps one quantizer:
+  Scale Quantizer's declaration (its 28 hooks and five rows) aimed at this module's bundled copy, and
+  this copy's own hooks, rows and row count left out (remix/machine_composition.py shared_supply;
+  Scale Quantizer's composition.json). Its engine and its quantizer stay one unit set.
 - The quantizer bundled privately, its units renamed `fm_*`, as in earlier FM Synth releases.
 - Each unit's generated `remix.inc` as the author writes it for a remix without SY DRUM and
   without Mute Modes, with the bundled quantizer counted as present: FM Synth installs alone on
@@ -34,8 +41,8 @@ This wrapper adds only what the Modwerk build needs:
   builds never call them. Its admit_track, assign and ui_tick run the author's own guard and
   machine change (machine.s ml_guard_p, ml_toast, fm_choose, ml_reset), so those three local
   routines are exported from the fmmachine unit's object (Linked.exports; no code byte changes).
-- `sy_state` exported from the poly unit's object for the bundled quantizer's panel transaction:
-  poly.s exports it only when SY DRUM is in the remix, which on Modwerk it is not.
+- `sy_state`: the bundled quantizer's panel transaction reads it; since be2810f the author's poly.s
+  exports it whenever that transaction is assembled, so this wrapper no longer does.
 
 Since 2.21 the author's own manifest links the PLAYBACK page as a DRAM unit (page.s, compared
 with the page he ratified at its historical address by length and SHA-256) and keeps the 16
@@ -248,10 +255,10 @@ if {g.address for g in _READ_ONLY} != {site for hooks in _DROPPED.values() for s
     raise ValueError('FM Synth: _READ_ONLY answers exactly the dropped hooks\' reads')
 
 # SEQUENCER: the stock three rows, then SCALE, ROOT and GLIDE (the first three entries the
-# author's tables add); his row-count poke, pea of 3 + 19 rows, becomes pea of 3 + 3.
+# author's tables add); his row-count poke, pea of 3 + 5 rows, becomes pea of 3 + 3.
 _SEQ_ROWS = 3
 _PEA_W = bytes.fromhex('4878')                  # pea (xxx).w: the row count's push
-_SEQ_COUNT = (_PEA_W + (3 + 19).to_bytes(2, 'big'), _PEA_W + (3 + _SEQ_ROWS).to_bytes(2, 'big'))
+_SEQ_COUNT = (_PEA_W + (3 + 5).to_bytes(2, 'big'), _PEA_W + (3 + _SEQ_ROWS).to_bytes(2, 'big'))
 
 
 def _guard(site, length):
@@ -395,10 +402,9 @@ _PORT = Linked('fmport', _REL('port.s'), cpu='5475', dram=True)
 # port.s's machine record does the author's commit on the base (machine-ports.json: its package
 # leaves fm_main_commit to the base's ot_machines commit, which calls admit_track and assign):
 # the selection guard for any Part, its popup, the row choice and the machine change's init.
-# The bundled quantizer's panel transaction (2.21, quantizer/panel_transaction.inc.s) reads the
-# engine's per-track state sy_state, which poly.s exports only with SY DRUM in the remix
-# (HAVE_SYDRUM); without SY DRUM it is exported from the poly unit's object (no code byte changes).
-_EXPORTS = {'fmmachine': ('fm_choose', 'ml_guard_p', 'ml_toast'), 'poly': ('sy_state',)}
+# (The bundled quantizer's panel transaction reads the engine's sy_state, which the author's poly.s
+# exports itself since be2810f.)
+_EXPORTS = {'fmmachine': ('fm_choose', 'ml_guard_p', 'ml_toast')}
 for _label in _EXPORTS:
     if sum(u.label == _label for u in _SY.linked) != 1:
         raise ValueError('FM Synth: the author\'s manifest no longer has one %s unit' % _label)
