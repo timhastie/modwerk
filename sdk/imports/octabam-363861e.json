@@ -501,12 +501,12 @@
       "revision": "363861e31ee963c478fab2b190a0fabe1d7ce37b",
       "sourcePath": "modules/quantizer/manifest.py",
       "sourceSha256": "0cb4a79f7cd68e1881cd1076a0f6ba2e132b1c199da3a2d4923906b443797602",
-      "vendoredSha256": "bc2cf8e6bf14ad4d16bf9f355886f9be814dcf8575fb47e9f04f4098264f7d1c",
+      "vendoredSha256": "e0841437a471b000b448ce8417c8fd25cba1cf155aec488d08d2888f4c249394",
       "localReleaseUpdate": {
         "moduleVersion": "0.1.4-experimental",
         "previousVendoredSha256": "0cb4a79f7cd68e1881cd1076a0f6ba2e132b1c199da3a2d4923906b443797602",
         "record": "octabam/modules/quantizer/TESTING.md",
-        "reason": "Re-export the author's manifest (990eff8: 2.21 + TRACK / FOLLOW) byte for byte; declare every detour and poke guard in Modwerk's stock_guard(address, length, sha256) form, matched to his declaration by site (stockGuards below): 28 detours (2.21 adds qz_panel_stage and qz_panel_commit) and the row-count poke."
+        "reason": "Re-export the author's manifest (990eff8: 2.21 + TRACK / FOLLOW) byte for byte; declare every detour and poke guard in Modwerk's stock_guard(address, length, sha256) form, matched to his declaration by site (stockGuards below): 28 detours (2.21 adds qz_panel_stage and qz_panel_commit) and the row-count poke. The wrapper also assembles quantizer.s as a selection without FM Synth (his 2.21 panel transaction is for FM's engine; FM Synth bundles its own copy and conflicts with this module)."
       }
     },
     {

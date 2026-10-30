@@ -123,7 +123,19 @@ def _guarded(module):
         pokes=tuple(dataclasses.replace(p, expect=_BY_SITE[p.addr]) for p in module.pokes))
 
 
-MODULE = _guarded(_upstream_module())
+def _without_fm(module):
+    """quantizer.s's remix.inc as a selection without FM Synth gives it. The author enables his panel
+    publication transaction (2.21) only beside the SYNTH MACHINE module, whose engine state it writes;
+    FM Synth bundles its own copy of this quantizer and declares a conflict with this module, so this
+    module never runs beside it and its adapters always assemble to their replays (no reference to
+    FM's state, wherever the unit is assembled)."""
+    def without(include):
+        return lambda modules: include({key: value for key, value in modules.items() if key != "SYNTH MACHINE"})
+    return dataclasses.replace(module, linked=tuple(
+        dataclasses.replace(unit, include=without(unit.include)) if unit.include else unit for unit in module.linked))
+
+
+MODULE = _without_fm(_guarded(_upstream_module()))
 MODULE = dataclasses.replace(
     MODULE,
     # The module table's fields are octabam's (README.md, `make docs`), so they
