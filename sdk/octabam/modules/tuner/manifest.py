@@ -1,6 +1,7 @@
 """Tuner: retain the author's source, with local credits and stock guards.
 
-The upstream directory is an immutable copy of Tim Hastie's v2.20 Tuner.
+The upstream directory is an unchanged copy of Tim Hastie's Tuner: v2.21 plus
+his DC-removal commit (evidence/source-revendor-2026-10-30.json).
 Its manifest derives its linked source path from its own file location, so
 the native card build resolves that same source. The local wrapper replaces
 only detour expectations with Modwerk guards; USB loading is unsupported.
