@@ -16,7 +16,7 @@
         "shows": "location",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "e1c4f1036f88644a85f02b9009cd915a41c62c04a06c5ad7fd9902a172c8e412",
+        "imageSha256": "22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8",
         "setup": "Headless ot_emu; MKII panel; stopped transport; 128\u00d764 LCD at integer scale 6. Empty disposable card; no samples, user projects or physical hardware."
       }
     },
@@ -33,7 +33,7 @@
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "e1c4f1036f88644a85f02b9009cd915a41c62c04a06c5ad7fd9902a172c8e412",
+        "imageSha256": "22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8",
         "setup": "Headless ot_emu; MKII panel; stopped transport; 128\u00d764 LCD at integer scale 6. Empty disposable card; no samples, user projects or physical hardware."
       }
     },
@@ -50,7 +50,7 @@
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "e1c4f1036f88644a85f02b9009cd915a41c62c04a06c5ad7fd9902a172c8e412",
+        "imageSha256": "22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8",
         "setup": "Headless ot_emu; MKII panel; stopped transport; 128\u00d764 LCD at integer scale 6. Empty disposable card; no samples, user projects or physical hardware."
       }
     },
@@ -67,24 +67,24 @@
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "e1c4f1036f88644a85f02b9009cd915a41c62c04a06c5ad7fd9902a172c8e412",
+        "imageSha256": "22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8",
         "setup": "Headless ot_emu; MKII panel; stopped transport; 128\u00d764 LCD at integer scale 6. Empty disposable card; no samples, user projects or physical hardware."
       }
     },
     {
       "path": "media/ot-track-rows.png",
       "captureType": "emulator",
-      "caption": "Below GLIDE, AUDIO 1 SCALE set to OFF with LEVEL: that track plays unquantized while the others follow the scale.",
-      "alt": "CONTROL SEQUENCER showing MIDI 7 SCALE ON, MIDI 8 SCALE ON and AUDIO 1 SCALE OFF selected.",
+      "caption": "Below GLIDE, TRACK set to AUDIO 8 and FOLLOW set to OFF with LEVEL: that track plays unquantized while the others follow the scale.",
+      "alt": "CONTROL SEQUENCER showing GLIDE OFF, TRACK AUDIO 8 and FOLLOW OFF selected.",
       "credit": "Tim Hastie (headless capture)",
       "license": "LicenseRef-OT-UI-Documentation",
       "source": "original",
       "otUi": {
-        "page": "CONTROL SEQUENCER: AUDIO 1 SCALE",
+        "page": "CONTROL SEQUENCER: FOLLOW",
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "e1c4f1036f88644a85f02b9009cd915a41c62c04a06c5ad7fd9902a172c8e412",
+        "imageSha256": "22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8",
         "setup": "Headless ot_emu; MKII panel; stopped transport; 128\u00d764 LCD at integer scale 6. Empty disposable card; no samples, user projects or physical hardware."
       }
     },
@@ -101,7 +101,7 @@
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "e1c4f1036f88644a85f02b9009cd915a41c62c04a06c5ad7fd9902a172c8e412",
+        "imageSha256": "22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8",
         "setup": "Headless ot_emu; MKII panel; stopped transport; 128\u00d764 LCD at integer scale 6. Empty disposable card; no samples, user projects or physical hardware."
       }
     }

@@ -1,19 +1,83 @@
 # Scale Quantizer 0.1.4 testing
 
-Version: `0.1.4-experimental`. Author source: timhastie/octatrick-modules v2.20
-(`fd18f5530989be348e6aa4c6e38f93beba555e6d`), `quantizer/` byte for byte: his 2.19
-quantizer, whose hook comments now describe the stock instructions in words and
-whose manifest reads every guard through `stock_guard(site, length)`; the assembled
-code is 2.19's. (The author moved tag v2.20 from `a0e8df4` to `7cca7a2`, a comment
-cleanup: in `quantizer/` only comment lines of `core.s` and `quantizer.s` changed; then
-to `fd18f55`, a README cleanup: `quantizer/README.md` and the top-level `README.md`
-describe each hook site in words; no code file changed.) Records made on 25 October 2026 on macOS
-with Node 24.21.0, Python 3.13.7, m68k-elf binutils 2.47 and GCC 16.2.0, and the
-`modwerk-source-tools` image built from `sdk/build/Dockerfile` (image ID
-`sha256:0db04819ba7c59e422ac32a5a519ba2c19760ac73f46a30bf94018d10edb7ac7`, colima).
-No firmware, stock bytes, card images or raw renders are committed. Since `fd18f55` the
-vendored READMEs carry no stock bytes and quote no stock instruction either (main's
-vendored 0.1.3 README does both).
+Version: `0.1.4-experimental`. Author source: timhastie/octatrick-modules
+`990eff8bf88463af4d396793f1c60eb1dab34ea0` (his 2.21 line plus the TRACK / FOLLOW rows;
+local, not yet published), `quantizer/` byte for byte. Records made on 29 October 2026 on
+macOS with Node 24.21.0, Python 3.13, m68k-elf binutils 2.47, and the `modwerk-source-tools`
+image `sha256:0db04819ba7c59e422ac32a5a519ba2c19760ac73f46a30bf94018d10edb7ac7` (colima).
+No firmware, stock bytes, card images or raw renders are committed.
+
+## This cut: 2.21 + TRACK / FOLLOW (29 October 2026)
+
+What changed against the v2.20 cut below:
+
+- The sixteen per-track rows (MIDI 1..8 SCALE, AUDIO 1..8 SCALE) are two rows: TRACK
+  (AUDIO 1..8, MIDI 1..8; a RAM byte of the unit, AUDIO 1 at power-on, not saved; it
+  changes no sound) and FOLLOW (ON / OFF for that track, on the same battery-RAM bits
+  as before). The module contributes five SEQUENCER rows (SCALE, ROOT, GLIDE, TRACK,
+  FOLLOW): within the base's eight over USB, the same five on the card (tables 3 + 5,
+  row-count poke 3 -> 8). The project-file lines are unchanged.
+- 2.21 adds two guarded detours, `qz_panel_stage` (0x4004fc84, 16 bytes) and
+  `qz_panel_commit` (0x40005162, 8 bytes), and includes `remix.inc` twice (the flags,
+  then `panel_transaction.inc.s`); without FM Synth they assemble to their replays.
+  The wrapper declares the two new guards (28 detours + the poke);
+  `quantizer_runtime.py` writes the standalone include at both sites and calls it from
+  the octabam root. The author's include enables the transaction beside SYNTH MACHINE,
+  where it writes FM's engine state (`sy_state`); FM Synth bundles its own copy and
+  conflicts with this module, so the wrapper gives the include a selection without FM
+  Synth. Before that, the card-build object assembled for the whole requested set named
+  `sy_state` and did not link alone; the card image and the USB package are the same
+  either way.
+
+Results:
+
+- Card build (`scripts/export-composition-proofs.py --vendored-sdk --static-stock
+  --modules quantizer --select quantizer:true`, private stage with the local 1.40C):
+  MAIN `22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8` (1,116,202 B),
+  update `ec4b811fe6620f06eb6ba9fd23c18e996830f8fea255cf6552fdcc4d089ff808` (449,848 B);
+  rebuilt identical from the committed tree.
+- USB package: the machine recipe re-captured for the new sources (6 copies, hashes
+  only); `quantizer/0.1.4-experimental.mwrm` 7,210 B
+  `33700b9339c0d0e619716cf6358ac83c9912c9881e30721411d2bf79897bbe04`, 19 hooks, 9
+  stock-code sites; `octatrack:module-packages --check --stock`: 27 identical, rc 0.
+- Card-build packages: Docker isolated build + `modules:import --development`; GNU link
+  proofs refreshed in the toolchain image (7); standalone recipes' four asset pins
+  refreshed.
+- Emulator (ot_emu, MKII panel, a card with tracks 1 and 8 FLEX on one sine sample,
+  trigs 1/5/9/13, Part PTCH +1 st): on the card
+  image above, PROJECT > CONTROL > SEQUENCER lists stock's three rows, SCALE, ROOT,
+  GLIDE, TRACK (AUDIO 1), FOLLOW (ON); DOWN past FOLLOW stays there. TRACK = AUDIO 8,
+  FOLLOW = OFF sets bit 7 of `0x100b14eb`; turning TRACK to MIDI 1 shows FOLLOW ON in the
+  first LCD read 60 ms after the turn, back to AUDIO 8 shows OFF, and TRACK turns change
+  no stored byte. TRACK stops at AUDIO 1 and MIDI 8, [YES] wraps MIDI 8 to AUDIO 1, [YES]
+  toggles FOLLOW. Playing in C MAJOR, track 1's PTCH word is snapped from +1 to 0 st by
+  `qz_atrig` at every trig while track 8 (FOLLOW OFF) keeps +1; with AUDIO 8 FOLLOW ON
+  both snap. SAVE PROJECT writes `#SEQUENCER_MIDI_SCALE_OFF=2` and
+  `#SEQUENCER_AUDIO_SCALE_OFF=132` (AUDIO 3, AUDIO 8, MIDI 2 OFF) and a `project.work`
+  byte-identical to the one the author's 2.21 writes for the same settings; after a power
+  cycle (battery RAM in, no load posted) the bits are back and TRACK starts at AUDIO 1;
+  a project saved by 2.21 with those tracks OFF loads with the same tracks OFF. The
+  SEQUENCER screens of stock's rows and SCALE / ROOT / GLIDE are pixel-identical to
+  2.21's. Every screen of these walks is pixel-identical to the author's standalone 2.21 +
+  TRACK / FOLLOW build. The six media PNGs were re-captured from this image
+  (`scripts/capture-module-ui.py`, ot_emu `07a7c08e`); only `ot-track-rows.png` changed.
+- Checks: in this tree, without the owner's records: `sdk:imports:check`
+  pass (82 files); `test_requested_imports` and `test_quantizer_group_participants` pass;
+  lint (0 errors) and typecheck pass; `octatrack:module-packages --check --stock` 27
+  identical. `modules:generate`, `modules:check` and `npm run check` stop at "quantizer:
+  owner-approved update does not cover this module version" (owner record);
+  `modules:compat -- quantizer` reports one problem, "POLY8 bundled quantizer declaration
+  drift" (owner record `composition.json`). The vitest failures this tree adds over main
+  follow from those two records (the generated catalogue documents stay at 0.1.3, so
+  "Compiled module versions differ from the catalog" and the changelog test) and from the
+  Analog BD composition proofs, which are not refreshed: this Mac's exporter output differs
+  from the committed record also for selections without the quantizer.
+
+## The v2.20 cut (25-27 October 2026)
+
+The sections below record the earlier 0.1.4 cut (author v2.20 `fd18f55`, nineteen
+SEQUENCER rows, card MAIN `e1c4f103...`), kept as history. Its TEST1 hardware report
+applies to that image, not to this cut's.
 
 ## What changed against 0.1.3
 
@@ -266,13 +330,13 @@ so nothing meets there today.
 
 ## Open
 
-- Hardware functional status is **reported** for the TEST1 image above. See the
-  dated report; complete qualification and the unreported measurements remain open.
+- This cut has no hardware report yet (TEST2 image, MAIN `22541cd6...`).
 - Owner: the approval record for 0.1.4 and POLY8's composition signature; then
   `module:verify`, `modules:pairs -- --write` and `modules:generate`.
-- Base: over USB eight contributed SEQUENCER rows, so MIDI 6..8 SCALE and AUDIO 1..8
-  SCALE are unreachable there; side-by-side USB installs with a 2.19-based FM Synth need
-  events at the seven sites above.
+- `src/engine/assets/analog-bd-composition-proofs.json` is not refreshed (see the checks
+  above); it needs the reference toolchain's run.
+- Base: side-by-side USB installs with a 2.19-or-later FM Synth need events at the nine
+  guarded sites.
 
 ## Historical evidence
 
