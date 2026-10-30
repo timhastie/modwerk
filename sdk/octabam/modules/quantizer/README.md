@@ -56,9 +56,14 @@ The module adds ColdFire control hooks and no continuous DSP audio engine. RATE
 is not a semitone control.
 
 FM Synth carries its own copy of this quantizer, because its engine shares the
-quantizer's key mailbox and scale accessor, and FM Synth declares a conflict
-with this module: select one of the two. With FM Synth selected, its bundled
-copy provides SCALE, ROOT, GLIDE and the scale-following behaviour.
+quantizer's key mailbox and scale accessor. Both modules install together:
+FM Synth bundles this module's source byte for byte, so the card build keeps
+one quantizer, this module's hooks and five rows aimed at FM Synth's copy,
+and FM Synth's own quantizer hooks and rows left out (the octabam SDK's
+composition rule `shared_supply`, `tools/remix/machine_composition.py`, from
+this module's `composition.json`; pending the owner's review). SEQUENCER
+shows SCALE, ROOT, GLIDE, TRACK and FOLLOW once; FM SYNTH tracks follow the
+scale as with FM Synth alone, and FOLLOW takes them out like any audio track.
 
 On the Modwerk USB base the eighteen quantizer sites that FM Synth and POLY8
 also use are base events, and the SEQUENCER rows are the base's table; the
