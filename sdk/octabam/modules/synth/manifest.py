@@ -1,6 +1,6 @@
 """FM SYNTH: Tim Hastie's FM engine, machine list and bundled scale quantizer (octatrick 2.21).
 
-`upstream/synth` and `upstream/quantizer` are the author's files at be2810f, byte for byte: release
+`upstream/synth` and `upstream/quantizer` are the author's files at 3531b8e (be2810f + poly.s: an FM SYNTH track whose FOLLOW is OFF reads the scale as OFF), byte for byte: release
 2.21's engine and machine list, his quantizer with the per-track switches as the SEQUENCER rows TRACK
 and FOLLOW (990eff8, the source Scale Quantizer 0.1.4 carries), and poly.s exporting the engine state
 the quantizer's panel transaction reads in a remix without SY DRUM (be2810f; no code byte changes).
