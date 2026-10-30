@@ -4,6 +4,7 @@
 Original imported files remain unchanged. Shared POLY8 key ownership must be
 resolved by the reviewed machine-composition policy before this source port.
 """
+import contextlib
 from dataclasses import replace
 import hashlib
 from pathlib import Path
@@ -58,6 +59,10 @@ def port(module, sdk_root, work):
         if not original.is_relative_to(sdk_root) or unit.defsyms or unit.stock_copies or (unit.include and unit.label != 'qz'):
             raise ValueError('Quantizer has an undeclared linked input.')
         target = work / (unit.label + '.s')
-        target.write_text(source_variant(original.name, original.read_text(), unit.include))
+        # 2.21's include reads panel_transaction.inc.s through a path relative to the octabam root (the
+        # author's manifest is loaded there), so it is called from there.
+        with contextlib.chdir(sdk_root):
+            text = source_variant(original.name, original.read_text(), unit.include)
+        target.write_text(text)
         units.append(replace(unit, source=str(target), cave_addr=None, dram=True, include=None))
     return replace(module, linked=tuple(units))
