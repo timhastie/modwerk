@@ -214,3 +214,79 @@ Stack: `tu_frame` uses registers only (0 B; it runs on whatever stack the frame 
 - Emulator only; no hardware timing, audio or canary. One run of each configuration.
 - The fixture's seven FLEX tracks play the same sample; no USB or MIDI traffic was driven.
 - The analysis cost is per update, amortised over its 400 blocks for the per-block figure; a single UI-task pass takes 9.5 ms (16.1 ms including the interrupts that preempt it), which can delay a key or redraw by that much while the window is open.
+
+## DC removal and re-qualification — 30 October 2026
+
+**Emulator evidence for the rebuilt card; hardware untested.** Numbers and identities: [qualification-emulator-2026-10-30.json](evidence/qualification-emulator-2026-10-30.json). The 29 October section above stays as the record of the previous image; [qualification.example.json](qualification.example.json) now carries this build's numbers.
+
+### The change
+
+The 29 October run found that the detector removed no DC: T2 of the fixture (FLEX through EQ and CHORUS) sits on a DC offset larger than its swing at the tap (mean 1,912, AC RMS 1,062), the normalised difference never goes negative, and every analysis held. Tim's commit `03202050` (branch `tuner-dc` from v2.21 `9e4d34a`, not yet published) changes stage A of `tu_analyse` only: the snapshot pass also sums the ring, the mean is `(sum + 2048) >> 12`, and a second pass over the snapshot subtracts it from every sample, clamps to a word and takes the peak; the gate, scaling, detector, cents table and display are unchanged. Integer arithmetic, word accesses at even addresses, registers only (`d0`–`d6`, `a0`, `a1`), no stack. `.text` grows by 64 bytes (2,830 to 2,894); `.data` is unchanged. The four `upstream/` files are byte-for-byte copies of that commit ([source-revendor-2026-10-30.json](evidence/source-revendor-2026-10-30.json)).
+
+### Build
+
+| Item | Identity |
+| --- | --- |
+| Recipe | the canonical one: pinned Docker image `0db04819…`, network none, read-only app mount, unchanged `scripts/export-composition-proofs.py` with `--vendored-sdk --static-stock --modules tuner --select tuner:true`, the stock 1.40C container and MAIN OS as private inputs, packed version `OCTAMOD79` |
+| Recipe check | the same wrapper first rebuilt `a0d35e2b` (the qualification branch, Tuner unchanged): card `b87ab778…` and bus `91bf159e…` byte for byte |
+| Source | Modwerk `tuner-0.1-dc` `67a75997` (clean) |
+| Card | `OCTATRACK_MODWERK_TUNER_TEST2.bin`, 448,084 B, `d4452bbb41d859deb71a159afa085e8b20c9f034818013fb531193a260d416f5` |
+| Bus | 1,114,848 B, `da2375cfbcee92129aad89b93ca202fff4b441f615fed2d22d2d8b8830055d74` |
+| Unit check | `.text` in emulated RAM (2,894 B at `0x40a955e0`, `.data` at `0x40a98130`) compared equal to a local link of `upstream/tuner.s` before each session |
+
+### Readings (T8 THRU, 0.5 FS sines, fixture playing; LCD and RAM agree)
+
+Taken at the same points of the signal schedule as on 29 October, so each row compares one to one.
+
+| Input | 29 Oct (no DC removal) | 30 Oct (DC removal) |
+| --- | --- | --- |
+| 440 Hz | A4 +0c 440.0Hz ×5 | A4 +0c 440.0Hz ×5 |
+| 82.41 Hz (52.4 s) | E2 +0c 82.4Hz ×5 | E2 +0c 82.4Hz ×5 (same period, 136,993 Q8) |
+| 445 Hz (84.4 s) | A4 +19c 445.0Hz ×5 | A4 +19c 445.0Hz ×5 (same period, 25,369 Q8) |
+| 110 Hz (112.4 s) | A2 −1c 109.9Hz ×3 | A2 −1c 109.9Hz ×5 (same period) |
+| white noise | one transition reading, then HOLD | one transition reading, then HOLD |
+| silence | HOLD | HOLD (ring peak 16) |
+| 440 Hz again | A4 +0c 440.0Hz ×3 | A4 +0c 440.0Hz ×3 |
+| **T2 FLEX, DC offset** | **HOLD ×5** | **F4 −23c 344.6Hz, −22c, −25c, −24c, −32c 342.8Hz, live** |
+
+The T2 reference: the same 4,096 ring samples analysed off-line (mean removed, full-rate difference minimum) give 344.2 Hz, FFT peak 345.8 Hz; the chorus moves the pitch a few cents between readings. The fixture's sample is a 220 Hz sine; the track plays it transposed, so 344 Hz is the signal at the tap, not an octave error. Capture: `media/11-tuner-t2-dc-offset.png` (README only; the record already declares its maximum of eight media); `media/08`–`10` were recaptured on this image.
+
+Readings 2.4–4 s after a tone change carry the previous tone through T8's effects (82.41 Hz: E2 +25c, then +4c to +5c; 445 Hz: +19c to +21c). A control session on the previous image (bus `91bf159e`) at the same points read the same within one cent, so this is the effect tail, not the change.
+
+### Cost (instruction-count model, as on 29 October)
+
+| Path | 29 Oct | 30 Oct |
+| --- | ---: | ---: |
+| `tu_frame`, window open (every block) | 195 | 195 (min = max over 104,872 blocks) |
+| `tu_frame` / `tu_tick` not due, closed | 4 / 4 | 4 / 4 |
+| `tu_tick` not due, open | 7 | 7 |
+| analysis + redraw, pitched (max) | 1,008,258 | 1,048,251 (440 Hz; 1,045,898–1,048,251 over 82.41 / 110 / 440 / 445 Hz and T2) |
+| analysis + redraw, noise (max) | 935,298 | 972,901 |
+| analysis + redraw, silence (max) | 56,115 | 106,443 (both passes run before the gate) |
+| analysis + redraw, transport stopped (max) | 1,005,617 | 1,046,788 |
+| open / close events | 13,749 / 5,968 | 13,749 / 5,968 |
+| **per block, amortised worst case** | **6,769 cycles (71 %)** | **7,018 cycles (73 % of 9,577)** |
+| per block, window closed | 10 cycles | 10 cycles |
+
+Per block: 195 + 1,048,251 / 400 + 7 × 108 / 2,756 = 2,816 instructions × 2.49216 = 7,018 cycles. The frame-interrupt share is unchanged at 486 cycles; the analysis takes 9.9 ms of the UI task every 145 ms (was 9.5 ms). Whole frame-interrupt body under the fixture: closed mean 25,284, max 40,982; open mean about 25,430, max 41,221.
+
+### Memory
+
+| Region | 29 Oct | 30 Oct |
+| --- | ---: | ---: |
+| code and tables (`.text`) | 2,830 | 2,894 |
+| data (`.data`) | 19,500 | 19,500 |
+| link gap | 8,194 | 8,194 |
+| appended loader and packed unit | 2,241 | 2,288 |
+| hook sites | 18 | 18 |
+| UI-task stack peak | 236 | 236 |
+| **own total** | **33,019** | **33,130** |
+| platform reserve less the unit span | 10,457,284 | 10,457,220 |
+
+Stack, re-measured with a write trace on the UI stack (1 s, six analyses and draws): the entry SPs are as before (loop head `0x460d59a8`, `tu_analyse` and `tu_draw` at `0x460d5978`); the deepest write by a Tuner PC is 172 B and inside `tu_draw` 236 B (stock text routine `0x40012bdc`), both unchanged. Interrupt chains nested inside the analysis spans (stock PCs) reached 616 B below the loop head in this sample (528 B on 29 October); they are not Tuner frames.
+
+### Limits
+
+- Emulator only; no hardware timing, audio or canary. One session for the readings and costs, one for the 82.41 Hz reading at the 29 October time, one control session on the previous image.
+- The fix commit is unpublished: `source.revision` names it, and the package must be repinned to Tim's published tag before submission.
+- The browser package identities under `src/engine/assets/` (source-tree hash) were not regenerated for this source change.

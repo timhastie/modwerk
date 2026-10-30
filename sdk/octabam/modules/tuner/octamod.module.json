@@ -7,12 +7,12 @@
   "category": "system",
   "source": {
     "repository": "https://github.com/timhastie/octatrick-modules",
-    "revision": "fd18f5530989be348e6aa4c6e38f93beba555e6d",
+    "revision": "03202050464576b58961093bcc09de783be1f7bd",
     "path": "tuner"
   },
   "build": {
     "status": "pending",
-    "reason": "Current source is v2.20 at fd18f553, rebased onto current main. No current-source build or checks have run; preserved UI and build records belong to the earlier v2.19 integration."
+    "reason": "Source is Tim's v2.21 Tuner plus his DC-removal commit 03202050 (local branch tuner-dc, not yet published; repin to the published tag before submission). Card image OCTATRACK_MODWERK_TUNER_TEST2.bin (d4452bbb, bus da2375cf) built from Modwerk 67a75997 with the canonical recipe; emulator-qualified 30 Oct 2026, hardware pending."
   },
   "author": {
     "github": "timhastie",
@@ -27,7 +27,7 @@
     "label": "Pitch readout on UP + TEMPO",
     "family": "Track utilities",
     "summary": "Hold UP and press TEMPO to read the selected audio track\u2019s note, octave, cents and frequency in a tuner window.",
-    "overview": "Tuner reads the selected audio track after its effects and before its fader. Its note, octave, cents, frequency and needle are designed to help tune a steady pitched sound. It uses no effect slot. This draft offers card builds only; emulator captures of the canonical build show live readings of a tone on the input; hardware qualification is pending.",
+    "overview": "Tuner reads the selected audio track after its effects and before its fader. Its note, octave, cents, frequency and needle are designed to help tune a steady pitched sound. It uses no effect slot. This draft offers card builds only; emulator captures of the card build of this source show live readings of a tone on the input; hardware qualification is pending.",
     "highlights": [
       "UP then TEMPO opens and closes the tuner window.",
       "Follows the selected audio track; no effect slot or parameter assignment.",
@@ -66,35 +66,35 @@
       "key:UP+TEMPO"
     ],
     "limitations": [
-      "Current v2.20 source is unbuilt and untested. The preserved seven UI screenshots and prior native build belong to the older v2.19/card-sdk image and do not qualify this revision.",
+      "Built and emulator-measured on 30 Oct 2026 (card d4452bbb, bus da2375cf) from Tim's v2.21 source plus his unpublished DC-removal commit 03202050; the seven older UI screenshots belong to the earlier v2.19/card-sdk image.",
       "The signal is taken after track effects and before the track fader. It is a monophonic pitch estimate; complex, noisy or inharmonic sounds can wander or select an octave.",
       "Below the signal or confidence threshold, the last valid reading is held. A held reading does not indicate the current pitch.",
       "A4 is fixed at 440 Hz. No calibration control, parameter locks, LFO destination or saved project setting is added.",
       "Hold UP before TEMPO. Pressing TEMPO first follows the ordinary tempo-window path.",
       "Card builds only: the base has no removal refusal for ordinary modules.",
       "The retained older emulator fault is in its DSP write callback; the triggering image property remains unresolved.",
-      "Emulator readings only so far (29 October 2026); no hardware pitch or audio result is claimed. The standalone 2.19 reference exited before capture, so paired visual equivalence with it is unavailable.",
-      "The detector removes no DC offset: a signal whose DC offset is larger than its AC (RMS) level (seen on one emulator fixture track after its effects) shows HOLD instead of a reading."
+      "Emulator readings only so far (29 and 30 October 2026); no hardware pitch or audio result is claimed. The standalone 2.19 reference exited before capture, so paired visual equivalence with it is unavailable.",
+      "The reading follows the last 93 ms of the track after its effects, so an effect tail can pull it just after a note changes (on the emulator: E2 +25c 2.4 s after 440 Hz gave way to 82.41 Hz on T8, +0c at 12 s; the same with and without the DC removal)."
     ]
   },
   "resources": {
-    "recorded": "29 October 2026; emulator counts and link map; hardware pending",
+    "recorded": "30 October 2026; emulator counts and link map; hardware pending",
     "storage": {
       "label": "ColdFire code, data and stack",
-      "display": "33,019 B of its own (+ the 10.46 MB DRAM platform reserve)",
-      "value": 33019,
+      "display": "33,130 B of its own (+ the 10.46 MB DRAM platform reserve)",
+      "value": 33130,
       "unit": "bytes",
       "method": "static",
-      "conditions": "Exact link map of the canonical build (runtime.elf / layout.json): 2,830 B code and tables, 19,500 B state, ring and detector workspace, an 8,194 B unused gap the link leaves between them, 2,241 B platform loader and packed unit appended to the image, 18 B of rewritten hook sites and a measured 236 B UI-task stack peak. Any DRAM module also creates the platform reserve taken from Flex sample RAM (10,457,284 B beyond the unit); see TESTING.md.",
+      "conditions": "Exact layout of the card build d4452bbb: 2,894 B code and tables (a local link of upstream/tuner.s compared equal to emulated RAM), 19,500 B state, ring and detector workspace, an 8,194 B unused gap the link leaves between them (.data at 0x40a98130), 2,288 B platform loader and packed unit appended to the image, 18 B of rewritten hook sites and a measured 236 B UI-task stack peak. Any DRAM module also creates the platform reserve taken from Flex sample RAM (10,457,220 B beyond the unit); see TESTING.md.",
       "source": "TESTING.md"
     },
     "processing": {
       "label": "ColdFire, per audio block (amortised)",
-      "display": "6,769 of 9,577 cycles per block worst case",
-      "value": 6769,
+      "display": "7,018 of 9,577 cycles per block worst case",
+      "value": 7018,
       "unit": "cycles/block",
       "method": "emulator",
-      "conditions": "Window open on a pitched tone with the tuner-load8 fixture playing: 195 instructions in the frame interrupt every block, plus one analysis and redraw in the UI task every 400 blocks (1,008,258 instructions at most, 9.5 ms at 9.44 ns per instruction), amortised over those 400 blocks; window closed: 4 instructions per block. Instruction-count model at 264 MHz, not chip timing; see TESTING.md.",
+      "conditions": "Window open on a pitched tone with the tuner-load8 fixture playing: 195 instructions in the frame interrupt every block, plus one analysis and redraw in the UI task every 400 blocks (1,048,251 instructions at most, 9.9 ms at 9.44 ns per instruction, including the DC-removal pass), amortised over those 400 blocks; window closed: 4 instructions per block. Instruction-count model at 264 MHz, not chip timing; see TESTING.md.",
       "source": "TESTING.md"
     },
     "impact": {
@@ -121,13 +121,14 @@
   },
   "tests": {
     "report": "TESTING.md",
-    "summary": "Emulator qualification of the canonical card build (bus 91bf159e) on 29 October 2026: a sine on the input reaches the tap and reads A4 +0c 440.0Hz, E2 +0c 82.4Hz and A4 +19c 445.0Hz live; worst-case ColdFire cost 195 instructions per block in the frame interrupt and 1,008,258 per analysis in the UI task (6,769 of 9,577 cycles per block amortised); exact memory from the link map with a measured stack peak. Hardware remains untested; the qualification object waits for the hardware report.",
+    "summary": "Emulator qualification of the card build of this source (card d4452bbb, bus da2375cf) on 30 October 2026: a sine on the input reaches the tap and reads A4 +0c 440.0Hz, E2 +0c 82.4Hz, A4 +19c 445.0Hz and A2 -1c 109.9Hz live, the same as the 29 October build; a fixture track whose signal sits on a DC offset larger than its swing, which held before, now reads (F4, 343-345 Hz, matching an off-line analysis of the same samples); worst-case ColdFire cost 195 instructions per block in the frame interrupt and 1,048,251 per analysis in the UI task (7,018 of 9,577 cycles per block amortised); exact memory with a measured stack peak. Hardware remains untested; the qualification object waits for the hardware report.",
     "hardwareStatus": "untested",
-    "evidenceRevision": "fd18f5530989be348e6aa4c6e38f93beba555e6d",
+    "evidenceRevision": "03202050464576b58961093bcc09de783be1f7bd",
     "gates": [
-      "Emulator: tone on the input reaches the read-back tap; 440, 82.41, 445 and 110 Hz read within one cent (LCD captures)",
+      "Emulator: tone on the input reaches the read-back tap; 440, 82.41, 445 and 110 Hz read within one cent (LCD captures), unchanged from the build without DC removal",
+      "Emulator: a track with a DC offset larger than its AC level reads instead of holding (LCD capture, off-line reference)",
       "Emulator: instruction counts per block (frame hook) and per analysis (UI task) under the tuner-load8 fixture, window open and closed",
-      "Link map of the canonical build and measured UI-task stack peak (exact memory)"
+      "Unit layout of the card build compared with emulated RAM, and measured UI-task stack peak (exact memory)"
     ]
   },
   "license": {
@@ -234,8 +235,8 @@
         "shows": "location-and-controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.0-experimental",
-        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
-        "setup": "Emulator measurement 29 Oct 2026: ot_emu c81d13dc (--dsp, MKII panel) on the canonical bus 91bf159e (card OCTATRACK_MWTUN0.1.bin b87ab778), tuner-load8 fixture playing (seven FLEX tracks with stock FX, T8 THRU), a 0.5 FS sine on the input fed by --audio-in, T8 selected; actual 128x64 LCD at integer scale 6."
+        "imageSha256": "da2375cfbcee92129aad89b93ca202fff4b441f615fed2d22d2d8b8830055d74",
+        "setup": "Emulator measurement 30 Oct 2026: ot_emu c81d13dc (--dsp, MKII panel) on bus da2375cf (card OCTATRACK_MODWERK_TUNER_TEST2.bin d4452bbb), tuner-load8 fixture playing (seven FLEX tracks with stock FX, T8 THRU), a 0.5 FS sine on the input fed by --audio-in, T8 selected; actual 128x64 LCD at integer scale 6, rendered black and white."
       }
     },
     {
@@ -251,8 +252,8 @@
         "shows": "location-and-controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.0-experimental",
-        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
-        "setup": "Emulator measurement 29 Oct 2026: ot_emu c81d13dc (--dsp, MKII panel) on the canonical bus 91bf159e (card OCTATRACK_MWTUN0.1.bin b87ab778), tuner-load8 fixture playing (seven FLEX tracks with stock FX, T8 THRU), a 0.5 FS sine on the input fed by --audio-in, T8 selected; actual 128x64 LCD at integer scale 6."
+        "imageSha256": "da2375cfbcee92129aad89b93ca202fff4b441f615fed2d22d2d8b8830055d74",
+        "setup": "Emulator measurement 30 Oct 2026: ot_emu c81d13dc (--dsp, MKII panel) on bus da2375cf (card OCTATRACK_MODWERK_TUNER_TEST2.bin d4452bbb), tuner-load8 fixture playing (seven FLEX tracks with stock FX, T8 THRU), a 0.5 FS sine on the input fed by --audio-in, T8 selected; actual 128x64 LCD at integer scale 6, rendered black and white."
       }
     },
     {
@@ -268,8 +269,8 @@
         "shows": "location-and-controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.0-experimental",
-        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
-        "setup": "Emulator measurement 29 Oct 2026: ot_emu c81d13dc (--dsp, MKII panel) on the canonical bus 91bf159e (card OCTATRACK_MWTUN0.1.bin b87ab778), tuner-load8 fixture playing (seven FLEX tracks with stock FX, T8 THRU), a 0.5 FS sine on the input fed by --audio-in, T8 selected; actual 128x64 LCD at integer scale 6."
+        "imageSha256": "da2375cfbcee92129aad89b93ca202fff4b441f615fed2d22d2d8b8830055d74",
+        "setup": "Emulator measurement 30 Oct 2026: ot_emu c81d13dc (--dsp, MKII panel) on bus da2375cf (card OCTATRACK_MODWERK_TUNER_TEST2.bin d4452bbb), tuner-load8 fixture playing (seven FLEX tracks with stock FX, T8 THRU), a 0.5 FS sine on the input fed by --audio-in, T8 selected; actual 128x64 LCD at integer scale 6, rendered black and white."
       }
     }
   ]

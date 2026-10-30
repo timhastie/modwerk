@@ -1,6 +1,6 @@
 # Tuner
 
-Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged for Modwerk from the exact v2.20 source; emulator-qualified, hardware pending.
+Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged for Modwerk from his v2.21 source plus his DC-removal fix (commit `03202050`); emulator-qualified, hardware pending.
 
 ## Overview
 
@@ -8,7 +8,7 @@ Hold **UP first, then press TEMPO** to open a pitch readout for the selected aud
 
 **Card builds only: the base has no removal refusal for ordinary modules.** USB support is optional future work; the earlier admission proposal is retained in [evidence/usb-admission.md](evidence/usb-admission.md), not implemented or required for this card-only draft.
 
-On the emulator (29 October 2026) the canonical card build reads a tone on the input live: A4 +0c 440.0Hz, E2 +0c 82.4Hz and A4 +19c 445.0Hz, with its cost and memory measured under an eight-track load. Hardware qualification is pending. [TESTING.md](TESTING.md) has the numbers and the earlier records.
+On the emulator (30 October 2026) the card build of this source reads a tone on the input live: A4 +0c 440.0Hz, E2 +0c 82.4Hz and A4 +19c 445.0Hz, and a track whose effects leave a DC offset larger than its swing now reads too; cost and memory are measured under an eight-track load. Hardware qualification is pending. [TESTING.md](TESTING.md) has the numbers and the earlier records.
 
 ## Controls
 
@@ -51,7 +51,7 @@ Press TEMPO to close. The track page is visible again, with no tuner overlay.
 
 More screenshots retain the alternate [NO close state](media/03-closed-no.png), [YES close state](media/04-closed-yes.png), [ordinary tempo window](media/06-normal-tempo.png) and [tempo-tapping dialog](media/07-func-tempo.png). All seven images were reviewed. The unmodified [capture record](media/capture.json) binds their identities and input plan; [the UI evidence note](evidence/ui-capture-2026-10-26.json) records the tooling and qualification limits. The [thumbnail](presentation/thumbnail.svg) is conceptual artwork, not an instrument capture.
 
-### Live readings (emulator, 29 October 2026)
+### Live readings (emulator, 30 October 2026)
 
 A 440 Hz sine on input A, T8 THRU selected, the eight-track fixture playing: A4, the needle centred, +0c, 440.0Hz.
 
@@ -65,6 +65,10 @@ The low E string, 82.41 Hz: E2 +0c 82.4Hz.
 
 ![Tuner reading A4 +19c 445.0Hz](media/10-tuner-a4-445.png)
 
+T2 of the fixture: a sample through EQ and CHORUS whose signal at the tap sits on a DC offset larger than its swing (mean 1,911, AC RMS 834). The detector takes the mean off before it looks for a period, so the track reads F4 about 25 cents flat, 343-345 Hz, the chorus moving it a few cents; the same samples analysed off-line give 344.2 Hz.
+
+![Tuner reading F4 -32c 342.8Hz on T2](media/11-tuner-t2-dc-offset.png)
+
 ## Compatibility and limitations
 
 - Targets OS 1.40C and declares `key:UP+TEMPO`. The historical source describes both Octatrack models; this capture used an MKII panel, not physical hardware.
@@ -73,25 +77,25 @@ The low E string, 82.41 Hz: E2 +0c 82.4Hz.
 - No tuner setting is stored in a Part, project, card or battery RAM. The window and working history are temporary.
 - The private declaration compatibility check passed on the earlier fixture. Companion behavior and current-base runtime compatibility remain unqualified.
 - An older retained emulator failed in its DSP write callback. Which image property triggers that fault remains unresolved; the current capture does not justify a Tuner firmware correction.
-- The detector removes no DC offset. A signal whose DC offset is larger than its AC (RMS) level (one fixture track after its effects, on the emulator) shows HOLD instead of a reading.
+- The reading follows the last 93 ms of the track's signal after its effects, so an effect's tail can pull it just after a note changes: on the emulator, 2.4–2.8 s after a 440 Hz tone gave way to 82.41 Hz on T8 (THRU with its two stock effects) it read E2 +25c, +4c to +5c at 3.2–4 s, and +0c at 12 s (the same with and without the DC removal).
 - Card-only acceptance does not supply hardware qualification, and does not waive the catalogue’s evidence requirements.
 
 ## Tests and measurements
 
-Emulator, 29 October 2026, canonical card build (MAIN OS `91bf159e…`), eight-track fixture playing ([TESTING.md](TESTING.md), [evidence](evidence/qualification-emulator-2026-10-29.json)):
+Emulator, 30 October 2026, card build of this source (`OCTATRACK_MODWERK_TUNER_TEST2.bin` `d4452bbb…`, MAIN OS `da2375cf…`), eight-track fixture playing ([TESTING.md](TESTING.md), [evidence](evidence/qualification-emulator-2026-10-30.json)):
 
 | Measure | Result |
 | --- | --- |
-| Readings | 440 Hz A4 +0c, 82.41 Hz E2 +0c, 445 Hz A4 +19c, 110 Hz A2 −1c; noise and silence HOLD |
+| Readings | 440 Hz A4 +0c, 82.41 Hz E2 +0c, 445 Hz A4 +19c, 110 Hz A2 −1c; noise and silence HOLD; the DC-offset track F4 −23c..−32c (343–345 Hz, live) |
 | Frame interrupt, every block | 195 instructions open, 4 closed |
-| Analysis and redraw, every 400 blocks (UI task) | at most 1,008,258 instructions (9.5 ms at 9.44 ns) |
-| Per block, amortised worst case | 6,769 of 9,577 cycles (instruction-count model, 264 MHz) |
-| Memory | 33,019 B of its own (2,830 code, 19,500 data, 8,194 link gap, 2,241 appended loader and unit, 18 hook sites, 236 stack) plus the DRAM platform reserve |
+| Analysis and redraw, every 400 blocks (UI task) | at most 1,048,251 instructions (9.9 ms at 9.44 ns) |
+| Per block, amortised worst case | 7,018 of 9,577 cycles (instruction-count model, 264 MHz) |
+| Memory | 33,130 B of its own (2,894 code, 19,500 data, 8,194 link gap, 2,288 appended loader and unit, 18 hook sites, 236 stack) plus the DRAM platform reserve |
 
 Not yet measured on hardware. The earlier native build, declaration check and UI walk records stay in [TESTING.md](TESTING.md).
 
 ## Authorship and licences
 
-Tuner is by **Tim Hastie (@timhastie)**, from `timhastie/octatrick-modules` tag `v2.20`, commit `fd18f5530989be348e6aa4c6e38f93beba555e6d`. All four files in `upstream/` are unchanged. The local wrapper preserves the upstream runtime/source declarations and replaces the three detour expectations with verified Modwerk-form hash guards; [guard provenance](evidence/guard-provenance.json) records that adapter change. The preserved card image predates both that adapter and this source update. The immutable upstream reader needs the build working directory's local MAIN section before manifest import; the Modwerk wrapper then replaces the three expectations with lazy digest guards. No current-source build or check was run during the re-vendor.
+Tuner is by **Tim Hastie (@timhastie)**, from `timhastie/octatrick-modules` v2.21 (`9e4d34a`) plus his commit `03202050464576b58961093bcc09de783be1f7bd` on branch `tuner-dc`, which takes the ring's mean off before the analysis; that commit is not yet published, and this package is to be repinned to the published tag before submission. All four files in `upstream/` are copies of that commit, byte for byte ([source-revendor-2026-10-30.json](evidence/source-revendor-2026-10-30.json)). The local wrapper preserves the upstream runtime/source declarations and replaces the three detour expectations with verified Modwerk-form hash guards; [guard provenance](evidence/guard-provenance.json) records that adapter change. The immutable upstream reader needs the build working directory's local MAIN section before manifest import; the Modwerk wrapper then replaces the three expectations with lazy digest guards.
 
 The upstream MIT terms remain in [LICENSE](LICENSE). Octabam supplies the native platform. Documentary screenshots retain the underlying interface rights; firmware is not included. No hardware endorsement or affiliation is asserted.
