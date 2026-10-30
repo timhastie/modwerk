@@ -74,7 +74,7 @@
       "Card builds only: the base has no removal refusal for ordinary modules.",
       "The retained older emulator fault is in its DSP write callback; the triggering image property remains unresolved.",
       "Emulator readings only so far (29 October 2026); no hardware pitch or audio result is claimed. The standalone 2.19 reference exited before capture, so paired visual equivalence with it is unavailable.",
-      "The detector removes no DC offset: a signal whose offset exceeds its swing (seen on one emulator fixture track after its effects) shows HOLD instead of a reading."
+      "The detector removes no DC offset: a signal whose DC offset is larger than its AC (RMS) level (seen on one emulator fixture track after its effects) shows HOLD instead of a reading."
     ]
   },
   "resources": {

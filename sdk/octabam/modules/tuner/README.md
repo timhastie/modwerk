@@ -73,7 +73,7 @@ The low E string, 82.41 Hz: E2 +0c 82.4Hz.
 - No tuner setting is stored in a Part, project, card or battery RAM. The window and working history are temporary.
 - The private declaration compatibility check passed on the earlier fixture. Companion behavior and current-base runtime compatibility remain unqualified.
 - An older retained emulator failed in its DSP write callback. Which image property triggers that fault remains unresolved; the current capture does not justify a Tuner firmware correction.
-- The detector removes no DC offset. A signal whose offset is larger than its swing (one fixture track after its effects, on the emulator) shows HOLD instead of a reading.
+- The detector removes no DC offset. A signal whose DC offset is larger than its AC (RMS) level (one fixture track after its effects, on the emulator) shows HOLD instead of a reading.
 - Card-only acceptance does not supply hardware qualification, and does not waive the catalogue’s evidence requirements.
 
 ## Tests and measurements

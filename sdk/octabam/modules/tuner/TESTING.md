@@ -166,7 +166,7 @@ The emulator fills this arena. The earlier attempts' zero peak was a fixture lev
 
 The 445 Hz and 110 Hz readings sit one cent low: the cents come from a 12-bit ratio table (0.42 cents per step), as the upstream README says. Captures: `media/08-tuner-a4-440.png`, `media/09-tuner-e2-82.png`, `media/10-tuner-a4-445.png`.
 
-T2 of the fixture (FLEX with EQ and CHORUS) carries a DC offset at the tap: ring mean 1,912, swing ±1,062, so the normalised difference never goes negative and every analysis ends in HOLD. The detector removes no DC. See *Open* below.
+T2 of the fixture (FLEX with EQ and CHORUS) carries a DC offset at the tap: ring mean 1,912, AC RMS 1,062 (range -621 to 3,926), so the normalised difference never goes negative and every analysis ends in HOLD. The detector removes no DC. See *Open* below.
 
 ### Cost (instruction-count model)
 

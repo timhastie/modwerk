@@ -3,7 +3,7 @@
  "date": "2026-10-29",
  "identities": {
   "emulator": {
-   "path": "relay130/emulator/build/ot_emu",
+   "path": "ot_emu",
    "sha256": "c81d13dc70f9012cd1431b115a13d0804a47d0b7ebae6eacfca8329b7e32bff9"
   },
   "image_bus": {
