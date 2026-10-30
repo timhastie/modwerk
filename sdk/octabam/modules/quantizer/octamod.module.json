@@ -288,8 +288,8 @@
   },
   "tests": {
     "report": "TESTING.md",
-    "summary": "0.1.4 imports Tim Hastie's 2.19 quantizer byte for byte. Card-build and USB packages built on this Mac from the user's own 1.40C; modules:compat, module:doctor and the native emulator smoke recorded in TESTING.md. The author reports TEST1 functional hardware checks passed on MKI / OS 1.40C on 26 October 2026; see TESTING.md for the exact image identities and limitations. Chip timing and complete memory bounds remain unmeasured.",
-    "hardwareStatus": "reported",
+    "summary": "0.1.4 imports Tim Hastie's 2.21 quantizer with the TRACK / FOLLOW rows byte for byte. Card-build and USB packages built on this Mac from the user's own 1.40C; the emulator gates are recorded in TESTING.md. The author's TEST1 hardware report (26 October 2026) covers the earlier v2.20 cut, not this image; this cut is untested on hardware. Chip timing and complete memory bounds remain unmeasured.",
+    "hardwareStatus": "untested",
     "evidenceRevision": "363861e31ee963c478fab2b190a0fabe1d7ce37b",
     "gates": [],
     "documentation": {
