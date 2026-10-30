@@ -6,29 +6,23 @@ from pathlib import Path
 import unittest
 
 APP = Path(__file__).resolve().parents[2]
-ORIGINAL = json.loads((APP/'sdk/imports/synth-949f3be.json').read_text())
-RECORD = json.loads((APP/'sdk/imports/synth-fixes-273-264.json').read_text())
-FOLDER = APP/RECORD['folder']
+RECORD = json.loads((APP/'sdk/imports/synth-9e4d34a.json').read_text())  # 0.1.4: the author's 2.21 files (v2.21 = 9e4d34a), byte for byte
+FOLDER = APP/RECORD['root']
 sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 class SynthRelease(unittest.TestCase):
     def test_source_identities_and_complete_notices(self):
-        files = ORIGINAL['files'] + ORIGINAL['localFiles']
-        updates = {item['path']: item for item in RECORD['files']}
-        self.assertEqual(RECORD['originalImport'], 'synth-949f3be.json')
-        self.assertEqual(RECORD['status'], 'released')
+        files = RECORD['files']
+        self.assertEqual(RECORD['moduleVersion'], json.loads((FOLDER/'octamod.module.json').read_text())['version'])
         self.assertEqual(len(files), len({item['path'] for item in files}))
         for item in files:
-            update = updates.get(item['path'])
-            if update:
-                self.assertEqual(update['previousSha256'], item['vendoredSha256'])
-            self.assertEqual(sha(FOLDER/item['path']), update['draftSha256'] if update else item['vendoredSha256'], item['path'])
-            if 'revision' in item:
-                self.assertRegex(item['revision'], r'^[a-f0-9]{40}$')
-                self.assertRegex(item['sourceSha256'], r'^[a-f0-9]{64}$')
-                if not item.get('changes'):
-                    self.assertEqual(item['sourceSha256'], item['vendoredSha256'])
+            self.assertRegex(item['revision'], r'^[a-f0-9]{40}$')
+            self.assertEqual(item['revision'], RECORD['authorPin']['revision'])
+            self.assertRegex(item['sourceSha256'], r'^[a-f0-9]{64}$')
+            self.assertEqual(sha(FOLDER/item['path']), item['vendoredSha256'], item['path'])
+            if not item.get('changes'):
+                self.assertEqual(item['sourceSha256'], item['vendoredSha256'])
         license_text = (FOLDER/'LICENSE').read_text()
         for name in ['upstream/LICENSE', 'OCTABAM-LICENSE']:
             self.assertIn((FOLDER/name).read_text().strip(), license_text)
@@ -52,7 +46,7 @@ class SynthRelease(unittest.TestCase):
 
     def test_experimental_release_does_not_claim_hardware_or_timing(self):
         doc = json.loads((FOLDER/'octamod.module.json').read_text())
-        self.assertEqual(doc['version'], RECORD['version'])
+        self.assertEqual(doc['version'], RECORD['moduleVersion'])
         self.assertNotIn('build', doc)
         self.assertEqual(doc['tests']['hardwareStatus'], 'untested')
         self.assertNotIn('qualification', doc['tests'])

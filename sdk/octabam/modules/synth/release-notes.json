@@ -1,9 +1,11 @@
 {
-  "version": "0.1.2-experimental",
-  "date": "2026-10-08",
+  "version": "0.1.4-experimental",
+  "date": "2026-10-25",
   "changes": [
-    "correct the MIDI chromatic drawer’s argument stack so changing MIDI trig mode keeps the instrument responsive (#264).",
-    "add 18.06 dB of source headroom before mono output and paraphonic summing, preserving envelopes and relative voice levels (#273). Sounds are quieter at unchanged mixer settings; effect and multi-track mix clipping remains possible.",
-    "Owner-approved experimental release without current hardware validation. Chip timing and complete memory bounds remain unmeasured; the original static symptom is not hardware-confirmed."
+    "Updates to the author's Octatrick 2.20: step and scene locks on every FM control, a selection guard and voice cap per Part, init on a machine change; the quantizer follows MIDI and audio tracks too.",
+    "Fixes the click at note start and end (#557), a chord's first trig ignoring the AMP envelope (#710), a CHRD scene change keeping the old chord (#751) and FLEX names on LFO1/LFO2 (#589).",
+    "LFOs and scene locks on AMP ATK, HOLD and REL now shape the sound, and an LFO on PTCH moves the pitch as far as on FLEX, following Jan Kolkmeier's report and fix (#883, #884).",
+    "Card builds keep the SRC page out of the 16 bytes the stock DELAY reads past its table at a slow tempo with a long TIME (0.1.2 kept page code there), as Jannik Aßfalg's #895 did.",
+    "About 12 dB louder than 0.1.2: the engine keeps 6 dB of headroom instead of 18; AMP VOL 0 is the reference. Known issue: not tested on hardware; card builds only, no USB package yet."
   ]
 }
