@@ -63,7 +63,9 @@ and FM Synth's own quantizer hooks and rows left out (the octabam SDK's
 composition rule `shared_supply`, `tools/remix/machine_composition.py`, from
 this module's `composition.json`; pending the owner's review). SEQUENCER
 shows SCALE, ROOT, GLIDE, TRACK and FOLLOW once; FM SYNTH tracks follow the
-scale as with FM Synth alone, and FOLLOW takes them out like any audio track.
+scale as with FM Synth alone, and FOLLOW takes them out like any audio track
+(with the author's `3531b8e` in FM Synth; on the earlier be2810f build an FM SYNTH
+track set OFF kept its keys snapped and only lost the ROOT transpose).
 
 On the Modwerk USB base the eighteen quantizer sites that FM Synth and POLY8
 also use are base events, and the SEQUENCER rows are the base's table; the
