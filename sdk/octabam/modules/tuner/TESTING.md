@@ -132,3 +132,85 @@ The independent failure that is ours is the Analog BD proof's stale `moduleSourc
 The setup used 251 unchanged published assets copied from the successful draft media generation after catalogue and corresponding input equivalence. Tuner was excluded. No generated qualification catalogue or waiver was changed. The earlier failed generation and D01 receipts remain preserved; the corrected attempts do not erase them.
 
 Both branches remain based on main `4e2226f1be6347f74d51a0d5b99ee572ba3a82bb`, not newer main `814f6c556e6d518ba7cac77ac3cecc9f15cadf68`. [local-checks-order-074.json](evidence/local-checks-order-074.json) contains the per-leaf source pins, full receipt hashes, import binding and assertion-by-assertion analysis. This later documentation was not part of the checked commits. Canonical firmware and the runtime USB mechanism are unchanged. No new hardware, cycle, complete-memory or runtime qualification is claimed.
+
+## Emulator qualification — 29 October 2026
+
+**Emulator evidence for the qualification record; hardware untested.** Numbers and identities: [qualification-emulator-2026-10-29.json](evidence/qualification-emulator-2026-10-29.json). The record itself waits in [qualification.example.json](qualification.example.json) (complete except `hardware`) until Tim's report on the exact card image exists; `tests.qualification` is not set and `tests.hardwareStatus` stays `untested`.
+
+### What ran
+
+| Item | Identity |
+| --- | --- |
+| Image | canonical card `OCTATRACK_MWTUN0.1.bin` (448,024 B, `b87ab778…`), whose MAIN OS is the bus `91bf159e…` that ran; built from promotion `ab3db4f5`, upstream Tuner `fd18f553` (the `tuner/` files are identical in v2.21) |
+| Unit check | the Tuner's 2,830 B of code in emulated RAM compared equal to `runtime.elf` `.text` (`492f1b52…`) before any measurement |
+| Emulator | `ot_emu` `c81d13dc…` (source build 27 Oct), `--dsp --frame --mkii`, unsandboxed, one rig slot |
+| Fixture | `tuner-load8` card (`90bef7e1…`): T1–T7 FLEX playing a sample with stock FX1 and FX2 on every track, trigs and retrigs on every track at 120 BPM; T8 THRU on input A |
+| Signal | `--audio-in` WAV, the same 0.5 FS signal on the four input slots, scheduled: 440, 82.41, 445, 110 Hz sines, white noise, silence, 440 Hz again. No firmware, memory or code was changed: the tone reaches the tap through the stock input, the THRU machine, the track's effects and the read-back DMA |
+
+### The tap
+
+`tu_frame` (upstream `tuner.s` lines 97–127) runs at frame_isr's tail (`0x4000d99a`) on every 16-sample block while the window is open. It reads `0x80003190 + bank × 1024 + track × 128`, with the bank from `0x800000e4` and the track from `0x80000000 & 7`: sixteen L/R pairs of 32-bit left-justified words, the selected track after its effects and before its fader. It writes `(L >> 1) + (R >> 1)`, top 16 bits, into a 4,096-sample ring. `tu_tick` (UI task loop head `0x40056c72`) analyses the ring and redraws every 400 blocks.
+
+The emulator fills this arena. The earlier attempts' zero peak was a fixture level: at the 0.1 FS built-in tones T8 THRU reaches about 26 at the tap (gate 64), and T1 of this fixture is silent at the tap after its effects. At 0.5 FS, T8 reaches 100–184.
+
+### Readings (LCD and RAM agree; five readings 0.4 s apart unless noted)
+
+| Input on T8 | Expected | Read | State |
+| --- | --- | --- | --- |
+| 440 Hz | A4 +0.0c | A4 +0c 440.0Hz ×5 (and ×3 at the end) | live |
+| 82.41 Hz | E2 +0.1c | E2 +0c 82.4Hz ×5 | live |
+| 445 Hz | A4 +19.6c | A4 +19c 445.0Hz ×5 | live |
+| 110 Hz | A2 +0.0c | A2 −1c 109.9Hz ×3 | live |
+| white noise | no pitch | first reading A2 +43c 112.7Hz (ring half tone, half noise), then HOLD | HOLD |
+| silence | HOLD | HOLD (ring peak 15, under the gate) | HOLD |
+
+The 445 Hz and 110 Hz readings sit one cent low: the cents come from a 12-bit ratio table (0.42 cents per step), as the upstream README says. Captures: `media/08-tuner-a4-440.png`, `media/09-tuner-e2-82.png`, `media/10-tuner-a4-445.png`.
+
+T2 of the fixture (FLEX with EQ and CHORUS) carries a DC offset at the tap: ring mean 1,912, swing ±1,062, so the normalised difference never goes negative and every analysis ends in HOLD. The detector removes no DC. See *Open* below.
+
+### Cost (instruction-count model)
+
+The emulator counts executed ColdFire instructions; PC watches on the Tuner's entries and exits and on the stock frame-interrupt body (`0x4000aad8`–`0x4000d9a6`) give per-call counts. Converted with the toolkit's calibration, the FM Synth record's model: **9.44 ns per instruction at 264 MHz = 2.49216 cycles per instruction**; one block is 16 samples at 44.1 kHz = 362.8 µs = **95,779 cycles**; Modwerk's ColdFire module allowance is 10 % of it, **9,577 cycles per block**. This is not chip timing and not opcode cycles.
+
+| Path | Window | Instructions | Where |
+| --- | --- | ---: | --- |
+| `tu_frame` (frame interrupt, every block) | open | 195 (min = max over 60,708 blocks) | — |
+| `tu_frame` | closed | 4 | — |
+| `tu_tick` not due (UI loop head, ~108 visits/s) | open / closed | 7 / 4 | — |
+| analysis + redraw (UI task, every 400 blocks) | open, pitched tone | mean 998,000–1,000,500, **max 1,008,258** | 440 Hz under load |
+| analysis + redraw | open, noise (clarity reject) | max 935,298 | |
+| analysis + redraw | open, silence (gate reject) | max 56,115 | |
+| `tu_analyse` alone | open, pitched | max 1,002,725 | |
+| `tu_draw` alone | open | 5,418–5,863 | |
+| open (UP + TEMPO to the first draw, key task) | event | 13,749 | |
+| close (TEMPO, `tu_close`) | event | 5,968 | |
+
+UI-task counts exclude the frame-interrupt bodies that preempt them; any other interrupt inside the span stays in the count, so they are upper bounds. The counts depend on the signal, not on the load: open with the transport stopped (only T8's input) gives the same 195 and max 1,005,617.
+
+**Per block, worst case (window open, pitched tone, fixture playing):** 195 + 1,008,258 / 400 + 7 × 108 / 2,756 = **2,716 instructions = 6,769 cycles per block, 71 % of the 9,577 allowance.** The frame interrupt itself carries 195 instructions = 486 cycles (5.1 %); the rest is UI-task work, 9.5 ms every 145 ms (6.6 % of the core), which the frame interrupt preempts. Window closed: 4 + 4 × 108 / 2,756 instructions = 10 cycles per block.
+
+The whole frame-interrupt body under the fixture: closed mean 25,158, max 40,890; open mean 25,410, max 41,219 instructions. The fixture's own peak is above the 38,432 instruction-times of a block at 9.44 ns (it fits at 8.38 ns, 43,294) with or without the Tuner; the Tuner adds its 195.
+
+### Memory (exact)
+
+From `runtime.elf`, `layout.json` and the appended bytes of the canonical build:
+
+| Region | Space | Bytes |
+| --- | --- | ---: |
+| Tuner code and tables (`.text` `0x40a955e0`–`0x40a960ee`) | sdram | 2,830 |
+| State 44, ring 8,192, snapshot 8,192, decimated 2,048, NSDF 740, lobes 256, YIN 28 (`.data` `0x40a980f0`–`0x40a9cd1c`) | sdram | 19,500 |
+| Unused gap the link leaves between `.text` and `.data` | sdram | 8,194 |
+| Platform loader (232) and packed unit (2,009) appended to the image | cpu-flash | 2,241 |
+| Three hook sites rewritten in place (3 × 6 B) | cpu-flash | 18 |
+| UI-task stack below the loop head, measured peak | sdram | 236 |
+| DRAM platform reserve (Flex sample RAM given up, `0x40a955e0`–`0x41495de0`, 10,487,808 B) less the unit span | sdram | 10,457,284 |
+
+The Tuner's own bytes: 33,019; with the reserve 10,490,303. One global instance; no heap, no SRAM, battery RAM or DSP memory; the window object is the stock TEMPO window's (class 5), created by the stock routine.
+
+Stack: `tu_frame` uses registers only (0 B; it runs on whatever stack the frame interrupt has). In the UI task the deepest write inside `tu_draw` (writes trace filtered to the UI task, interrupt chains excluded) is 236 B below the loop-head SP `0x460d59a8`: the Tuner's own frames are 172 B (`tu_tick` 44, return 4, `tu_draw` 92, helper return 4, 24 B of text arguments, call 4), the stock text routine adds 64. `tu_analyse` pushes nothing. On the key path the draw starts at the `tu_tempo` entry SP and reached 124 B at the watched calls (188 B with the text routine), next to the stock window creation the stock TEMPO opener does anyway. Non-frame interrupt chains reach 528 B below the loop head with or without the Tuner. No hardware canary was measured.
+
+### Limits
+
+- Emulator only; no hardware timing, audio or canary. One run of each configuration.
+- The fixture's seven FLEX tracks play the same sample; no USB or MIDI traffic was driven.
+- The analysis cost is per update, amortised over its 400 blocks for the per-block figure; a single UI-task pass takes 9.5 ms (16.1 ms including the interrupts that preempt it), which can delay a key or redraw by that much while the window is open.

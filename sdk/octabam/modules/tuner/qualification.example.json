@@ -1,0 +1,110 @@
+{
+  "_status": "STAGED, NOT PART OF THE RECORD. Complete except 'hardware'. When Tim's functional report on OCTATRACK_MWTUN0.1.bin (b87ab778) exists: add hardware {kind: functional, status: reported, model, testedOn, tester, sourceRevision = tests.evidenceRevision = the built source commit, imageSha256 = this imageSha256, summary, limitations, report}, set sourceSha256 to moduleNativeSourceSha256 of the final folder, move this object to tests.qualification and set tests.hardwareStatus to reported.",
+  "qualification": {
+    "documentation": {
+      "tutorial": {
+        "title": "Quick tutorial: tune a sound on a track",
+        "steps": [
+          "Select the audio track to tune with its track key. Tuner reads the track after its effects and before its fader, so a quiet or faded track still reads.",
+          "Hold UP first, then press TEMPO. The window shows the track, the note and octave, a +-50 cent needle, the cents and the frequency.",
+          "Play a steady pitched sound on that track (a THRU track with an instrument on input A, or a sample) and adjust it until the needle is centred and the cents read +0c.",
+          "Below the signal gate or without a clear pitch the last reading stays with HOLD in the header. Press TEMPO, YES or NO, or UP + TEMPO again, to close the window."
+        ]
+      },
+      "screenshots": [
+        "media/08-tuner-a4-440.png",
+        "media/09-tuner-e2-82.png",
+        "media/10-tuner-a4-445.png"
+      ],
+      "screenshotStyle": "black-and-white"
+    },
+    "moduleVersion": "0.1.0-experimental",
+    "sourceSha256": "208cf39666a0a8969c189239a13d4b272e3b117631873111b4b5a0d2d2aaca44",
+    "imageSha256": "b87ab778e69ed59988ba710dac655abc37cd04e97102f5f416e73c56aa0232d6",
+    "cycles": [
+      {
+        "processor": "coldfire",
+        "worstCase": 6769,
+        "maxConfiguration": 6769,
+        "maxInstances": 1,
+        "budget": 9577,
+        "unit": "cycles/block",
+        "method": "emulator",
+        "conditions": {
+          "parameterExtremes": "The Tuner has no parameters. Its branches were all driven: closed window (4 instructions per hook), open window not due (7), analysis rejected at the input gate (silence, max 56,115 per update), rejected at the clarity gate (white noise, 935,298), and accepted readings at 82.41, 110, 440 and 445 Hz (max 1,008,258 per update at 440 Hz). Instruction counts on ot_emu c81d13dc for the canonical image, converted at 9.44 ns per instruction at 264 MHz (2.49216 cycles per instruction); see TESTING.md.",
+          "parameterModulation": "No parameter, lock, LFO, scene or MIDI CC path: the module reads only the selected-track byte and the read-back arena. Changing the track while open (T8 -> T2 -> T8) was exercised; the frame hook cost is constant (195 instructions, min = max over 60,708 blocks).",
+          "modeSwitching": "Opening (UP + TEMPO to the first draw, 13,749 instructions in the key task) and closing (TEMPO, 5,968) are one-off events outside the frame path; open, close and reopen were repeated with the fixture playing. Transport start/stop does not change the module's cost (stopped: 195 per block, 1,005,617 per update).",
+          "maxLoad": "One global instance. The tuner-load8 fixture playing: seven FLEX tracks with stock FX1 and FX2 on all eight tracks, trigs and retrigs on every track at 120 BPM, T8 THRU on input A. Per block: 195 instructions in the frame interrupt plus the UI-task analysis and redraw (1,008,258 instructions at most, every 400 blocks, preempted by the frame interrupt) amortised over 400 blocks plus 108 not-due visits a second at 7: 2,716 instructions = 6,769 cycles, against Modwerk's 9,577-cycle ColdFire allowance (10 % of a 362.8 us block at 264 MHz). The frame-interrupt share alone is 486 cycles. UI-task counts exclude nested frame-interrupt bodies and include any other interrupt (upper bound). No USB or MIDI traffic was driven.",
+          "inputConditions": "Sines at 0.5 FS on the input (82.41, 110, 440, 445 Hz), white noise and silence through T8 THRU and the track's effects to the read-back tap; a FLEX track with a DC offset after its effects (HOLD). The pitched path is the most expensive (YIN refinement runs only on an accepted lobe); the noise path stops after the lag loop and the silent path after the snapshot."
+        },
+        "report": "TESTING.md"
+      }
+    ],
+    "memory": {
+      "regions": [
+        {
+          "name": "Tuner DRAM unit code and tables (.text)",
+          "space": "sdram",
+          "words": 2830,
+          "wordBits": 8,
+          "bytes": 2830,
+          "scope": "shared"
+        },
+        {
+          "name": "Tuner state, sample ring, snapshot and detector workspace (.data)",
+          "space": "sdram",
+          "words": 19500,
+          "wordBits": 8,
+          "bytes": 19500,
+          "scope": "shared"
+        },
+        {
+          "name": "Unused link gap between .text and .data inside the unit span",
+          "space": "sdram",
+          "words": 8194,
+          "wordBits": 8,
+          "bytes": 8194,
+          "scope": "shared"
+        },
+        {
+          "name": "Platform loader and packed Tuner unit appended to the image",
+          "space": "cpu-flash",
+          "words": 2241,
+          "wordBits": 8,
+          "bytes": 2241,
+          "scope": "shared"
+        },
+        {
+          "name": "Three hook sites rewritten in place (3 x 6-byte detours)",
+          "space": "cpu-flash",
+          "words": 18,
+          "wordBits": 8,
+          "bytes": 18,
+          "scope": "shared"
+        },
+        {
+          "name": "UI-task caller stack below the loop head (measured peak, tu_tick + tu_draw + stock text routine)",
+          "space": "sdram",
+          "words": 236,
+          "wordBits": 8,
+          "bytes": 236,
+          "scope": "shared"
+        },
+        {
+          "name": "Platform reserve: Flex sample RAM given up to the DRAM platform, less the unit span",
+          "space": "sdram",
+          "words": 10457284,
+          "wordBits": 8,
+          "bytes": 10457284,
+          "scope": "shared"
+        }
+      ],
+      "perInstanceBytes": 0,
+      "sharedBytes": 10490303,
+      "maxInstances": 1,
+      "totalBytes": 10490303,
+      "conditions": "Exact link map of the canonical build (runtime.elf 492f1b52, layout.json, the 2,241 bytes appended to the bus 91bf159e). The Tuner's own bytes are 33,019: 2,830 code and tables, 19,500 data (state 44, ring 8,192, snapshot 8,192, decimated 2,048, NSDF 740, lobes 256, YIN 28), the 8,194-byte gap the link leaves between them, 2,241 appended loader and packed unit, 18 bytes of hook sites, and a 236-byte UI-task stack peak measured on the emulator (own frames 172 B static). The frame hook uses no stack. The 10,457,284-byte platform reserve is Flex sample RAM given up to the DRAM platform (10,487,808 B less the unit span); any DRAM module creates it. No heap, SRAM, battery-RAM or DSP allocation; the window is the stock TEMPO window object. No hardware canary was measured.",
+      "report": "TESTING.md"
+    }
+  }
+}

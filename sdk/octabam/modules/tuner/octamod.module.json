@@ -27,7 +27,7 @@
     "label": "Pitch readout on UP + TEMPO",
     "family": "Track utilities",
     "summary": "Hold UP and press TEMPO to read the selected audio track\u2019s note, octave, cents and frequency in a tuner window.",
-    "overview": "Tuner reads the selected audio track after its effects and before its fader. Its note, octave, cents, frequency and needle are designed to help tune a steady pitched sound. It uses no effect slot. This draft offers card builds only; the captured older candidate demonstrates window navigation, not live pitch or hardware qualification.",
+    "overview": "Tuner reads the selected audio track after its effects and before its fader. Its note, octave, cents, frequency and needle are designed to help tune a steady pitched sound. It uses no effect slot. This draft offers card builds only; emulator captures of the canonical build show live readings of a tone on the input; hardware qualification is pending.",
     "highlights": [
       "UP then TEMPO opens and closes the tuner window.",
       "Follows the selected audio track; no effect slot or parameter assignment.",
@@ -52,6 +52,7 @@
     "screenshots": [
       "media/01-track-page.png",
       "media/02-tuner-open.png",
+      "media/08-tuner-a4-440.png",
       "media/05-closed-tempo.png"
     ]
   },
@@ -71,28 +72,29 @@
       "A4 is fixed at 440 Hz. No calibration control, parameter locks, LFO destination or saved project setting is added.",
       "Hold UP before TEMPO. Pressing TEMPO first follows the ordinary tempo-window path.",
       "Card builds only: the base has no removal refusal for ordinary modules.",
-      "The standalone 2.19 reference exited before capture, so paired visual equivalence is unavailable. No live pitch, needle response or audio result is claimed.",
-      "The retained older emulator fault is in its DSP write callback; the triggering image property remains unresolved."
+      "The retained older emulator fault is in its DSP write callback; the triggering image property remains unresolved.",
+      "Emulator readings only so far (29 October 2026); no hardware pitch or audio result is claimed. The standalone 2.19 reference exited before capture, so paired visual equivalence with it is unavailable.",
+      "The detector removes no DC offset: a signal whose offset exceeds its swing (seen on one emulator fixture track after its effects) shows HOLD instead of a reading."
     ]
   },
   "resources": {
-    "recorded": "26 October 2026; current hardware timing and resource qualification remain unmeasured",
+    "recorded": "29 October 2026; emulator counts and link map; hardware pending",
     "storage": {
-      "label": "ColdFire code and working memory",
-      "display": "Current allocation unmeasured",
-      "value": null,
+      "label": "ColdFire code, data and stack",
+      "display": "33,019 B of its own (+ the 10.46 MB DRAM platform reserve)",
+      "value": 33019,
       "unit": "bytes",
-      "method": "unmeasured",
-      "conditions": "One global tuner instance with a sample ring and detector workspace in DRAM. Exact current code, data, stack, loader and alignment totals require the named build.",
+      "method": "static",
+      "conditions": "Exact link map of the canonical build (runtime.elf / layout.json): 2,830 B code and tables, 19,500 B state, ring and detector workspace, an 8,194 B unused gap the link leaves between them, 2,241 B platform loader and packed unit appended to the image, 18 B of rewritten hook sites and a measured 236 B UI-task stack peak. Any DRAM module also creates the platform reserve taken from Flex sample RAM (10,457,284 B beyond the unit); see TESTING.md.",
       "source": "TESTING.md"
     },
     "processing": {
-      "label": "ColdFire pitch analysis",
-      "display": "Current worst-case cycles unmeasured",
-      "value": null,
-      "unit": "cycles/event",
-      "method": "unmeasured",
-      "conditions": "While open, the frame hook copies selected-track samples and the UI task analyses them approximately seven times a second. No detector runs in the interrupt. Current chip timing and maximum-load behavior remain unmeasured.",
+      "label": "ColdFire, per audio block (amortised)",
+      "display": "6,769 of 9,577 cycles per block worst case",
+      "value": 6769,
+      "unit": "cycles/block",
+      "method": "emulator",
+      "conditions": "Window open on a pitched tone with the tuner-load8 fixture playing: 195 instructions in the frame interrupt every block, plus one analysis and redraw in the UI task every 400 blocks (1,008,258 instructions at most, 9.5 ms at 9.44 ns per instruction), amortised over those 400 blocks; window closed: 4 instructions per block. Instruction-count model at 264 MHz, not chip timing; see TESTING.md.",
       "source": "TESTING.md"
     },
     "impact": {
@@ -119,10 +121,14 @@
   },
   "tests": {
     "report": "TESTING.md",
-    "summary": "Current v2.20 source update is unbuilt and untested. Historical v2.19 card-sdk build and UI observations remain separately attributed; hardware, timing and resource qualification remain pending.",
+    "summary": "Emulator qualification of the canonical card build (bus 91bf159e) on 29 October 2026: a sine on the input reaches the tap and reads A4 +0c 440.0Hz, E2 +0c 82.4Hz and A4 +19c 445.0Hz live; worst-case ColdFire cost 195 instructions per block in the frame interrupt and 1,008,258 per analysis in the UI task (6,769 of 9,577 cycles per block amortised); exact memory from the link map with a measured stack peak. Hardware remains untested; the qualification object waits for the hardware report.",
     "hardwareStatus": "untested",
     "evidenceRevision": "fd18f5530989be348e6aa4c6e38f93beba555e6d",
-    "gates": []
+    "gates": [
+      "Emulator: tone on the input reaches the read-back tap; 440, 82.41, 445 and 110 Hz read within one cent (LCD captures)",
+      "Emulator: instruction counts per block (frame hook) and per analysis (UI task) under the tuner-load8 fixture, window open and closed",
+      "Link map of the canonical build and measured UI-task stack peak (exact memory)"
+    ]
   },
   "license": {
     "spdx": "MIT",
@@ -213,6 +219,57 @@
         "moduleVersion": "0.1.0-experimental",
         "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
         "setup": "Original candidate built from native SDK baseline 916ce01b; source-built emulator 5581c685 substituted for the retained binary. MKII panel; transport stopped; main output off; actual 128x64 LCD at integer scale 6. Historical v2.19/card-sdk capture; not rebuilt from current v2.20 source or main 4e2226f1. No live pitch/audio qualification."
+      }
+    },
+    {
+      "path": "media/08-tuner-a4-440.png",
+      "captureType": "emulator",
+      "caption": "The tuner on T8 reading a 440 Hz sine on input A: A4, the needle centred, +0c, 440.0Hz.",
+      "alt": "Tuner window titled TUNER T8 showing A4, a centred needle, +0c and 440.0Hz.",
+      "credit": "Tuner by Tim Hastie; documentary emulator capture; underlying interface by Elektron Music Machines.",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "Tuner window",
+        "shows": "location-and-controls",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
+        "setup": "Emulator measurement 29 Oct 2026: ot_emu c81d13dc (--dsp, MKII panel) on the canonical bus 91bf159e (card OCTATRACK_MWTUN0.1.bin b87ab778), tuner-load8 fixture playing (seven FLEX tracks with stock FX, T8 THRU), a 0.5 FS sine on the input fed by --audio-in, T8 selected; actual 128x64 LCD at integer scale 6."
+      }
+    },
+    {
+      "path": "media/09-tuner-e2-82.png",
+      "captureType": "emulator",
+      "caption": "An 82.41 Hz sine (the low E string) reads E2 +0c 82.4Hz.",
+      "alt": "Tuner window showing E2, a centred needle, +0c and 82.4Hz.",
+      "credit": "Tuner by Tim Hastie; documentary emulator capture; underlying interface by Elektron Music Machines.",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "Tuner window",
+        "shows": "location-and-controls",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
+        "setup": "Emulator measurement 29 Oct 2026: ot_emu c81d13dc (--dsp, MKII panel) on the canonical bus 91bf159e (card OCTATRACK_MWTUN0.1.bin b87ab778), tuner-load8 fixture playing (seven FLEX tracks with stock FX, T8 THRU), a 0.5 FS sine on the input fed by --audio-in, T8 selected; actual 128x64 LCD at integer scale 6."
+      }
+    },
+    {
+      "path": "media/10-tuner-a4-445.png",
+      "captureType": "emulator",
+      "caption": "A 445 Hz sine (about 20 cents sharp of A4) reads A4 +19c 445.0Hz with the needle right of centre.",
+      "alt": "Tuner window showing A4, the needle right of centre, +19c and 445.0Hz.",
+      "credit": "Tuner by Tim Hastie; documentary emulator capture; underlying interface by Elektron Music Machines.",
+      "license": "LicenseRef-OT-UI-Documentation",
+      "source": "original",
+      "otUi": {
+        "page": "Tuner window",
+        "shows": "location-and-controls",
+        "firmware": "1.40C",
+        "moduleVersion": "0.1.0-experimental",
+        "imageSha256": "91bf159ee5a25c1d6b9356fe3eb0f43d8985f569bbfdeee3a7f85ba0da3770b3",
+        "setup": "Emulator measurement 29 Oct 2026: ot_emu c81d13dc (--dsp, MKII panel) on the canonical bus 91bf159e (card OCTATRACK_MWTUN0.1.bin b87ab778), tuner-load8 fixture playing (seven FLEX tracks with stock FX, T8 THRU), a 0.5 FS sine on the input fed by --audio-in, T8 selected; actual 128x64 LCD at integer scale 6."
       }
     }
   ]

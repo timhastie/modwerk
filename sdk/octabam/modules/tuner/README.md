@@ -1,6 +1,6 @@
 # Tuner
 
-Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged as an unqualified Modwerk draft from the exact v2.20 source.
+Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged for Modwerk from the exact v2.20 source; emulator-qualified, hardware pending.
 
 ## Overview
 
@@ -8,7 +8,7 @@ Hold **UP first, then press TEMPO** to open a pitch readout for the selected aud
 
 **Card builds only: the base has no removal refusal for ordinary modules.** USB support is optional future work; the earlier admission proposal is retained in [evidence/usb-admission.md](evidence/usb-admission.md), not implemented or required for this card-only draft.
 
-The preserved v2.19/card-sdk candidate has a successful historical build and seven reviewed emulator UI captures. It was **not rebuilt from this v2.20 source or current main**. Exact-current-source build, hardware, live pitch, timing and resource qualification remain pending. [TESTING.md](TESTING.md) separates those gaps from the observed window behavior.
+On the emulator (29 October 2026) the canonical card build reads a tone on the input live: A4 +0c 440.0Hz, E2 +0c 82.4Hz and A4 +19c 445.0Hz, with its cost and memory measured under an eight-track load. Hardware qualification is pending. [TESTING.md](TESTING.md) has the numbers and the earlier records.
 
 ## Controls
 
@@ -24,12 +24,14 @@ There are no editable tuner parameters, locks, LFO destinations or calibration c
 
 ## Usage
 
-### Quick tutorial: tune a steady sound
+Open the window on the track you want to tune and play a steady pitched sound on it; the reading refreshes about seven times a second.
 
-1. Use an identified card build and select an audio track receiving a steady pitched sound. No effect slot is required.
-2. Hold UP first, then press TEMPO to open Tuner. Pressing TEMPO first follows the ordinary tempo-window route instead.
-3. Adjust the sound at its source while watching the readout. The intended reference is A4 at 440 Hz, with the cents reading and needle near the center. Accuracy and live response on this integration still require the hardware check.
-4. Press TEMPO, YES or NO to close. The opening gesture also toggles the window; its toggle-off path remains a hardware checklist item.
+### Quick tutorial: tune a sound on a track
+
+1. Select the audio track to tune with its track key. Tuner reads the track after its effects and before its fader, so a quiet or faded track still reads.
+2. Hold UP first, then press TEMPO. The window shows the track, the note and octave, a +-50 cent needle, the cents and the frequency.
+3. Play a steady pitched sound on that track (a THRU track with an instrument on input A, or a sample) and adjust it until the needle is centred and the cents read +0c.
+4. Below the signal gate or without a clear pitch the last reading stays with HOLD in the header. Press TEMPO, YES or NO, or UP + TEMPO again, to close the window.
 
 ## Screens and audio
 
@@ -49,6 +51,20 @@ Press TEMPO to close. The track page is visible again, with no tuner overlay.
 
 More screenshots retain the alternate [NO close state](media/03-closed-no.png), [YES close state](media/04-closed-yes.png), [ordinary tempo window](media/06-normal-tempo.png) and [tempo-tapping dialog](media/07-func-tempo.png). All seven images were reviewed. The unmodified [capture record](media/capture.json) binds their identities and input plan; [the UI evidence note](evidence/ui-capture-2026-10-26.json) records the tooling and qualification limits. The [thumbnail](presentation/thumbnail.svg) is conceptual artwork, not an instrument capture.
 
+### Live readings (emulator, 29 October 2026)
+
+A 440 Hz sine on input A, T8 THRU selected, the eight-track fixture playing: A4, the needle centred, +0c, 440.0Hz.
+
+![Tuner reading A4 +0c 440.0Hz](media/08-tuner-a4-440.png)
+
+The low E string, 82.41 Hz: E2 +0c 82.4Hz.
+
+![Tuner reading E2 +0c 82.4Hz](media/09-tuner-e2-82.png)
+
+445 Hz, about 20 cents sharp of A4: the needle sits right of centre and the cents read +19c (the cents table steps 0.42 cents).
+
+![Tuner reading A4 +19c 445.0Hz](media/10-tuner-a4-445.png)
+
 ## Compatibility and limitations
 
 - Targets OS 1.40C and declares `key:UP+TEMPO`. The historical source describes both Octatrack models; this capture used an MKII panel, not physical hardware.
@@ -57,13 +73,22 @@ More screenshots retain the alternate [NO close state](media/03-closed-no.png), 
 - No tuner setting is stored in a Part, project, card or battery RAM. The window and working history are temporary.
 - The private declaration compatibility check passed on the earlier fixture. Companion behavior and current-base runtime compatibility remain unqualified.
 - An older retained emulator failed in its DSP write callback. Which image property triggers that fault remains unresolved; the current capture does not justify a Tuner firmware correction.
-- Card-only acceptance does not supply hardware, timing, resource or exact-build qualification, and does not waive the catalogue’s evidence requirements.
+- The detector removes no DC offset. A signal whose offset is larger than its swing (one fixture track after its effects, on the emulator) shows HOLD instead of a reading.
+- Card-only acceptance does not supply hardware qualification, and does not waive the catalogue’s evidence requirements.
 
 ## Tests and measurements
 
-The earlier private native build and declaration compatibility check passed. A no-Tuner control booted with the retained emulator. The candidate subsequently completed the seven-image UI walk with substituted tooling; the reference image failed before UI commands. The prior draft check failed in application tests. [TESTING.md](TESTING.md) preserves these separate outcomes.
+Emulator, 29 October 2026, canonical card build (MAIN OS `91bf159e…`), eight-track fixture playing ([TESTING.md](TESTING.md), [evidence](evidence/qualification-emulator-2026-10-29.json)):
 
-Current code/data/padding, loader overhead, maximum stack, worst-case cycles, pitch accuracy, audio continuity and behavior under load remain unqualified. Historical upstream measurements explain the design but do not qualify this draft or its current source revision.
+| Measure | Result |
+| --- | --- |
+| Readings | 440 Hz A4 +0c, 82.41 Hz E2 +0c, 445 Hz A4 +19c, 110 Hz A2 −1c; noise and silence HOLD |
+| Frame interrupt, every block | 195 instructions open, 4 closed |
+| Analysis and redraw, every 400 blocks (UI task) | at most 1,008,258 instructions (9.5 ms at 9.44 ns) |
+| Per block, amortised worst case | 6,769 of 9,577 cycles (instruction-count model, 264 MHz) |
+| Memory | 33,019 B of its own (2,830 code, 19,500 data, 8,194 link gap, 2,241 appended loader and unit, 18 hook sites, 236 stack) plus the DRAM platform reserve |
+
+Not yet measured on hardware. The earlier native build, declaration check and UI walk records stay in [TESTING.md](TESTING.md).
 
 ## Authorship and licences
 
