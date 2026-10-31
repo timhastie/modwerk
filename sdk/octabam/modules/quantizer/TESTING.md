@@ -9,9 +9,9 @@ No firmware, stock bytes, card images or raw renders are committed.
 
 ## Beside FM Synth: one quantizer (30 October 2026)
 
-FM Synth 0.1.4 now bundles this module's author source byte for byte (`3531b8e`, whose `quantizer/` equals `990eff8`'s; `3531b8e` = `be2810f` plus the author's `poly.s` fix below). `composition.json` names its units' copies in FM Synth (`supplied.units`) and the signature of this declaration (`687ed9a8...`); with the octabam SDK's composition rule `shared_supply` (`tools/remix/machine_composition.py`, pending the owner's review; not on this branch) the card build of both keeps one quantizer: this module's 28 hooks and five rows aimed at FM Synth's copy, this module's units not linked, FM Synth's own quantizer hooks and rows left out. This module alone is unchanged: card image TEST2 (`ec4b811f...`, MAIN `22541cd6...`) rebuilds byte-identical.
+FM Synth 0.1.4 now bundles this module's author source byte for byte (`3531b8e`, whose `quantizer/` equals `990eff8`'s; `3531b8e` = `be2810f` plus the author's `poly.s` fix below). `composition.json` names its units' copies in FM Synth (`supplied.units`) and the signature of this declaration (`687ed9a8...`); with the octabam SDK's composition rule `shared_supply` (`tools/remix/machine_composition.py`, pending the owner's review; not on this branch) the card build of both keeps one quantizer: this module's 28 hooks and five rows aimed at FM Synth's copy, this module's units not linked, FM Synth's own quantizer hooks and rows left out. This module alone is unchanged: card image TEST2 (`ec4b811f...`, MAIN `22541cd6...`) rebuilds byte-identical. FM Synth 0.1.4 declares `quantizer` in its `compatibility.conflicts` again (30 October 2026, as agreed with the owner on #555): the pair stays declared conflicting until the rule is merged in its own base PR, and this module's `conflicts` stays empty, as on main (the module whose change makes the pair collide flags it, docs/module-guides/README.md 'Who flags'). `manifest.py`'s note that FM Synth declares a conflict with this module is true again.
 
-Emulator, the image of both (TEST2: upgrade file `c56be6796301f4f7f1658860542f5e48bba9a2a6144e7a74aff610fee4a227ab`, MAIN `ad6681dbef87790426573968c2f0f5762e38b5e107c175b129a30eb1b4e7fa56`; TEST1 `d091b3c0...` / `dbf73edf...` superseded): this module's card walk (rows, TRACK / FOLLOW, the setting acting at play, SAVE, power cycle, the load of a 2.21-saved project) gives the same NV bytes and PTCH words as on TEST2, 38 of its 40 screens byte-identical (the other two differ in timing-dependent pixels), and a `project.work` byte-identical to 2.21's. FM SYNTH tracks keep FM Synth's chords and first chord after power-on. FOLLOW OFF on an FM SYNTH track: on TEST1 only the ROOT transpose was dropped and the keys were still snapped (FM Synth's engine read the scale mask without the track's bit); with the author's `3531b8e` in FM Synth (TEST2) the track plays exactly SCALE OFF's pitches (E PHRYGN, trig keys 1..16 one at a time: 0x400 0x900 0xe00 ... 0x4f00, the SCALE OFF words; FOLLOW ON: the PHRYGN set) while the other tracks keep the scale. Untested on hardware.
+Emulator, the image of both (TEST2: upgrade file `c56be6796301f4f7f1658860542f5e48bba9a2a6144e7a74aff610fee4a227ab`, MAIN `ad6681dbef87790426573968c2f0f5762e38b5e107c175b129a30eb1b4e7fa56`; TEST1 `d091b3c0...` / `dbf73edf...` superseded): this module's card walk (rows, TRACK / FOLLOW, the setting acting at play, SAVE, power cycle, the load of a 2.21-saved project) gives the same NV bytes and PTCH words as on TEST2, 38 of its 40 screens byte-identical (the other two differ in timing-dependent pixels), and a `project.work` byte-identical to 2.21's. FM SYNTH tracks keep FM Synth's chords and first chord after power-on. FOLLOW OFF on an FM SYNTH track: on TEST1 only the ROOT transpose was dropped and the keys were still snapped (FM Synth's engine read the scale mask without the track's bit); with the author's `3531b8e` in FM Synth (TEST2) the track plays exactly SCALE OFF's pitches (E PHRYGN, trig keys 1..16 one at a time: 0x400 0x900 0xe00 ... 0x4f00, the SCALE OFF words; FOLLOW ON: the PHRYGN set) while the other tracks keep the scale. Both images were tested on the author's MKI on 30 October 2026 (Author-reported hardware — 30 October 2026, below).
 
 ## This cut: 2.21 + TRACK / FOLLOW (29 October 2026)
 
@@ -138,6 +138,38 @@ it, outside Git), menus from `defaultChoosers(['quantizer'], true)`:
   `193d7877` (the v2.20 files at `a0e8df4`) and from a fresh clone at `ce285c1b` (the
   files at `7cca7a2`) and from a fresh clone at `3a01cc1b` (the files at `fd18f55`): both
 files identical each time, runtime ELF `a51a75e3...`.
+
+## Author-reported hardware — 30 October 2026 (TEST2, and the pair)
+
+Tim Hastie reports every item of the Scale Quantizer 0.1.4-experimental TEST2 sheet working,
+tested on an **Octatrack MKI, OS 1.40C, on 30 October 2026**: in his words, "passed all
+checks". The image is the one above: update file
+`ec4b811fe6620f06eb6ba9fd23c18e996830f8fea255cf6552fdcc4d089ff808` (449,848 bytes), MAIN
+`22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8`. **Reported by the author**,
+not independently repeated here. The same facts are in `octamod.module.json`
+(`tests.hardwareStatus` `reported`, a `tests.gates` line); no `tests.qualification` object is
+added, because the contract wants worst-case cycles and exact memory beside the hardware block
+and this cut measures neither.
+
+- tested on: 2026-10-30
+- tester: timhastie
+- model: MKI
+- summary: every item of the sheet worked. SEQUENCER has eight rows ending in TRACK and FOLLOW
+  and DOWN past FOLLOW does nothing; TRACK AUDIO 8 with FOLLOW OFF, then TRACK to MIDI 1 and
+  back, reads ON and OFF as it turns without leaving the page, and TRACK stops at AUDIO 1 and
+  MIDI 8; with the same pitched sample on T1 and T8 at PTCH +1 and trigs on 1, 5, 9 and 13,
+  C MAJOR with AUDIO 8 FOLLOW OFF plays T1 at the root and T8 a semitone higher, and AUDIO 8
+  FOLLOW ON plays both the same; after SAVE and a power-cycle SCALE reads MAJOR, TRACK is back
+  at AUDIO 1, AUDIO 8 still reads FOLLOW OFF and T8 still plays +1.
+- the pair: the FM Synth + Scale Quantizer image (TEST2 of the pair, update
+  `c56be679…`, MAIN `ad6681db…`, built from `fq-integration` with the `shared_supply` rule)
+  passed every item of its own sheet on the same unit the same day (FM Synth's TESTING.md
+  lists them: the five rows once, a MIDI track's NOTE C to D, a FLEX trig snapped at play,
+  C# sounding and marking C, FOLLOW per track, FOLLOW OFF on an FM SYNTH track and on MIDI 1,
+  SCALE OFF, save and power-cycle, a 2.21-saved project).
+- limitations: play time and the MIDI gear used were not recorded; whether the optional step
+  (a 2.21-saved project with SCALE rows OFF) was run is not stated. A functional check of the
+  sheet's items, not a load or stress qualification; no cycle or memory figure is measured.
 
 ## Author-reported hardware — 26 October 2026
 
@@ -325,8 +357,9 @@ results without the timeout.
 ## Beside FM Synth
 
 FM Synth bundles its own copy of this quantizer (labels `fm_*`) and lists
-`quantizer` in `compatibility.conflicts`; the declaration ledger refuses the two
-together, so a build selects one. Over USB both ports subscribe the same 18 take
+`quantizer` in `compatibility.conflicts` (FM Synth 0.1.4 keeps that declaration
+until the `shared_supply` rule is merged, above); the declaration ledger refuses the
+two together, so a build selects one. Over USB both ports subscribe the same 18 take
 events (FM at 40, Scale Quantizer at 50) and contribute rows with the same labels,
 and the keyed table shows one set. With 2.19 sources on both sides, FM's bundled copy
 and this module would both patch the seven sites that have no event (`qz_mknob`,
@@ -336,7 +369,8 @@ so nothing meets there today.
 
 ## Open
 
-- This cut has no hardware report yet (TEST2 image, MAIN `22541cd6...`).
+- The 30 October 2026 MKI report of TEST2 is the author's own (above): not independently
+  repeated; play time and MIDI gear not recorded.
 - Owner: the approval record for 0.1.4 and POLY8's composition signature; then
   `module:verify`, `modules:pairs -- --write` and `modules:generate`.
 - `src/engine/assets/analog-bd-composition-proofs.json` is not refreshed (see the checks

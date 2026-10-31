@@ -240,8 +240,8 @@
       "Sample pitch quantization works on Flex, Static and Pickup; RATE is not a semitone control.",
       "SCALE, ROOT and GLIDE are shared project settings; TRACK and FOLLOW switch single tracks off.",
       "The module adds five SEQUENCER rows (SCALE, ROOT, GLIDE, TRACK, FOLLOW), within the eight the Modwerk base gives over USB; card builds show the same five.",
-      "FM Synth carries its own copy of this quantizer (the same source). Selected together, the card build keeps one quantizer: this module's hooks and five rows on FM Synth's copy (octabam tools/remix/machine_composition.py shared_supply, pending owner review). Synth polyphony and synth-specific tuning and glide need FM Synth.",
-      "Current-version physical hardware, reboot, audio, chip timing and complete memory bounds remain untested."
+      "FM Synth carries its own copy of this quantizer (the same source) and declares a conflict with this module until the octabam composition rule shared_supply (tools/remix/machine_composition.py, a separate base PR) is merged; with that rule the card build of both keeps one quantizer, this module's hooks and five rows on FM Synth's copy. Synth polyphony and synth-specific tuning and glide need FM Synth.",
+      "Reported working by the author on his MKI (TEST2, 30 October 2026; TESTING.md): the rows, FOLLOW acting at play, save and power-cycle, a 2.21-saved project. Audio measurements, chip timing and complete memory bounds remain unmeasured."
     ]
   },
   "resources": {
@@ -288,10 +288,12 @@
   },
   "tests": {
     "report": "TESTING.md",
-    "summary": "0.1.4 imports Tim Hastie's 2.21 quantizer with the TRACK / FOLLOW rows byte for byte. Card-build and USB packages built on this Mac from the user's own 1.40C; the emulator gates are recorded in TESTING.md. The author's TEST1 hardware report (26 October 2026) covers the earlier v2.20 cut, not this image; this cut is untested on hardware. Chip timing and complete memory bounds remain unmeasured.",
-    "hardwareStatus": "untested",
+    "summary": "0.1.4 imports Tim Hastie's 2.21 quantizer with the TRACK / FOLLOW rows byte for byte. Card-build and USB packages built on this Mac from the user's own 1.40C; the emulator gates are recorded in TESTING.md. The author reports this cut's image (TEST2, MAIN 22541cd6...) working on his MKI on 30 October 2026, every item of its test sheet (TESTING.md); his TEST1 report (26 October 2026) covered the v2.20 cut. Chip timing and complete memory bounds remain unmeasured.",
+    "hardwareStatus": "reported",
     "evidenceRevision": "363861e31ee963c478fab2b190a0fabe1d7ce37b",
-    "gates": [],
+    "gates": [
+      "Hardware report for this source and image: timhastie, MKI, 2026-10-30 (reported; TESTING.md)"
+    ],
     "documentation": {
       "tutorial": {
         "title": "Quick tutorial: choose a scale",

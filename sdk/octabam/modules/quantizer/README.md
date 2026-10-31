@@ -56,16 +56,21 @@ The module adds ColdFire control hooks and no continuous DSP audio engine. RATE
 is not a semitone control.
 
 FM Synth carries its own copy of this quantizer, because its engine shares the
-quantizer's key mailbox and scale accessor. Both modules install together:
-FM Synth bundles this module's source byte for byte, so the card build keeps
-one quantizer, this module's hooks and five rows aimed at FM Synth's copy,
-and FM Synth's own quantizer hooks and rows left out (the octabam SDK's
-composition rule `shared_supply`, `tools/remix/machine_composition.py`, from
-this module's `composition.json`; pending the owner's review). SEQUENCER
-shows SCALE, ROOT, GLIDE, TRACK and FOLLOW once; FM SYNTH tracks follow the
-scale as with FM Synth alone, and FOLLOW takes them out like any audio track
-(with the author's `3531b8e` in FM Synth; on the earlier be2810f build an FM SYNTH
-track set OFF kept its keys snapped and only lost the ROOT transpose).
+quantizer's key mailbox and scale accessor, and FM Synth 0.1.4 declares this
+module a conflict, as agreed with the owner on
+[#555](https://github.com/repeat98/modwerk/issues/555) (30 October 2026): both
+would patch the same sites. This module's own `conflicts` stays empty, as on
+main; the module whose change makes the pair collide flags it. The octabam SDK's
+composition rule `shared_supply` (`tools/remix/machine_composition.py`, a
+separate base PR, driven by this module's `composition.json`) lets the card
+build keep one quantizer: this module's hooks and five rows aimed at FM Synth's
+copy of the same source, FM Synth's own quantizer hooks and rows left out.
+SEQUENCER then shows SCALE, ROOT, GLIDE, TRACK and FOLLOW once; FM SYNTH tracks
+follow the scale as with FM Synth alone, and FOLLOW takes them out like any
+audio track (with the author's `3531b8e` in FM Synth; on the earlier be2810f
+build an FM SYNTH track set OFF kept its keys snapped and only lost the ROOT
+transpose). That image was tested on the author's MKI on 30 October 2026
+(TESTING.md); the conflict goes in a follow-up once the rule is merged.
 
 On the Modwerk USB base the eighteen quantizer sites that FM Synth and POLY8
 also use are base events, and the SEQUENCER rows are the base's table; the
@@ -74,16 +79,17 @@ guarded patches. The base's SEQUENCER table shows stock's three rows and up to
 eight contributed rows; this module contributes five (SCALE, ROOT, GLIDE,
 TRACK, FOLLOW), and card builds show the same five.
 
-Current-source audio, physical hardware, Part/project persistence, power-cycle
-survival, chip timing and complete memory bounds remain untested on this
-version. See [TESTING.md](TESTING.md) for exact evidence and limits.
+The author reports this version's image working on his MKI (30 October 2026,
+TESTING.md), save and power-cycle included. Audio measurements, chip timing and
+complete memory bounds remain unmeasured on this version. See
+[TESTING.md](TESTING.md) for exact evidence and limits.
 
 ## Tests and measurements
 
 [TESTING.md](TESTING.md) records the commands, the source revision and every
 result of this version: the native card build, the USB package, the compat and
-doctor runs and the emulator smoke. No current-build physical hardware or
-chip-cycle measurements are claimed.
+doctor runs, the emulator smoke and the author's MKI report of 30 October 2026
+(reported evidence, not a measurement). No chip-cycle measurements are claimed.
 
 ## Authorship and licences
 
