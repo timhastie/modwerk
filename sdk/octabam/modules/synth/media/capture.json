@@ -190,5 +190,5 @@
     "staticStock": true
   },
   "releaseProvenance": "Captures from the native card build of FM Synth 0.1.4 on the author's 3531b8e (2.21 engine, the TRACK / FOLLOW quantizer source, poly.s reading the scale as OFF on an FM SYNTH track whose FOLLOW is OFF; Modwerk exporter, Synth alone, stock FX2 kept; MAIN 265308da), taken on 30 October 2026 with the plan of the 2.21 cut: all six are byte-identical to the captures from MAIN c5039cff (be2810f) and MAIN 8d89d596 (v2.21). The native source these captures are bound to (sourceSha256) is this version's. Software captures confer no hardware verification.",
-  "sourceSha256": "c597e6dfc53c8c8438d5e35156f25a437df66499ba25c244792eef32dc8b4fdf"
+  "sourceSha256": "8981bf01b073860d9404ac3dd8f57e8c7ded46d6dbfcb56b5e5dab008018332e"
 }

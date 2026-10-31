@@ -48,7 +48,7 @@ class SynthRelease(unittest.TestCase):
         doc = json.loads((FOLDER/'octamod.module.json').read_text())
         self.assertEqual(doc['version'], RECORD['moduleVersion'])
         self.assertNotIn('build', doc)
-        self.assertEqual(doc['tests']['hardwareStatus'], 'untested')
+        self.assertEqual(doc['tests']['hardwareStatus'], 'reported')  # the author's MKI report of 30 Oct 2026 (TESTING.md): reported, not verified
         self.assertNotIn('qualification', doc['tests'])
         self.assertTrue((APP/'sdk/octabam/modules/synth').exists())
         for name in ['sdk/catalog.json','src/catalog/module-documents.json']:

@@ -26,7 +26,7 @@
     "label": "Two-operator FM",
     "family": "Synth machines",
     "summary": "Two-operator FM with a dedicated track machine, one to four voices, chords and glide.",
-    "overview": "FM SYNTH provides one to four paraphonic FM voices through the stock AMP and effects. Version 0.1.4 is the author's Octatrick 2.21 line: step and scene locks on every FM control, LFOs and scenes on the AMP envelope, LFO pitch depth as on FLEX, a selection guard and voice cap per Part, chords on the chromatic keys that keep their notes with a scale, and the first chord after power-on kept as a chord. Its bundled scale quantizer follows the scale on FM SYNTH tracks; MIDI tracks are Scale Quantizer's. Emulator checks pass; the build has not been tested on hardware and installs with a card build only.",
+    "overview": "FM SYNTH provides one to four paraphonic FM voices through the stock AMP and effects. Version 0.1.4 is the author's Octatrick 2.21 line: step and scene locks on every FM control, LFOs and scenes on the AMP envelope, LFO pitch depth as on FLEX, a selection guard and voice cap per Part, chords on the chromatic keys that keep their notes with a scale, and the first chord after power-on kept as a chord. Its bundled scale quantizer follows the scale on FM SYNTH tracks; MIDI tracks are Scale Quantizer's. Emulator checks pass and the author reports the image working on his MKI (30 October 2026); it installs with a card build only.",
     "highlights": [
       "Dedicated machine chooser entry; no sample required.",
       "Pitch, ratio, index, fine tuning, feedback and index decay on SRC.",
@@ -192,20 +192,21 @@
     "effectId": null,
     "location": "Track machine",
     "conflicts": [
-      "analog-bassdrum"
+      "analog-bassdrum",
+      "quantizer"
     ],
     "limitations": [
       "Parts store stock FLEX kind 1 plus FM/1 in unused NEIGHBOR control bytes. A stock build reads the track as FLEX; it does not synthesize FM. Choose stock explicitly before downgrading.",
       "VOIC and CHRD sit in the PLAYBACK SETUP page's LOOP and SLIC boxes; LFOs and scenes reach them (PMTR VOIC / CHRD), and they are latched at a note's START.",
       "A Part holds at most two FM SYNTH tracks; the voices are capped so the Part stays within the CPU budget (the VOIC shown is the Part's). A choice past the limit is refused with a message.",
       "An LFO on PTCH moves the pitch 0.2 semitone per unit of depth, as on FLEX. FLEX's PTCH stops at +-12.8 semitones; an FM SYNTH track's range goes further.",
-      "The matching quantizer is bundled privately because the engine shares its mailbox and fixed scale accessor. With FM Synth alone, MIDI tracks are not quantized, and on STATIC / FLEX tracks the PTCH knob, PTCH locks and chromatic keys step through the scale but a trig's PTCH is not snapped as it plays, and the chromatic keyboard marks the key pressed, not the note sounded: those are Scale Quantizer's. Beside Scale Quantizer the card build keeps one quantizer: Scale Quantizer's hooks and rows on this module's bundled copy of the same source (octabam tools/remix/machine_composition.py shared_supply, pending owner review).",
+      "The matching quantizer is bundled privately because the engine shares its mailbox and fixed scale accessor. With FM Synth alone, MIDI tracks are not quantized, and on STATIC / FLEX tracks the PTCH knob, PTCH locks and chromatic keys step through the scale but a trig's PTCH is not snapped as it plays, and the chromatic keyboard marks the key pressed, not the note sounded: those are Scale Quantizer's, which is declared a conflict with FM Synth until the octabam composition rule shared_supply (tools/remix/machine_composition.py, a separate base PR) is merged; with that rule the card build beside Scale Quantizer keeps one quantizer, Scale Quantizer's hooks and rows on this module's bundled copy of the same source.",
       "LFO SETUP names an FM SYNTH track's six PLAYBACK destinations with FLEX's names (PTCH STRT LEN RATE RTRG RTIM; checked in the emulator). Which FM control each one modulates follows the author's LFO routing, which this version keeps; giving the entries their FM names is the base's (#589).",
-      "A project saved with Scale Quantizer or Octatrick (#SEQUENCER_AUDIO_SCALE_OFF) keeps those tracks out of the scale under FM Synth, FM SYNTH tracks included; FM Synth alone has no per-track rows to change it, Scale Quantizer beside it has TRACK and FOLLOW.",
-      "Cannot combine with Analog BD because their native hooks overlap.",
+      "A project saved with Scale Quantizer or Octatrick (#SEQUENCER_AUDIO_SCALE_OFF) keeps those tracks out of the scale under FM Synth, FM SYNTH tracks included; FM Synth has no per-track rows to change it (Scale Quantizer's TRACK and FOLLOW rows do, once the two can be built together).",
+      "Cannot combine with Analog BD, whose native hooks overlap this module's, or with Scale Quantizer until the shared_supply rule is merged: both carry the same quantizer source and would patch the same sites.",
       "About 12 dB louder than 0.1.2 at identical mixer settings (6 dB of headroom instead of 18); AMP VOL 0 is the reference and VOL above it can clip a full-scale voice.",
       "Card builds only: the Octatrack base's USB package for this version cannot be built yet (DRAM regions and generated includes; TESTING.md).",
-      "Emulator-checked (boot, the machine list, chords at VOIC 4 with a scale, the first chord after power-on, SEQUENCER rows, LFO SETUP); external MIDI traffic, maximum loads and hardware timing are untested on this build."
+      "Emulator-checked (boot, the machine list, chords at VOIC 4 with a scale, the first chord after power-on, SEQUENCER rows, LFO SETUP) and reported working by the author on his MKI (TEST7, 30 October 2026; TESTING.md); external MIDI traffic, maximum loads and hardware timing are not measured."
     ]
   },
   "resources": {
@@ -252,13 +253,14 @@
   },
   "tests": {
     "report": "TESTING.md",
-    "summary": "Experimental 0.1.4 (the author's octatrick 2.21): the native card build boots and plays in the emulator; chords on the chromatic keys at VOIC 4 with a scale keep their notes on every repeat, and the first chord after power-on in a saved project is a chord. The TEST4 hardware report (26 October 2026) was for the 2.20 cut; this cut is untested on hardware. See TESTING.md.",
-    "hardwareStatus": "untested",
+    "summary": "Experimental 0.1.4 (the author's octatrick 2.21): the native card build boots and plays in the emulator; chords on the chromatic keys at VOIC 4 with a scale keep their notes on every repeat, and the first chord after power-on in a saved project is a chord. The author reports this cut's image (TEST7, MAIN 265308da...) working on his MKI on 30 October 2026, every item of its test sheet (TESTING.md); the TEST4 report (26 October 2026) was for the 2.20 cut. See TESTING.md.",
+    "hardwareStatus": "reported",
     "evidenceRevision": "73490ef77f36bf523bc28f2b385d62e331ec7c5c",
     "gates": [
       "verify.py",
       "verify-audio.py",
-      "verify-regressions.py"
+      "verify-regressions.py",
+      "Hardware report for this source and image: timhastie, MKI, 2026-10-30 (reported; TESTING.md)"
     ],
     "documentation": {
       "tutorial": {
