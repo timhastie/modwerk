@@ -58,19 +58,10 @@ is not a semitone control.
 FM Synth carries its own copy of this quantizer, because its engine shares the
 quantizer's key mailbox and scale accessor, and FM Synth 0.1.4 declares this
 module a conflict, as agreed with the owner on
-[#555](https://github.com/repeat98/modwerk/issues/555) (30 October 2026): both
-would patch the same sites. This module's own `conflicts` stays empty, as on
-main; the module whose change makes the pair collide flags it. The octabam SDK's
-composition rule `shared_supply` (`tools/remix/machine_composition.py`, a
-separate base PR, driven by this module's `composition.json`) lets the card
-build keep one quantizer: this module's hooks and five rows aimed at FM Synth's
-copy of the same source, FM Synth's own quantizer hooks and rows left out.
-SEQUENCER then shows SCALE, ROOT, GLIDE, TRACK and FOLLOW once; FM SYNTH tracks
-follow the scale as with FM Synth alone, and FOLLOW takes them out like any
-audio track (with the author's `3531b8e` in FM Synth; on the earlier be2810f
-build an FM SYNTH track set OFF kept its keys snapped and only lost the ROOT
-transpose). That image was tested on the author's MKI on 30 October 2026
-(TESTING.md); the conflict goes in a follow-up once the rule is merged.
+[#555](https://github.com/repeat98/modwerk/issues/555) (31 October 2026): both
+would patch the same sites, and a module may not hook into another module's
+code, rows, tables or files. This module's own `conflicts` stays empty, as on
+main; the module whose change makes the pair collide flags it.
 
 On the Modwerk USB base the eighteen quantizer sites that FM Synth and POLY8
 also use are base events, and the SEQUENCER rows are the base's table; the

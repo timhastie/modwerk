@@ -240,7 +240,7 @@
       "Sample pitch quantization works on Flex, Static and Pickup; RATE is not a semitone control.",
       "SCALE, ROOT and GLIDE are shared project settings; TRACK and FOLLOW switch single tracks off.",
       "The module adds five SEQUENCER rows (SCALE, ROOT, GLIDE, TRACK, FOLLOW), within the eight the Modwerk base gives over USB; card builds show the same five.",
-      "FM Synth carries its own copy of this quantizer (the same source) and declares a conflict with this module until the octabam composition rule shared_supply (tools/remix/machine_composition.py, a separate base PR) is merged; with that rule the card build of both keeps one quantizer, this module's hooks and five rows on FM Synth's copy. Synth polyphony and synth-specific tuning and glide need FM Synth.",
+      "FM Synth carries its own copy of this quantizer (the same source) and declares a conflict with this module: both would patch the same sites, and a module may not hook into another module's code, rows, tables or files (the owner, #555, 31 October 2026). Synth polyphony and synth-specific tuning and glide need FM Synth.",
       "Reported working by the author on his MKI (TEST2, 30 October 2026; TESTING.md): the rows, FOLLOW acting at play, save and power-cycle, a 2.21-saved project. Audio measurements, chip timing and complete memory bounds remain unmeasured."
     ]
   },
