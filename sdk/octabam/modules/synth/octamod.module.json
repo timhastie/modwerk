@@ -200,12 +200,12 @@
       "VOIC and CHRD sit in the PLAYBACK SETUP page's LOOP and SLIC boxes; LFOs and scenes reach them (PMTR VOIC / CHRD), and they are latched at a note's START.",
       "A Part holds at most two FM SYNTH tracks; the voices are capped so the Part stays within the CPU budget (the VOIC shown is the Part's). A choice past the limit is refused with a message.",
       "An LFO on PTCH moves the pitch 0.2 semitone per unit of depth, as on FLEX. FLEX's PTCH stops at +-12.8 semitones; an FM SYNTH track's range goes further.",
-      "The matching quantizer is bundled privately because the engine shares its mailbox and fixed scale accessor. With FM Synth alone, MIDI tracks are not quantized, and on STATIC / FLEX tracks the PTCH knob, PTCH locks and chromatic keys step through the scale but a trig's PTCH is not snapped as it plays, and the chromatic keyboard marks the key pressed, not the note sounded: those are Scale Quantizer's, which is declared a conflict with FM Synth until the octabam composition rule shared_supply (tools/remix/machine_composition.py, a separate base PR) is merged; with that rule the card build beside Scale Quantizer keeps one quantizer, Scale Quantizer's hooks and rows on this module's bundled copy of the same source.",
-      "A project saved with Scale Quantizer or Octatrick (#SEQUENCER_AUDIO_SCALE_OFF) keeps those tracks out of the scale under FM Synth, FM SYNTH tracks included; FM Synth has no per-track rows to change it (Scale Quantizer's TRACK and FOLLOW rows do, once the two can be built together).",
-      "Cannot combine with Analog BD, whose native hooks overlap this module's, or with Scale Quantizer until the shared_supply rule is merged: both carry the same quantizer source and would patch the same sites.",
+      "The matching quantizer is bundled privately because the engine shares its mailbox and fixed scale accessor. With FM Synth alone, MIDI tracks are not quantized, and on STATIC / FLEX tracks the PTCH knob, PTCH locks and chromatic keys step through the scale but a trig's PTCH is not snapped as it plays, and the chromatic keyboard marks the key pressed, not the note sounded: those are Scale Quantizer's, which is a declared conflict with FM Synth (both carry the same quantizer source and would patch the same sites).",
+      "A project saved with Scale Quantizer or Octatrick (#SEQUENCER_AUDIO_SCALE_OFF) keeps those tracks out of the scale under FM Synth, FM SYNTH tracks included; FM Synth has no per-track rows to change it.",
+      "Cannot combine with Analog BD, whose native hooks overlap this module's, or with Scale Quantizer: both carry the same quantizer source and would patch the same sites, and a module may not hook into another module's code, rows, tables or files (the owner, #555, 31 October 2026).",
       "About 12 dB louder than 0.1.2 at identical mixer settings (6 dB of headroom instead of 18); AMP VOL 0 is the reference and VOL above it can clip a full-scale voice.",
       "Card builds only: the Octatrack base's USB package for this version cannot be built yet (DRAM regions and generated includes; TESTING.md).",
-      "Emulator-checked (boot, the machine list, chords at VOIC 4 with a scale, the first chord after power-on, SEQUENCER rows, LFO SETUP names). The author reports the TEST7 image (this cut before the LFO SETUP names hook came back) working on his MKI (30 October 2026; TESTING.md); this cut's image (TEST8) is not yet reported. External MIDI traffic, maximum loads and hardware timing are not measured."
+      "Emulator-checked (boot, the machine list, chords at VOIC 4 with a scale, the first chord after power-on, SEQUENCER rows, LFO SETUP names, the level of an FM SYNTH track unchanged by a sample loaded into its slot). The author reports the TEST7 image (this cut before the LFO SETUP names hook came back and before the slot GAIN fix) working on his MKI (30 October 2026; TESTING.md); this cut's image (TEST9) is not yet reported. External MIDI traffic, maximum loads and hardware timing are not measured."
     ]
   },
   "resources": {
@@ -252,7 +252,7 @@
   },
   "tests": {
     "report": "TESTING.md",
-    "summary": "Experimental 0.1.4 (the author's octatrick 2.21): the native card build boots and plays in the emulator; chords on the chromatic keys at VOIC 4 with a scale keep their notes on every repeat, and the first chord after power-on in a saved project is a chord. The author reports the TEST7 image (MAIN 265308da..., this cut before the LFO SETUP names hook came back) working on his MKI on 30 October 2026, every item of its test sheet; this cut's image (TEST8, MAIN d2d250a6...) is not yet reported (TESTING.md); the TEST4 report (26 October 2026) was for the 2.20 cut. See TESTING.md.",
+    "summary": "Experimental 0.1.4 (the author's octatrick 2.21): the native card build boots and plays in the emulator; chords on the chromatic keys at VOIC 4 with a scale keep their notes on every repeat, the first chord after power-on in a saved project is a chord, and an FM SYNTH track's level is unchanged by a sample loaded into its slot. The author reports the TEST7 image (MAIN 265308da..., this cut before the LFO SETUP names hook came back and before the slot GAIN fix) working on his MKI on 30 October 2026, every item of its test sheet; this cut's image (TEST9, MAIN cd7c72c8...) is not yet reported (TESTING.md); the TEST4 report (26 October 2026) was for the 2.20 cut. See TESTING.md.",
     "hardwareStatus": "untested",
     "evidenceRevision": "73490ef77f36bf523bc28f2b385d62e331ec7c5c",
     "gates": [
@@ -300,7 +300,7 @@
         "shows": "location-and-controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "d2d250a66ccadba18defb7b72f7c7981fc1aacbbd9f6e535c96ea4ce5853b142",
+        "imageSha256": "cd7c72c82229ffa1f4089cb11337cea30563ec3a83fea0094bce1d265fb7f9d0",
         "setup": "Headless ot_emu; MKII panel; empty 32 MiB disposable card; stopped transport; actual 128×64 LCD pixels at integer scale 6."
       }
     },
@@ -317,7 +317,7 @@
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "d2d250a66ccadba18defb7b72f7c7981fc1aacbbd9f6e535c96ea4ce5853b142",
+        "imageSha256": "cd7c72c82229ffa1f4089cb11337cea30563ec3a83fea0094bce1d265fb7f9d0",
         "setup": "Headless ot_emu; MKII panel; empty 32 MiB disposable card; stopped transport; actual 128×64 LCD pixels at integer scale 6."
       }
     },
@@ -334,7 +334,7 @@
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "d2d250a66ccadba18defb7b72f7c7981fc1aacbbd9f6e535c96ea4ce5853b142",
+        "imageSha256": "cd7c72c82229ffa1f4089cb11337cea30563ec3a83fea0094bce1d265fb7f9d0",
         "setup": "Headless ot_emu; MKII panel; empty 32 MiB disposable card; stopped transport; actual 128×64 LCD pixels at integer scale 6."
       }
     },
@@ -351,7 +351,7 @@
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "d2d250a66ccadba18defb7b72f7c7981fc1aacbbd9f6e535c96ea4ce5853b142",
+        "imageSha256": "cd7c72c82229ffa1f4089cb11337cea30563ec3a83fea0094bce1d265fb7f9d0",
         "setup": "Headless ot_emu; MKII panel; empty 32 MiB disposable card; stopped transport; actual 128×64 LCD pixels at integer scale 6."
       }
     },
@@ -368,7 +368,7 @@
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "d2d250a66ccadba18defb7b72f7c7981fc1aacbbd9f6e535c96ea4ce5853b142",
+        "imageSha256": "cd7c72c82229ffa1f4089cb11337cea30563ec3a83fea0094bce1d265fb7f9d0",
         "setup": "Headless ot_emu; MKII panel; empty 32 MiB disposable card; stopped transport; actual 128×64 LCD pixels at integer scale 6."
       }
     },
@@ -385,7 +385,7 @@
         "shows": "controls",
         "firmware": "1.40C",
         "moduleVersion": "0.1.4-experimental",
-        "imageSha256": "d2d250a66ccadba18defb7b72f7c7981fc1aacbbd9f6e535c96ea4ce5853b142",
+        "imageSha256": "cd7c72c82229ffa1f4089cb11337cea30563ec3a83fea0094bce1d265fb7f9d0",
         "setup": "Headless ot_emu; MKII panel; empty 32 MiB disposable card; stopped transport; actual 128×64 LCD pixels at integer scale 6."
       }
     },

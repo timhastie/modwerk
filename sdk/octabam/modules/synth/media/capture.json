@@ -1,6 +1,6 @@
 {
   "firmware": "1.40C",
-  "imageSha256": "d2d250a66ccadba18defb7b72f7c7981fc1aacbbd9f6e535c96ea4ce5853b142",
+  "imageSha256": "cd7c72c82229ffa1f4089cb11337cea30563ec3a83fea0094bce1d265fb7f9d0",
   "emulatorSha256": "07a7c08e3d4562f7b51ee5985bd2595cced383f1b8090995f1dfecfb404f092d",
   "setup": "Headless ot_emu; MKII panel; stopped transport; 128×64 LCD at integer scale 6.",
   "palette": {
@@ -189,6 +189,6 @@
     "keepStockFx2": true,
     "staticStock": true
   },
-  "releaseProvenance": "Captures from the native card build of FM Synth 0.1.4 on the author's 3531b8e with the LFO SETUP names hook po_lfdname back in the card build (Modwerk exporter, Synth alone, stock FX2 kept; MAIN d2d250a6, TEST8), taken on 30 October 2026 with the plan of the 2.21 cut: all six are byte-identical to the captures from MAIN 265308da (TEST7), MAIN c5039cff (be2810f) and MAIN 8d89d596 (v2.21). The native source these captures are bound to (sourceSha256) is this version's. Software captures confer no hardware verification.",
-  "sourceSha256": "0bdf02e43a49de6887983d7f3b5219422a6d6182632d6536400436b3ef083d76"
+  "releaseProvenance": "Captures from the native card build of FM Synth 0.1.4 on the author's 2fba0e5 (the slot GAIN fix: an FM SYNTH track's level is the engine's) with the LFO SETUP names hook po_lfdname in the card build, on Modwerk main 00ecaf52 (Modwerk exporter, Synth alone, stock FX2 kept; MAIN cd7c72c8, TEST9), taken on 31 October 2026 with the plan of the 2.21 cut: all six are byte-identical to the captures from MAIN d2d250a6 (TEST8), MAIN 265308da (TEST7), MAIN c5039cff (be2810f) and MAIN 8d89d596 (v2.21). The native source these captures are bound to (sourceSha256) is this version's. Software captures confer no hardware verification.",
+  "sourceSha256": "ee245bbabdd42cabc46b00a8cd1b51b1e111c8ee8fb6c09fd0844327731ffffc"
 }
