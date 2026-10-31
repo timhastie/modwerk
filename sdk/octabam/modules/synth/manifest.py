@@ -16,12 +16,15 @@ This wrapper adds only what the Modwerk build needs:
 - The bundled quantizer's detour and poke guards restated by address, length and digest
   (`_QZ_GUARDS`); its manifest's reads are answered from this table, and each of those sites is
   declared with it.
-- Eight of the author's hooks left out (`_DROPPED`), as agreed with Jannik Aßfalg on #555:
+- Seven of the author's hooks left out (`_DROPPED`), as agreed with Jannik Aßfalg on #555:
   the bundled quantizer's seven hooks on MIDI tracks and on sample tracks (qz_mknob, qz_mplock,
   qz_mkey, qz_mnote, qz_mprev, qz_atrig, qz_heldmark: Scale Quantizer's job; FM tracks keep their
-  quantizing in the engine), and the LFO SETUP names hook po_lfdname (0x4003bff2, which meets the
-  base's 0x4003bff4). The author's manifests still read those spans while they build their
-  tables, so `_READ_ONLY` answers the reads; nothing declares or patches them.
+  quantizing in the engine). The author's manifests still read those spans while they build their
+  tables, so `_READ_ONLY` answers the reads; nothing declares or patches them. The LFO SETUP
+  names hook po_lfdname (0x4003bff2, 8 bytes) is in the card build again: since the base's #1080
+  ot_machines owns that whole 8-byte site, so the hook is listed under the ot_machines
+  contribution's `replaces` (machine-ports.json; Jannik Aßfalg, #555, 30 October 2026) -- a card
+  build, which has no base, keeps the detour, and a USB package would drop it for the table.
 - SEQUENCER: SCALE, ROOT and GLIDE after the stock three (`_SEQ_ROWS`); the author's TRACK and
   FOLLOW rows are left out of the tables and the row count.
 - Beside Scale Quantizer, which carries the same quantizer source, the card build keeps one quantizer:
@@ -132,6 +135,7 @@ _GUARDS = (
     stock_guard(0x40039df4, 8, '0c6d3f0bfd198ddc78800e6503eccdc6cbc5c442209d882244584eda864e93ca'),
     stock_guard(0x4003a45c, 6, '59d18aebd5e0181b5559da16c7573710e1be845ea44475e1b4a175eb58e5719e'),
     stock_guard(0x4003a52e, 8, 'cae34bf50383462ed4f92d8044e3021247edb8bf69c17a9c7ead62f6edf79510'),
+    stock_guard(0x4003bff2, 8, '646fea5c7ac7852156feed7591534de986df92af53074c25ecf54e4295d072ae'),
     stock_guard(0x4003a614, 10, 'ad14a643a51b28ae439d5e7d2988b9e42dd2b973b4e1a2ae230b8a6ecd99435f'),
     stock_guard(0x4003ae40, 12, '3e401f14e70d67d18fcec37faf084580fd6bfa25426424788fe2828eb89f5c53'),
     stock_guard(0x4003af0a, 10, 'd248085685bfc02ef8676cdf2e954840efc741ef3957382256f9dbd35c208e65'),
@@ -234,7 +238,6 @@ _QZ_GUARDS = (
 # they build their tables: answered here, declared by nothing, never patched.
 _READ_ONLY = (
     stock_guard(0x4000c614, 6, 'e6abfb8463d2d93e458a247a07c80f477d3f2f616b85cf98f6cd828a433ae057'),
-    stock_guard(0x4003bff2, 8, '646fea5c7ac7852156feed7591534de986df92af53074c25ecf54e4295d072ae'),
     stock_guard(0x400436a8, 10, '2ab0a5529e7748a00dea86e66bc4fbb6105ec7f36e73e481bb840f6570da98cc'),
     stock_guard(0x400439d6, 8, '53d90093082490eb3a630e3e0afba99946d22a720a84bae7194f11e091224777'),
     stock_guard(0x40044abc, 8, 'd789a426f2ed177607e8d6f5ecbf4618283211fa07df645bb7a2848ef7187ef0'),
@@ -249,7 +252,7 @@ _QZ_BY_SITE = {g.address: g for g in _QZ_GUARDS}
 _DROPPED = {
     'qz': {'qz_mknob': 0x40055382, 'qz_mplock': 0x40050b98, 'qz_mkey': 0x400436a8, 'qz_mnote': 0x4009fb80,
            'qz_mprev': 0x400439d6, 'qz_atrig': 0x4000c614, 'qz_heldmark': 0x40044abc},
-    'poly': {'po_lfdname': 0x4003bff2},
+    'poly': {},
 }
 if {g.address for g in _READ_ONLY} != {site for hooks in _DROPPED.values() for site in hooks.values()}:
     raise ValueError('FM Synth: _READ_ONLY answers exactly the dropped hooks\' reads')
