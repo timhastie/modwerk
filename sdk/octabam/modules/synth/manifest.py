@@ -1,6 +1,6 @@
 """FM SYNTH: Tim Hastie's FM engine, machine list and bundled scale quantizer (octatrick 2.21).
 
-`upstream/synth` and `upstream/quantizer` are the author's files at 3531b8e (be2810f + poly.s: an FM SYNTH track whose FOLLOW is OFF reads the scale as OFF), byte for byte: release
+`upstream/synth` and `upstream/quantizer` are the author's files at 2fba0e5 (3531b8e + poly.s: an FM SYNTH track's level is the engine's, its slot's GAIN attribute ignored; 3531b8e = be2810f + poly.s: an FM SYNTH track whose FOLLOW is OFF reads the scale as OFF), byte for byte: release
 2.21's engine and machine list, his quantizer with the per-track switches as the SEQUENCER rows TRACK
 and FOLLOW (990eff8, the source Scale Quantizer 0.1.4 carries), and poly.s exporting the engine state
 the quantizer's panel transaction reads in a remix without SY DRUM (be2810f; no code byte changes).
@@ -27,10 +27,9 @@ This wrapper adds only what the Modwerk build needs:
   build, which has no base, keeps the detour, and a USB package would drop it for the table.
 - SEQUENCER: SCALE, ROOT and GLIDE after the stock three (`_SEQ_ROWS`); the author's TRACK and
   FOLLOW rows are left out of the tables and the row count.
-- Beside Scale Quantizer, which carries the same quantizer source, the card build keeps one quantizer:
-  Scale Quantizer's declaration (its 28 hooks and five rows) aimed at this module's bundled copy, and
-  this copy's own hooks, rows and row count left out (remix/machine_composition.py shared_supply;
-  Scale Quantizer's composition.json). Its engine and its quantizer stay one unit set.
+- Beside Scale Quantizer, which carries the same quantizer source, this module is a declared conflict
+  (octamod.module.json): both would patch the same sites, and a module may not hook into another
+  module's code, rows, tables or files (the owner, #555, 31 October 2026).
 - The quantizer bundled privately, its units renamed `fm_*`, as in earlier FM Synth releases.
 - Each unit's generated `remix.inc` as the author writes it for a remix without SY DRUM and
   without Mute Modes, with the bundled quantizer counted as present: FM Synth installs alone on

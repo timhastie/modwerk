@@ -224,7 +224,7 @@
   },
   "synth": {
    "sources": {
-    "sdk/octabam/modules/synth/manifest.py": "3f665d4f15711b72225c9859174bf91158bba3d6d39cade043627ccdebcf7431",
+    "sdk/octabam/modules/synth/manifest.py": "8702cbcd8701a197225d835161e412270d6b5a8325b526ed25995e88c74cb4ac",
     "sdk/octabam/modules/synth/port.s": "0b88bc18a6ec5bc9f150558dc88c89f89e8e142d2d7175a0183bb861f4134b86",
     "sdk/octabam/modules/synth/upstream/quantizer/core.s": "655bf8cb893ecbe8ec167633322491ae89fdf498c818e172ad6ba34c3fc992c8",
     "sdk/octabam/modules/synth/upstream/quantizer/keys.s": "e2ffdbfae34b0828794a4eb4cc229e3efcaed25dc953bf7c05c13f6e37f65587",
@@ -240,7 +240,7 @@
     "sdk/octabam/modules/synth/upstream/synth/manifest.py": "5839bf0f19ca0a0a731aceb6eba7c6206316bcdee8d886080ac80cde296c50ed",
     "sdk/octabam/modules/synth/upstream/synth/page.s": "efe74f16cc8a9b5dda7de3cbaefa37eece25ebe25e9beb42f1d8a329d5f06938",
     "sdk/octabam/modules/synth/upstream/synth/panel_transaction.inc.s": "cda0a6d554ebdbc5d274f6388fe9223557fac5cf15436979bbb390784a1efc17",
-    "sdk/octabam/modules/synth/upstream/synth/poly.s": "654bc4c2ba45e5ea000cf67d4ec8f3832d6ff56be2beb4897ef5d1f6cb504101",
+    "sdk/octabam/modules/synth/upstream/synth/poly.s": "585220d4c98bcd9a1d849948205039d58f56a90486d397b491ff29b6e855a185",
     "sdk/octabam/modules/synth/upstream/synth/stock_guard.py": "5f1fe08ef5a4eb05cd772c9b65ee9f54c2371914a8360c8589109a9ce4308c2d"
    },
    "subscribe": [
