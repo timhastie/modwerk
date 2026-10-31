@@ -6,6 +6,6 @@
     "Step and scene locks on every FM control, a selection guard and voice cap per Part; fixes #557 (click), #710 (first-trig envelope) and #751 (CHRD scene).",
     "LFOs and scene locks on AMP ATK, HOLD and REL shape the sound; an LFO on PTCH moves the pitch as on FLEX (Jan Kolkmeier's #883 / #884). The SRC page is out of the DELAY's table tail (#895).",
     "The bundled scale quantizer follows the scale on FM tracks; MIDI tracks are Scale Quantizer's (#555). SEQUENCER shows SCALE, ROOT and GLIDE. About 12 dB louder than 0.1.2.",
-    "Compatibility: Scale Quantizer stays a declared conflict until the shared_supply rule PR is merged. Reported working on the author's MKI (30 Oct 2026). Known: FLEX's LFO names (#589); card builds only"
+    "Compatibility: Scale Quantizer stays a declared conflict until the shared_supply rule PR is merged. LFO SETUP shows FM's names (#589, the hook kept). Card builds only; this image not yet on hardware"
   ]
 }
