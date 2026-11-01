@@ -4,6 +4,8 @@
 
 Tim Hastie flashed `OCTATRACK_MODWERK_TUNER_TEST3.bin` (448,084 bytes, sha256 `d4452bbb41d859deb71a159afa085e8b20c9f034818013fb531193a260d416f5`, MAIN OS bus `da2375cf…`, the unit showing OCTAMOD79) on his **Octatrack MKI on 1 November 2026** and reported the TEST3 sheet passing; his words, one line for three sheets: "tuner ... pass". TEST3 is byte for byte TEST2, the card the 30 October emulator qualification below measured, rebuilt at the head rebased onto main `00ecaf52` (three builds, every output file identical). **Reported by the author**, not independently repeated here. With this report the staged qualification object moved from `qualification.example.json` into `tests.qualification` (its `hardware` block is this report; `sourceSha256` is `moduleNativeSourceSha256` of the folder at the recording commit) and `tests.hardwareStatus` is `reported`.
 
+The wrapper's guard-table change in `manifest.py` (the stock guards declared from a digest table, so a checkout without the firmware section loads and checks the module) came after these measurements. It leaves the card byte for byte the same (`d4452bbb…`, rebuilt and compared), so the recorded cycles, memory and hardware results stand; `qualification.sourceSha256` is recomputed for the changed wrapper.
+
 - tested on: 2026-11-01
 - tester: timhastie
 - model: MKI
