@@ -1,6 +1,6 @@
 # Tuner
 
-Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged for Modwerk from his v2.21 source plus his DC-removal fix (commit `03202050`); emulator-qualified, and reported working on the author’s MKI (1 November 2026).
+Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged for Modwerk from his v2.21 source plus his DC-removal fix (commit `ef6cbc7`, released with Octatrick 2.22); emulator-qualified, and reported working on the author’s MKI (1 November 2026).
 
 ## Overview
 
@@ -96,6 +96,6 @@ On hardware: the author flashed the byte-identical TEST3 card on his MKI on 1 No
 
 ## Authorship and licences
 
-Tuner is by **Tim Hastie (@timhastie)**, from `timhastie/octatrick-modules` v2.21 (`9e4d34a`) plus his commit `03202050464576b58961093bcc09de783be1f7bd` on branch `tuner-dc`, which takes the ring's mean off before the analysis; that commit is not yet published, and this package is to be repinned to the published tag before submission. All four files in `upstream/` are copies of that commit, byte for byte ([source-revendor-2026-10-30.json](evidence/source-revendor-2026-10-30.json)). The local wrapper preserves the upstream runtime/source declarations and replaces the three detour expectations with verified Modwerk-form hash guards; [guard provenance](evidence/guard-provenance.json) records that adapter change. The immutable upstream reader needs the build working directory's local MAIN section before manifest import; the Modwerk wrapper then replaces the three expectations with lazy digest guards.
+Tuner is by **Tim Hastie (@timhastie)**, from `timhastie/octatrick-modules` v2.21 (`9e4d34a`) plus his commit `ef6cbc71623abcee584ff59a217cf2c2ba9d5c41`, released with Octatrick 2.22 (v2.22 = `73686de`), which takes the ring's mean off before the analysis. All four files in `upstream/` are copies of that commit, byte for byte; they were vendored on 30 October 2026 from his working commit `03202050` (branch `tuner-dc`), whose `tuner/` is identical to `ef6cbc7`'s, and [source-revendor-2026-10-30.json](evidence/source-revendor-2026-10-30.json) records that re-vendoring under the id of the day. The local wrapper preserves the upstream runtime/source declarations and replaces the three detour expectations with verified Modwerk-form hash guards; [guard provenance](evidence/guard-provenance.json) records that adapter change. The immutable upstream reader needs the build working directory's local MAIN section before manifest import; the Modwerk wrapper then replaces the three expectations with lazy digest guards.
 
 The upstream MIT terms remain in [LICENSE](LICENSE). Octabam supplies the native platform. Documentary screenshots retain the underlying interface rights; firmware is not included. No hardware endorsement or affiliation is asserted.

@@ -7,12 +7,12 @@
   "category": "system",
   "source": {
     "repository": "https://github.com/timhastie/octatrick-modules",
-    "revision": "03202050464576b58961093bcc09de783be1f7bd",
+    "revision": "ef6cbc71623abcee584ff59a217cf2c2ba9d5c41",
     "path": "tuner"
   },
   "build": {
     "status": "pending",
-    "reason": "Source is Tim's v2.21 Tuner plus his DC-removal commit 03202050 (local branch tuner-dc, not yet published; repin to the published tag before submission). Card image OCTATRACK_MODWERK_TUNER_TEST2.bin (d4452bbb, bus da2375cf) built from Modwerk 67a75997 with the canonical recipe; emulator-qualified 30 Oct 2026; reported working on the author's MKI 1 Nov 2026 (TEST3, the same bytes)."
+    "reason": "Source: Tim's v2.21 Tuner plus his DC-removal commit ef6cbc7 (Octatrick 2.22; the evidence records name his working commit 03202050, the same tuner/ files). Card image OCTATRACK_MODWERK_TUNER_TEST2.bin (d4452bbb, bus da2375cf) built from Modwerk 67a75997 with the canonical recipe; emulator-qualified 30 Oct 2026; reported working on the author's MKI 1 Nov 2026 (TEST3, the same bytes)."
   },
   "author": {
     "github": "timhastie",
@@ -66,7 +66,7 @@
       "key:UP+TEMPO"
     ],
     "limitations": [
-      "Built and emulator-measured on 30 Oct 2026 (card d4452bbb, bus da2375cf) from Tim's v2.21 source plus his unpublished DC-removal commit 03202050; the seven older UI screenshots belong to the earlier v2.19/card-sdk image.",
+      "Built and emulator-measured on 30 Oct 2026 (card d4452bbb, bus da2375cf) from Tim's v2.21 source plus his DC-removal commit (03202050 that day; ef6cbc7 in his released 2.22 line, the same tuner/ files); the seven older UI screenshots belong to the earlier v2.19/card-sdk image.",
       "The signal is taken after track effects and before the track fader. It is a monophonic pitch estimate; complex, noisy or inharmonic sounds can wander or select an octave.",
       "Below the signal or confidence threshold, the last valid reading is held. A held reading does not indicate the current pitch.",
       "A4 is fixed at 440 Hz. No calibration control, parameter locks, LFO destination or saved project setting is added.",
@@ -123,7 +123,7 @@
     "report": "TESTING.md",
     "summary": "Emulator qualification of the card build of this source (card d4452bbb, bus da2375cf) on 30 October 2026: a sine on the input reaches the tap and reads A4 +0c 440.0Hz, E2 +0c 82.4Hz, A4 +19c 445.0Hz and A2 -1c 109.9Hz live, the same as the 29 October build; a fixture track whose signal sits on a DC offset larger than its swing, which held before, now reads (F4, 343-345 Hz, matching an off-line analysis of the same samples); worst-case ColdFire cost 195 instructions per block in the frame interrupt and 1,048,251 per analysis in the UI task (7,018 of 9,577 cycles per block amortised); exact memory with a measured stack peak. The author reports the TEST3 card (the same bytes, rebuilt on current main) working on his MKI on 1 November 2026, every item of its test sheet; readings were not recorded (TESTING.md).",
     "hardwareStatus": "reported",
-    "evidenceRevision": "03202050464576b58961093bcc09de783be1f7bd",
+    "evidenceRevision": "ef6cbc71623abcee584ff59a217cf2c2ba9d5c41",
     "gates": [
       "Emulator: tone on the input reaches the read-back tap; 440, 82.41, 445 and 110 Hz read within one cent (LCD captures), unchanged from the build without DC removal",
       "Emulator: a track with a DC offset larger than its AC level reads instead of holding (LCD capture, off-line reference)",
@@ -226,7 +226,7 @@
         "model": "MKI",
         "testedOn": "2026-11-01",
         "tester": "timhastie",
-        "sourceRevision": "03202050464576b58961093bcc09de783be1f7bd",
+        "sourceRevision": "ef6cbc71623abcee584ff59a217cf2c2ba9d5c41",
         "imageSha256": "d4452bbb41d859deb71a159afa085e8b20c9f034818013fb531193a260d416f5",
         "summary": "The author flashed OCTATRACK_MODWERK_TUNER_TEST3.bin (448,084 B, sha256 d4452bbb..., byte-identical to TEST2) on his Octatrack MKI on 1 November 2026 and reported the TEST3 sheet passing (his words, one line for three sheets: 'tuner ... pass'). The sheet's checks: a pitched source on the selected track (a THRU track on input A, or a pitched sample); UP held first then TEMPO opens the TUNER window with the track number, TEMPO first opens the stock tempo window; a steady note reads its note, octave, cents and frequency with the needle centred in tune; a sharp note moves the needle right with +cents and a flat note left with -cents, the reading updating about seven times a second and still on a steady note; when the signal stops the last reading stays with HOLD in the header and HOLD goes away on playing; the DC case (EQ and CHORUS on a track playing a sustained pitched sample) reads a note instead of HOLD; the header follows the track keys; TEMPO, YES, NO or UP + TEMPO close the window and TEMPO alone and FUNC + TEMPO keep their stock behaviour; no clicks or dropouts while it is open.",
         "limitations": [

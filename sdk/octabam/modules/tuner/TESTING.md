@@ -16,7 +16,7 @@ The wrapper's guard-table change in `manifest.py` (the stock guards declared fro
 
 - Production proposal: `tuner`, `0.1.0-experimental`, under `sdk/octabam/modules/tuner` on `tuner-0.1-promotion`.
 - Preserved refreshed draft on `tuner-0.1`: `5a56f1f8d4c1c426c07195c26e552c677a8c44ac`. The location change does not establish publication qualification.
-- Current author source: `timhastie/octatrick-modules` commit `03202050464576b58961093bcc09de783be1f7bd` (v2.21 + the DC-offset fix, 30 Oct 2026; see the 30 Oct section below); all upstream files, including the stock-guard reader, are copied unchanged. Earlier pins below (v2.20 `fd18f553`) are history.
+- Current author source: `timhastie/octatrick-modules` commit `ef6cbc71623abcee584ff59a217cf2c2ba9d5c41` (v2.21 + the DC-offset fix, released with Octatrick 2.22, v2.22 = `73686de`; see the 30 Oct section below); all upstream files, including the stock-guard reader, are copied unchanged. They were vendored on 30 Oct 2026 from the author's working commit `03202050` (branch `tuner-dc`), whose `tuner/` directory is identical to `ef6cbc7`'s (`git diff 03202050 ef6cbc7 -- tuner` is empty); the evidence records of that day (`evidence/source-revendor-2026-10-30.json`, `evidence/qualification-emulator-2026-10-30.json`) name `03202050` and are left as written. Earlier pins below (v2.20 `fd18f553`) are history.
 - Current documentation/draft base: Modwerk `4e2226f1be6347f74d51a0d5b99ee572ba3a82bb`.
 - Preserved native candidate build baseline: `916ce01bbfc60f3aedd7156066354fedb521e6f4`, private `relay-tuner` facade, Tuner only, stock FX and static stock DSP; no USB base.
 - The delivered BIN/bus have **not** been rebuilt from this v2.20 source, current main, the hash-guard wrapper, or the new draft/promotion commit. They are historical candidate evidence, not exact-current-commit qualification.
@@ -233,7 +233,7 @@ Stack: `tu_frame` uses registers only (0 B; it runs on whatever stack the frame 
 
 ### The change
 
-The 29 October run found that the detector removed no DC: T2 of the fixture (FLEX through EQ and CHORUS) sits on a DC offset larger than its swing at the tap (mean 1,912, AC RMS 1,062), the normalised difference never goes negative, and every analysis held. Tim's commit `03202050` (branch `tuner-dc` from v2.21 `9e4d34a`, not yet published) changes stage A of `tu_analyse` only: the snapshot pass also sums the ring, the mean is `(sum + 2048) >> 12`, and a second pass over the snapshot subtracts it from every sample, clamps to a word and takes the peak; the gate, scaling, detector, cents table and display are unchanged. Integer arithmetic, word accesses at even addresses, registers only (`d0`–`d6`, `a0`, `a1`), no stack. `.text` grows by 64 bytes (2,830 to 2,894); `.data` is unchanged. The four `upstream/` files are byte-for-byte copies of that commit ([source-revendor-2026-10-30.json](evidence/source-revendor-2026-10-30.json)).
+The 29 October run found that the detector removed no DC: T2 of the fixture (FLEX through EQ and CHORUS) sits on a DC offset larger than its swing at the tap (mean 1,912, AC RMS 1,062), the normalised difference never goes negative, and every analysis held. Tim's commit `03202050` (branch `tuner-dc` from v2.21 `9e4d34a`; `ef6cbc7` in his released 2.22 line, the same `tuner/` files) changes stage A of `tu_analyse` only: the snapshot pass also sums the ring, the mean is `(sum + 2048) >> 12`, and a second pass over the snapshot subtracts it from every sample, clamps to a word and takes the peak; the gate, scaling, detector, cents table and display are unchanged. Integer arithmetic, word accesses at even addresses, registers only (`d0`–`d6`, `a0`, `a1`), no stack. `.text` grows by 64 bytes (2,830 to 2,894); `.data` is unchanged. The four `upstream/` files are byte-for-byte copies of that commit ([source-revendor-2026-10-30.json](evidence/source-revendor-2026-10-30.json)).
 
 ### Build
 
@@ -300,5 +300,5 @@ Stack, re-measured with a write trace on the UI stack (1 s, six analyses and dra
 ### Limits
 
 - The measurements are the emulator's; no hardware timing, audio or canary. One session for the readings and costs, one for the 82.41 Hz reading at the 29 October time, one control session on the previous image. The hardware report for this card is the author's functional one of 1 November 2026 (top of this file).
-- The fix commit is unpublished: `source.revision` names it, and the package must be repinned to Tim's published tag before submission.
+- `source.revision`, `tests.evidenceRevision` and the hardware block's `sourceRevision` name `ef6cbc7`, the fix commit of Tim's released 2.22 line; the 30 October evidence records name his working commit `03202050`, the same `tuner/` files.
 - The browser package identities under `src/engine/assets/` (source-tree hash) were not regenerated for this source change.
