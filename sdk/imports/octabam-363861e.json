@@ -26,8 +26,8 @@
     },
     "quantizer": {
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
-      "version": "2.21 + TRACK/FOLLOW (unpublished)"
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
+      "version": "2.21 + TRACK/FOLLOW, released with Octatrick 2.22 (v2.22 = 73686de)"
     }
   },
   "status": "verified loader-free browser/native integration; owner merge required for publication",
@@ -506,7 +506,7 @@
         "moduleVersion": "0.1.4-experimental",
         "previousVendoredSha256": "0cb4a79f7cd68e1881cd1076a0f6ba2e132b1c199da3a2d4923906b443797602",
         "record": "octabam/modules/quantizer/TESTING.md",
-        "reason": "Re-export the author's manifest (990eff8: 2.21 + TRACK / FOLLOW) byte for byte; declare every detour and poke guard in Modwerk's stock_guard(address, length, sha256) form, matched to his declaration by site (stockGuards below): 28 detours (2.21 adds qz_panel_stage and qz_panel_commit) and the row-count poke. The wrapper also assembles quantizer.s as a selection without FM Synth (his 2.21 panel transaction is for FM's engine; FM Synth bundles its own copy and conflicts with this module)."
+        "reason": "Re-export the author's manifest (8f6f564: 2.21 + TRACK / FOLLOW) byte for byte; declare every detour and poke guard in Modwerk's stock_guard(address, length, sha256) form, matched to his declaration by site (stockGuards below): 28 detours (2.21 adds qz_panel_stage and qz_panel_commit) and the row-count poke. The wrapper also assembles quantizer.s as a selection without FM Synth (his 2.21 panel transaction is for FM's engine; FM Synth bundles its own copy and conflicts with this module)."
       }
     },
     {
@@ -674,7 +674,7 @@
     {
       "path": "modules/quantizer/upstream/README.md",
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
       "sourcePath": "README.md",
       "sourceBytes": 38138,
       "sourceSha256": "ca7520645850710f6f41dd861e47c74cdcd7fc01a7e0fed3595948e9f561d280",
@@ -684,13 +684,13 @@
         "moduleVersion": "0.1.4-experimental",
         "previousRevision": "525f4b19b04dc3ba3f3bae3b25abbf48df34a10a",
         "previousVendoredSha256": "d97fb507a8eb6ecbf2c549ff088a4628d816bb42a6485eb13e88bf0d60f016f2",
-        "reason": "The author's file at 990eff8 (2.21 + TRACK / FOLLOW) byte for byte."
+        "reason": "The author's file at 8f6f564 (2.21 + TRACK / FOLLOW, released with Octatrick 2.22) byte for byte."
       }
     },
     {
       "path": "modules/quantizer/upstream/LICENSE",
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
       "sourcePath": "LICENSE",
       "sourceBytes": 5068,
       "sourceSha256": "9895a0c9da98720fec21e348456c9716ca81ca6438b7f046eca1fb2f456b24a7",
@@ -700,29 +700,29 @@
         "moduleVersion": "0.1.4-experimental",
         "previousRevision": "525f4b19b04dc3ba3f3bae3b25abbf48df34a10a",
         "previousVendoredSha256": "a8fe424c82a030f34f2e3f88df1f2585f97ae61710e1b799f2e6e818120396a0",
-        "reason": "The author's file at 990eff8 (2.21 + TRACK / FOLLOW) byte for byte (unchanged since v2.20)."
+        "reason": "The author's file at 8f6f564 (2.21 + TRACK / FOLLOW, released with Octatrick 2.22) byte for byte (unchanged since v2.20)."
       }
     },
     {
       "path": "modules/quantizer/upstream/quantizer/README.md",
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
       "sourcePath": "quantizer/README.md",
-      "sourceBytes": 110221,
-      "sourceSha256": "5dff8c9367f8ca0f509d485f53a4b9baab49f6632f3be682833e415d3a2a5800",
-      "sourceGitBlob": "10912588391cca9cab1729272c43d83f03034b8d",
-      "vendoredSha256": "5dff8c9367f8ca0f509d485f53a4b9baab49f6632f3be682833e415d3a2a5800",
+      "sourceBytes": 110211,
+      "sourceSha256": "f04a9795b2a956ad6d667f159b4f59b01b28cab861e154a093b7eba9bc9b3338",
+      "sourceGitBlob": "c549a14e84765fa8059affa5b734bac60648285d",
+      "vendoredSha256": "f04a9795b2a956ad6d667f159b4f59b01b28cab861e154a093b7eba9bc9b3338",
       "authorUpdate": {
         "moduleVersion": "0.1.4-experimental",
         "previousRevision": "525f4b19b04dc3ba3f3bae3b25abbf48df34a10a",
         "previousVendoredSha256": "25b9e9a1d1fb4be217514727374922e60010fc0067fe8c5c3f17ced909c8d94e",
-        "reason": "The author's file at 990eff8 (2.21 + TRACK / FOLLOW) byte for byte."
+        "reason": "The author's file at 8f6f564 (2.21 + TRACK / FOLLOW, released with Octatrick 2.22) byte for byte."
       }
     },
     {
       "path": "modules/quantizer/upstream/quantizer/core.s",
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
       "sourcePath": "quantizer/core.s",
       "sourceBytes": 6385,
       "sourceSha256": "655bf8cb893ecbe8ec167633322491ae89fdf498c818e172ad6ba34c3fc992c8",
@@ -732,13 +732,13 @@
         "moduleVersion": "0.1.4-experimental",
         "previousRevision": "525f4b19b04dc3ba3f3bae3b25abbf48df34a10a",
         "previousVendoredSha256": "2992b6c85cff440de03ae84eb22dee8b8a83a84f23e94b699404d28940b6f958",
-        "reason": "The author's file at 990eff8 (2.21 + TRACK / FOLLOW) byte for byte (unchanged since v2.20)."
+        "reason": "The author's file at 8f6f564 (2.21 + TRACK / FOLLOW, released with Octatrick 2.22) byte for byte (unchanged since v2.20)."
       }
     },
     {
       "path": "modules/quantizer/upstream/quantizer/keys.s",
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
       "sourcePath": "quantizer/keys.s",
       "sourceBytes": 1765,
       "sourceSha256": "e2ffdbfae34b0828794a4eb4cc229e3efcaed25dc953bf7c05c13f6e37f65587",
@@ -748,13 +748,13 @@
         "moduleVersion": "0.1.4-experimental",
         "previousRevision": "525f4b19b04dc3ba3f3bae3b25abbf48df34a10a",
         "previousVendoredSha256": "e2ffdbfae34b0828794a4eb4cc229e3efcaed25dc953bf7c05c13f6e37f65587",
-        "reason": "The author's file at 990eff8 (2.21 + TRACK / FOLLOW) byte for byte (unchanged since v2.20)."
+        "reason": "The author's file at 8f6f564 (2.21 + TRACK / FOLLOW, released with Octatrick 2.22) byte for byte (unchanged since v2.20)."
       }
     },
     {
       "path": "modules/quantizer/upstream/quantizer/manifest.py",
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
       "sourcePath": "quantizer/manifest.py",
       "sourceBytes": 29184,
       "sourceSha256": "9550382938153ec1c6fe5a262612c5a4daad1d71aca68da7c0b6a4c55e801aa8",
@@ -764,13 +764,13 @@
         "moduleVersion": "0.1.4-experimental",
         "previousRevision": "525f4b19b04dc3ba3f3bae3b25abbf48df34a10a",
         "previousVendoredSha256": "e637e3718e4b65320b847ef0758e0d46800f8be6b8020290f89192c798c535ef",
-        "reason": "The author's manifest at 990eff8 byte for byte: tables 3 + 5 (SCALE, ROOT, GLIDE, TRACK, FOLLOW), row-count poke 3 -> 8, the 2.21 detours qz_panel_stage (0x4004fc84) and qz_panel_commit (0x40005162), the two-pass remix.inc; every guard still read as stock_guard(site, length)."
+        "reason": "The author's manifest at 8f6f564 (released with Octatrick 2.22) byte for byte: tables 3 + 5 (SCALE, ROOT, GLIDE, TRACK, FOLLOW), row-count poke 3 -> 8, the 2.21 detours qz_panel_stage (0x4004fc84) and qz_panel_commit (0x40005162), the two-pass remix.inc; every guard still read as stock_guard(site, length)."
       }
     },
     {
       "path": "modules/quantizer/upstream/quantizer/panel_transaction.inc.s",
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
       "sourcePath": "quantizer/panel_transaction.inc.s",
       "sourceBytes": 7275,
       "sourceSha256": "e51d5d035e8561b27671ac751957756831988786b5b25163688cc066c36b9c79",
@@ -779,13 +779,13 @@
       "authorUpdate": {
         "moduleVersion": "0.1.4-experimental",
         "previousRevision": "525f4b19b04dc3ba3f3bae3b25abbf48df34a10a",
-        "reason": "New in the author's 2.21 line (32827c4, byte for byte at 990eff8): the panel publication adapters quantizer.s includes as remix.inc's second pass; with FM Synth absent (HAVE_PANEL_TRANSACTION 0) they assemble to their replays."
+        "reason": "New in the author's 2.21 line (32827c4, byte for byte at 8f6f564): the panel publication adapters quantizer.s includes as remix.inc's second pass; with FM Synth absent (HAVE_PANEL_TRANSACTION 0) they assemble to their replays."
       }
     },
     {
       "path": "modules/quantizer/upstream/quantizer/quantizer.s",
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
       "sourcePath": "quantizer/quantizer.s",
       "sourceBytes": 112223,
       "sourceSha256": "6883dce6058cfc42eca1cb4c51a1d7d2318579a5adb5e84ae4202d7570c26abb",
@@ -795,13 +795,13 @@
         "moduleVersion": "0.1.4-experimental",
         "previousRevision": "525f4b19b04dc3ba3f3bae3b25abbf48df34a10a",
         "previousVendoredSha256": "b14f214cc8236c19b8881d1113ea42359052a6d7ef0e9e0f02aaa88279da64a9",
-        "reason": "The author's 2.21 quantizer plus the TRACK / FOLLOW rows (990eff8, byte for byte; not yet published): the sixteen MIDI n / AUDIO n SCALE rows are two, TRACK (AUDIO 1..8, MIDI 1..8; picks the track, RAM, not saved) and FOLLOW (that track's ON / OFF on the same bits); the project-file lines and battery bytes are 2.21's. 2.21 also brings the panel publication transaction (qz_panel_stage / qz_panel_commit)."
+        "reason": "The author's 2.21 quantizer plus the TRACK / FOLLOW rows (8f6f564, byte for byte; released with Octatrick 2.22): the sixteen MIDI n / AUDIO n SCALE rows are two, TRACK (AUDIO 1..8, MIDI 1..8; picks the track, RAM, not saved) and FOLLOW (that track's ON / OFF on the same bits); the project-file lines and battery bytes are 2.21's. 2.21 also brings the panel publication transaction (qz_panel_stage / qz_panel_commit)."
       }
     },
     {
       "path": "modules/quantizer/upstream/quantizer/scale.s",
       "repository": "https://github.com/timhastie/octatrick-modules",
-      "revision": "990eff8bf88463af4d396793f1c60eb1dab34ea0",
+      "revision": "8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c",
       "sourcePath": "quantizer/scale.s",
       "sourceBytes": 695,
       "sourceSha256": "82242c407847ac61a6f60fe15bdc5b0b4fc852bac82c39745b5c838ec9389c64",
@@ -811,7 +811,7 @@
         "moduleVersion": "0.1.4-experimental",
         "previousRevision": "525f4b19b04dc3ba3f3bae3b25abbf48df34a10a",
         "previousVendoredSha256": "82242c407847ac61a6f60fe15bdc5b0b4fc852bac82c39745b5c838ec9389c64",
-        "reason": "The author's file at 990eff8 (2.21 + TRACK / FOLLOW) byte for byte (unchanged since v2.20)."
+        "reason": "The author's file at 8f6f564 (2.21 + TRACK / FOLLOW, released with Octatrick 2.22) byte for byte (unchanged since v2.20)."
       }
     }
   ],

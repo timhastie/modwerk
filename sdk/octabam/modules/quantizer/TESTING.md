@@ -1,15 +1,19 @@
 # Scale Quantizer 0.1.4 testing
 
 Version: `0.1.4-experimental`. Author source: timhastie/octatrick-modules
-`990eff8bf88463af4d396793f1c60eb1dab34ea0` (his 2.21 line plus the TRACK / FOLLOW rows;
-local, not yet published), `quantizer/` byte for byte. Records made on 29 October 2026 on
+`8f6f564a9c42636ed4c5cc6ad314ee6b7ce69e5c` (his 2.21 line plus the TRACK / FOLLOW rows,
+released with Octatrick 2.22 on top of v2.21), `quantizer/` byte for byte. The files were
+vendored on 29 October from his working commit `990eff8`, whose `quantizer/` is identical to
+`8f6f564`'s; the wrapper `manifest.py` docstring still names `990eff8` and is left as is,
+because that file's SHA-256 is bound in the committed package records (`src/engine/assets/requested-packages.json`,
+`media/capture.json`, the machine adapters). Records made on 29 October 2026 on
 macOS with Node 24.21.0, Python 3.13, m68k-elf binutils 2.47, and the `modwerk-source-tools`
 image `sha256:0db04819ba7c59e422ac32a5a519ba2c19760ac73f46a30bf94018d10edb7ac7` (colima).
 No firmware, stock bytes, card images or raw renders are committed.
 
 ## Beside FM Synth (31 October 2026)
 
-FM Synth 0.1.4 bundles this module's author source byte for byte (his `2fba0e5`, whose `quantizer/` equals `990eff8`'s) and declares `quantizer` in its `compatibility.conflicts`, as agreed with the owner on #555 (31 October 2026): both would patch the same sites, and a module may not hook into another module's code, rows, tables or files. This module's `conflicts` stays empty, as on main (the module whose change makes the pair collide flags it, docs/module-guides/README.md 'Who flags'); `manifest.py`'s note that FM Synth declares a conflict with this module is true. This module alone is unchanged by any of it.
+FM Synth 0.1.4 bundles this module's author source byte for byte (his `bb784c4`, whose `quantizer/` equals `8f6f564`'s) and declares `quantizer` in its `compatibility.conflicts`, as agreed with the owner on #555 (31 October 2026): both would patch the same sites, and a module may not hook into another module's code, rows, tables or files. This module's `conflicts` stays empty, as on main (the module whose change makes the pair collide flags it, docs/module-guides/README.md 'Who flags'); `manifest.py`'s note that FM Synth declares a conflict with this module is true. This module alone is unchanged by any of it.
 
 ## On current main (31 October 2026)
 
