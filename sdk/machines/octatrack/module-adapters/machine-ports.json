@@ -224,7 +224,7 @@
   },
   "synth": {
    "sources": {
-    "sdk/octabam/modules/synth/manifest.py": "8702cbcd8701a197225d835161e412270d6b5a8325b526ed25995e88c74cb4ac",
+    "sdk/octabam/modules/synth/manifest.py": "bfd2cd03df1ce5397d2daa8d1977eacfc6c9b119ca9a79fdb472a6b98a3a4fe5",
     "sdk/octabam/modules/synth/port.s": "0b88bc18a6ec5bc9f150558dc88c89f89e8e142d2d7175a0183bb861f4134b86",
     "sdk/octabam/modules/synth/upstream/quantizer/core.s": "655bf8cb893ecbe8ec167633322491ae89fdf498c818e172ad6ba34c3fc992c8",
     "sdk/octabam/modules/synth/upstream/quantizer/keys.s": "e2ffdbfae34b0828794a4eb4cc229e3efcaed25dc953bf7c05c13f6e37f65587",

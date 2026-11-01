@@ -1,9 +1,9 @@
 """FM SYNTH: Tim Hastie's FM engine, machine list and bundled scale quantizer (octatrick 2.21).
 
-`upstream/synth` and `upstream/quantizer` are the author's files at 2fba0e5 (3531b8e + poly.s: an FM SYNTH track's level is the engine's, its slot's GAIN attribute ignored; 3531b8e = be2810f + poly.s: an FM SYNTH track whose FOLLOW is OFF reads the scale as OFF), byte for byte: release
+`upstream/synth` and `upstream/quantizer` are the author's files at bb784c4 (bb784c413d86cc6ef2a895f7291af46cb851065f, released as part of Octatrick 2.22 on top of v2.21 9e4d34a; 342c533 + poly.s: an FM SYNTH track's level is the engine's, its slot's GAIN attribute ignored; 342c533 = 4d25490 + poly.s: an FM SYNTH track whose FOLLOW is OFF reads the scale as OFF), byte for byte: release
 2.21's engine and machine list, his quantizer with the per-track switches as the SEQUENCER rows TRACK
-and FOLLOW (990eff8, the source Scale Quantizer 0.1.4 carries), and poly.s exporting the engine state
-the quantizer's panel transaction reads in a remix without SY DRUM (be2810f; no code byte changes).
+and FOLLOW (8f6f564, the source Scale Quantizer 0.1.4 carries), and poly.s exporting the engine state
+the quantizer's panel transaction reads in a remix without SY DRUM (4d25490; no code byte changes).
 This wrapper adds only what the Modwerk build needs:
 
 - Stock guards in Modwerk's form: `stock_guard(address, length, sha256)` for every site the
@@ -43,7 +43,7 @@ This wrapper adds only what the Modwerk build needs:
   builds never call them. Its admit_track, assign and ui_tick run the author's own guard and
   machine change (machine.s ml_guard_p, ml_toast, fm_choose, ml_reset), so those three local
   routines are exported from the fmmachine unit's object (Linked.exports; no code byte changes).
-- `sy_state`: the bundled quantizer's panel transaction reads it; since be2810f the author's poly.s
+- `sy_state`: the bundled quantizer's panel transaction reads it; since 4d25490 the author's poly.s
   exports it whenever that transaction is assembled, so this wrapper no longer does.
 
 Since 2.21 the author's own manifest links the PLAYBACK page as a DRAM unit (page.s, compared
@@ -405,7 +405,7 @@ _PORT = Linked('fmport', _REL('port.s'), cpu='5475', dram=True)
 # leaves fm_main_commit to the base's ot_machines commit, which calls admit_track and assign):
 # the selection guard for any Part, its popup, the row choice and the machine change's init.
 # (The bundled quantizer's panel transaction reads the engine's sy_state, which the author's poly.s
-# exports itself since be2810f.)
+# exports itself since 4d25490.)
 _EXPORTS = {'fmmachine': ('fm_choose', 'ml_guard_p', 'ml_toast')}
 for _label in _EXPORTS:
     if sum(u.label == _label for u in _SY.linked) != 1:

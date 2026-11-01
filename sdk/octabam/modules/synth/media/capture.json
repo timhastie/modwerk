@@ -189,6 +189,6 @@
     "keepStockFx2": true,
     "staticStock": true
   },
-  "releaseProvenance": "Captures from the native card build of FM Synth 0.1.4 on the author's 2fba0e5 (the slot GAIN fix: an FM SYNTH track's level is the engine's) with the LFO SETUP names hook po_lfdname in the card build, on Modwerk main 00ecaf52 (Modwerk exporter, Synth alone, stock FX2 kept; MAIN cd7c72c8, TEST9), taken on 31 October 2026 with the plan of the 2.21 cut: all six are byte-identical to the captures from MAIN d2d250a6 (TEST8), MAIN 265308da (TEST7), MAIN c5039cff (be2810f) and MAIN 8d89d596 (v2.21). The native source these captures are bound to (sourceSha256) is this version's. Software captures confer no hardware verification.",
-  "sourceSha256": "ee245bbabdd42cabc46b00a8cd1b51b1e111c8ee8fb6c09fd0844327731ffffc"
+  "releaseProvenance": "Captures from the native card build of FM Synth 0.1.4 on the author's bb784c4 (released with Octatrick 2.22; the slot GAIN fix: an FM SYNTH track's level is the engine's) with the LFO SETUP names hook po_lfdname in the card build, on Modwerk main 00ecaf52 (Modwerk exporter, Synth alone, stock FX2 kept; MAIN cd7c72c8, TEST9), taken on 31 October 2026 with the plan of the 2.21 cut: all six are byte-identical to the captures from MAIN d2d250a6 (TEST8), MAIN 265308da (TEST7), MAIN c5039cff (4d25490) and MAIN 8d89d596 (v2.21). The native source these captures are bound to (sourceSha256) is this version's. Software captures confer no hardware verification.",
+  "sourceSha256": "79dbb62826b9afc7cb4852273af2af7ad7e4f058e5770132bb6aad4e53bfc3df"
 }
