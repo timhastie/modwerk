@@ -1,6 +1,6 @@
 # Tuner
 
-Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged for Modwerk from his v2.21 source plus his DC-removal fix (commit `03202050`); emulator-qualified, hardware pending.
+Version 0.1.0-experimental. Tim Hastie’s Tuner, packaged for Modwerk from his v2.21 source plus his DC-removal fix (commit `03202050`); emulator-qualified, and reported working on the author’s MKI (1 November 2026).
 
 ## Overview
 
@@ -8,7 +8,7 @@ Hold **UP first, then press TEMPO** to open a pitch readout for the selected aud
 
 **Card builds only: the base has no removal refusal for ordinary modules.** USB support is optional future work; the earlier admission proposal is retained in [evidence/usb-admission.md](evidence/usb-admission.md), not implemented or required for this card-only draft.
 
-On the emulator (30 October 2026) the card build of this source reads a tone on the input live: A4 +0c 440.0Hz, E2 +0c 82.4Hz and A4 +19c 445.0Hz, and a track whose effects leave a DC offset larger than its swing now reads too; cost and memory are measured under an eight-track load. Hardware qualification is pending. [TESTING.md](TESTING.md) has the numbers and the earlier records.
+On the emulator (30 October 2026) the card build of this source reads a tone on the input live: A4 +0c 440.0Hz, E2 +0c 82.4Hz and A4 +19c 445.0Hz, and a track whose effects leave a DC offset larger than its swing now reads too; cost and memory are measured under an eight-track load. On hardware, the author reports the same card (TEST3, byte-identical) working on his MKI on 1 November 2026, every item of its test sheet; readings were not recorded. [TESTING.md](TESTING.md) has the numbers and the earlier records.
 
 ## Controls
 
@@ -92,7 +92,7 @@ Emulator, 30 October 2026, card build of this source (`OCTATRACK_MODWERK_TUNER_T
 | Per block, amortised worst case | 7,018 of 9,577 cycles (instruction-count model, 264 MHz) |
 | Memory | 33,130 B of its own (2,894 code, 19,500 data, 8,194 link gap, 2,288 appended loader and unit, 18 hook sites, 236 stack) plus the DRAM platform reserve |
 
-Not yet measured on hardware. The earlier native build, declaration check and UI walk records stay in [TESTING.md](TESTING.md).
+On hardware: the author flashed the byte-identical TEST3 card on his MKI on 1 November 2026 and reported every item of its test sheet passing (reported evidence; readings and play time not recorded; no hardware timing). The earlier native build, declaration check and UI walk records stay in [TESTING.md](TESTING.md).
 
 ## Authorship and licences
 

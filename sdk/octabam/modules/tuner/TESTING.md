@@ -1,5 +1,15 @@
 # Tuner integration evidence
 
+## Hardware report — 1 November 2026 (TEST3, the author's MKI)
+
+Tim Hastie flashed `OCTATRACK_MODWERK_TUNER_TEST3.bin` (448,084 bytes, sha256 `d4452bbb41d859deb71a159afa085e8b20c9f034818013fb531193a260d416f5`, MAIN OS bus `da2375cf…`, the unit showing OCTAMOD79) on his **Octatrack MKI on 1 November 2026** and reported the TEST3 sheet passing; his words, one line for three sheets: "tuner ... pass". TEST3 is byte for byte TEST2, the card the 30 October emulator qualification below measured, rebuilt at the head rebased onto main `00ecaf52` (three builds, every output file identical). **Reported by the author**, not independently repeated here. With this report the staged qualification object moved from `qualification.example.json` into `tests.qualification` (its `hardware` block is this report; `sourceSha256` is `moduleNativeSourceSha256` of the folder at the recording commit) and `tests.hardwareStatus` is `reported`.
+
+- tested on: 2026-11-01
+- tester: timhastie
+- model: MKI
+- summary: the sheet's checks, all reported passing: a pitched source on the selected track (a THRU track on input A, or a pitched sample); UP held first then TEMPO opens the TUNER window with the track number, TEMPO first opens the stock tempo window; a steady note reads its note, octave, cents and frequency with the needle centred in tune; a sharp note moves the needle right with +cents and a flat note left with -cents, the reading updating about seven times a second and still on a steady note; when the signal stops the last reading stays with HOLD in the header and HOLD goes away on playing; the DC case (EQ and CHORUS on a track playing a sustained pitched sample) reads a note instead of HOLD; the header follows the track keys; TEMPO, YES, NO or UP + TEMPO close the window, and TEMPO alone and FUNC + TEMPO keep their stock behaviour; no clicks or dropouts while it is open.
+- limitations: the readings seen, what was fed in, the DC case's figures and the play time were not recorded; the report is the sheet's pass line. A functional check of the sheet's items, not a load or stress run; no hardware timing, stack canary or audio measurement (the cycle figures are the emulator's instruction-count model). The MKI only. The branch was rebased onto main `4ce910bb` after the report (1 November 2026); none of the card build's inputs changed between `00ecaf52` and `4ce910bb` (the module folder, `sdk/octabam/{platform,tools,dsp,licenses}`, the exporter, the module adapters, the package script and `build_core.py`: an empty diff), so the image is not rebuilt and the report stands for the head.
+
 ## Identity and qualification boundary
 
 - Production proposal: `tuner`, `0.1.0-experimental`, under `sdk/octabam/modules/tuner` on `tuner-0.1-promotion`.
@@ -135,7 +145,7 @@ Both branches remain based on main `4e2226f1be6347f74d51a0d5b99ee572ba3a82bb`, n
 
 ## Emulator qualification — 29 October 2026
 
-**Emulator evidence for the qualification record; hardware untested.** Numbers and identities: [qualification-emulator-2026-10-29.json](evidence/qualification-emulator-2026-10-29.json). The record itself waits in [qualification.example.json](qualification.example.json) (complete except `hardware`) until Tim's report on the exact card image exists; `tests.qualification` is not set and `tests.hardwareStatus` stays `untested`.
+**Emulator evidence for the qualification record (the previous image).** Numbers and identities: [qualification-emulator-2026-10-29.json](evidence/qualification-emulator-2026-10-29.json). The record waited for the author's report on the exact card image; it came on 1 November 2026 for the 30 October rebuild (top of this file), and `tests.qualification` now carries that build's numbers.
 
 ### What ran
 
@@ -217,7 +227,7 @@ Stack: `tu_frame` uses registers only (0 B; it runs on whatever stack the frame 
 
 ## DC removal and re-qualification — 30 October 2026
 
-**Emulator evidence for the rebuilt card; hardware untested.** Numbers and identities: [qualification-emulator-2026-10-30.json](evidence/qualification-emulator-2026-10-30.json). The 29 October section above stays as the record of the previous image; [qualification.example.json](qualification.example.json) now carries this build's numbers.
+**Emulator evidence for the rebuilt card; the author's MKI report of 1 November 2026 (top of this file) is this card's hardware report.** Numbers and identities: [qualification-emulator-2026-10-30.json](evidence/qualification-emulator-2026-10-30.json). The 29 October section above stays as the record of the previous image; `tests.qualification` in `octamod.module.json` carries this build's numbers with that report.
 
 ### The change
 
@@ -287,6 +297,6 @@ Stack, re-measured with a write trace on the UI stack (1 s, six analyses and dra
 
 ### Limits
 
-- Emulator only; no hardware timing, audio or canary. One session for the readings and costs, one for the 82.41 Hz reading at the 29 October time, one control session on the previous image.
+- The measurements are the emulator's; no hardware timing, audio or canary. One session for the readings and costs, one for the 82.41 Hz reading at the 29 October time, one control session on the previous image. The hardware report for this card is the author's functional one of 1 November 2026 (top of this file).
 - The fix commit is unpublished: `source.revision` names it, and the package must be repinned to Tim's published tag before submission.
 - The browser package identities under `src/engine/assets/` (source-tree hash) were not regenerated for this source change.
