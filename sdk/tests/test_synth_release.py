@@ -48,7 +48,7 @@ class SynthRelease(unittest.TestCase):
         doc = json.loads((FOLDER/'octamod.module.json').read_text())
         self.assertEqual(doc['version'], RECORD['moduleVersion'])
         self.assertNotIn('build', doc)
-        self.assertEqual(doc['tests']['hardwareStatus'], 'untested')  # TEST9 (the LFO SETUP names hook back, the slot GAIN fix) is not yet reported; the TEST7 report of 30 Oct 2026 is kept in TESTING.md
+        self.assertEqual(doc['tests']['hardwareStatus'], 'reported')  # TEST9 (the LFO SETUP names hook back, the slot GAIN fix): the author's MKI report of 1 Nov 2026 (TESTING.md); the TEST7 report of 30 Oct 2026 is kept there
         self.assertNotIn('qualification', doc['tests'])
         self.assertTrue((APP/'sdk/octabam/modules/synth').exists())
         for name in ['sdk/catalog.json','src/catalog/module-documents.json']:

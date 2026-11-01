@@ -61,7 +61,7 @@ This version installs with a card build. Its USB package for the Octatrack base 
 
 ## Tests and measurements
 
-See [TESTING.md](TESTING.md). The author reports the TEST7 image (this build before the LFO SETUP names hook came back and before the slot GAIN fix) working on his MKI on 30 October 2026, every item of its test sheet; this build’s image (TEST9) is not yet reported. The TEST4 report of 26 October 2026 was for the 2.20 cut.
+See [TESTING.md](TESTING.md). The author reports this build’s image (TEST9) working on his MKI on 1 November 2026, its test sheet passing (the optional step not confirmed; TESTING.md), and the TEST7 image (this build before the LFO SETUP names hook came back and before the slot GAIN fix) on 30 October 2026. The TEST4 report of 26 October 2026 was for the 2.20 cut. Reported evidence, not a measurement: play time and readings were not recorded.
 
 ## Authorship and licences
 

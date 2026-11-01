@@ -205,7 +205,7 @@
       "Cannot combine with Analog BD, whose native hooks overlap this module's, or with Scale Quantizer: both carry the same quantizer source and would patch the same sites, and a module may not hook into another module's code, rows, tables or files (the owner, #555, 31 October 2026).",
       "About 12 dB louder than 0.1.2 at identical mixer settings (6 dB of headroom instead of 18); AMP VOL 0 is the reference and VOL above it can clip a full-scale voice.",
       "Card builds only: the Octatrack base's USB package for this version cannot be built yet (DRAM regions and generated includes; TESTING.md).",
-      "Emulator-checked (boot, the machine list, chords at VOIC 4 with a scale, the first chord after power-on, SEQUENCER rows, LFO SETUP names, the level of an FM SYNTH track unchanged by a sample loaded into its slot). The author reports the TEST7 image (this cut before the LFO SETUP names hook came back and before the slot GAIN fix) working on his MKI (30 October 2026; TESTING.md); this cut's image (TEST9) is not yet reported. External MIDI traffic, maximum loads and hardware timing are not measured."
+      "Emulator-checked (boot, the machine list, chords at VOIC 4 with a scale, the first chord after power-on, SEQUENCER rows, LFO SETUP names, the level of an FM SYNTH track unchanged by a sample loaded into its slot). The author reports this cut's image (TEST9) working on his MKI on 1 November 2026, its test sheet passing (the optional step not confirmed; TESTING.md), and the TEST7 image (this cut before the LFO SETUP names hook came back and before the slot GAIN fix) on 30 October 2026 (TESTING.md). Play time and readings were not recorded; external MIDI traffic, maximum loads and hardware timing are not measured."
     ]
   },
   "resources": {
@@ -252,13 +252,14 @@
   },
   "tests": {
     "report": "TESTING.md",
-    "summary": "Experimental 0.1.4 (the author's octatrick 2.21): the native card build boots and plays in the emulator; chords on the chromatic keys at VOIC 4 with a scale keep their notes on every repeat, the first chord after power-on in a saved project is a chord, and an FM SYNTH track's level is unchanged by a sample loaded into its slot. The author reports the TEST7 image (MAIN 265308da..., this cut before the LFO SETUP names hook came back and before the slot GAIN fix) working on his MKI on 30 October 2026, every item of its test sheet; this cut's image (TEST9, MAIN cd7c72c8...) is not yet reported (TESTING.md); the TEST4 report (26 October 2026) was for the 2.20 cut. See TESTING.md.",
-    "hardwareStatus": "untested",
+    "summary": "Experimental 0.1.4 (the author's octatrick 2.21): the native card build boots and plays in the emulator; chords on the chromatic keys at VOIC 4 with a scale keep their notes on every repeat, the first chord after power-on in a saved project is a chord, and an FM SYNTH track's level is unchanged by a sample loaded into its slot. The author reports this cut's image (TEST9, upgrade file 296f9c0e..., MAIN cd7c72c8...) working on his MKI on 1 November 2026, its test sheet passing (the optional step not confirmed; TESTING.md), and the TEST7 image (MAIN 265308da..., this cut before the LFO SETUP names hook came back and before the slot GAIN fix) on 30 October 2026 (TESTING.md); the TEST4 report (26 October 2026) was for the 2.20 cut. See TESTING.md.",
+    "hardwareStatus": "reported",
     "evidenceRevision": "73490ef77f36bf523bc28f2b385d62e331ec7c5c",
     "gates": [
       "verify.py",
       "verify-audio.py",
-      "verify-regressions.py"
+      "verify-regressions.py",
+      "Hardware report for this cut's image (TEST9, upgrade file 296f9c0e..., 483,768 B): timhastie, MKI, 2026-11-01 (reported; TESTING.md)"
     ],
     "documentation": {
       "tutorial": {
