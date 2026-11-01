@@ -70,8 +70,9 @@ guarded patches. The base's SEQUENCER table shows stock's three rows and up to
 eight contributed rows; this module contributes five (SCALE, ROOT, GLIDE,
 TRACK, FOLLOW), and card builds show the same five.
 
-The author reports this version's image working on his MKI (30 October 2026,
-TESTING.md), save and power-cycle included. Audio measurements, chip timing and
+The author reports this version's image working on his MKI (30 October 2026 and,
+rebuilt byte-identical on current main, 1 November 2026; TESTING.md), save and
+power-cycle included. Audio measurements, chip timing and
 complete memory bounds remain unmeasured on this version. See
 [TESTING.md](TESTING.md) for exact evidence and limits.
 
@@ -79,8 +80,8 @@ complete memory bounds remain unmeasured on this version. See
 
 [TESTING.md](TESTING.md) records the commands, the source revision and every
 result of this version: the native card build, the USB package, the compat and
-doctor runs, the emulator smoke and the author's MKI report of 30 October 2026
-(reported evidence, not a measurement). No chip-cycle measurements are claimed.
+doctor runs, the emulator smoke and the author's MKI reports of 30 October and
+1 November 2026 (reported evidence, not a measurement). No chip-cycle measurements are claimed.
 
 ## Authorship and licences
 

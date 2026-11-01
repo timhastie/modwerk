@@ -13,7 +13,17 @@ FM Synth 0.1.4 bundles this module's author source byte for byte (his `2fba0e5`,
 
 ## On current main (31 October 2026)
 
-The branch was rebased onto main `00ecaf52` (#1029, #1094 and #1095 since `886098f5`; the quantizer recipe's pin of `sdk/runtime/loader/build.py` follows main's). The card image rebuilt at the rebased head (TEST3) is byte-identical to TEST2: update file `ec4b811fe6620f06eb6ba9fd23c18e996830f8fea255cf6552fdcc4d089ff808` (449,848 B), MAIN `22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8`, container `fcf9160d…`; the author's MKI report of 30 October 2026 (below) therefore stands for this image.
+The branch was rebased onto main `00ecaf52` (#1029, #1094 and #1095 since `886098f5`; the quantizer recipe's pin of `sdk/runtime/loader/build.py` follows main's). The card image rebuilt at the rebased head (TEST3) is byte-identical to TEST2: update file `ec4b811fe6620f06eb6ba9fd23c18e996830f8fea255cf6552fdcc4d089ff808` (449,848 B), MAIN `22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8`, container `fcf9160d…`; the author's MKI report of 30 October 2026 (below) therefore stands for this image, and on 1 November 2026 he ran the TEST3 sheet on the same bytes (next section). The branch was then rebased onto main `4ce910bb` (1 November 2026); none of the card build's inputs changed between `00ecaf52` and `4ce910bb` (the module folder, `sdk/octabam/{platform,tools,dsp,licenses}`, the exporter, the module adapters, the package script and `build_core.py`: an empty diff), so the image is not rebuilt.
+
+## Author-reported hardware — 1 November 2026 (TEST3)
+
+Tim Hastie reports the Scale Quantizer 0.1.4-experimental TEST3 sheet passing on his **Octatrack MKI on 1 November 2026**; his words, one line for three sheets: "scale quantizer ... pass". TEST3 is the image above, byte for byte TEST2 (update file `ec4b811fe6620f06eb6ba9fd23c18e996830f8fea255cf6552fdcc4d089ff808`, 449,848 bytes, MAIN `22541cd628f8064cb6d12e81a0481b17ffad9e737fd968454ae6eb419bb735e8`), rebuilt on main `00ecaf52`. **Reported by the author**, not independently repeated here. `octamod.module.json` keeps `tests.hardwareStatus` `reported` and adds a `tests.gates` line; no `tests.qualification` object, for the reason given under the 30 October report.
+
+- tested on: 2026-11-01
+- tester: timhastie
+- model: MKI
+- summary: the TEST3 sheet's checks, all reported passing: SEQUENCER has eight rows ending in TRACK and FOLLOW and DOWN past FOLLOW does nothing; TRACK AUDIO 8 with FOLLOW OFF, then TRACK to MIDI 1 and back, reads ON and OFF as it turns without leaving the page, and TRACK stops at AUDIO 1 and MIDI 8; with the same pitched sample on T1 and T8 at PTCH +1 and trigs on 1, 5, 9 and 13, C MAJOR with AUDIO 8 FOLLOW OFF plays T1 at the root and T8 a semitone higher, and AUDIO 8 FOLLOW ON plays both the same; after SAVE and a power-cycle SCALE reads MAJOR, TRACK is back at AUDIO 1, AUDIO 8 still reads FOLLOW OFF and T8 still plays +1.
+- limitations: play time and readings were not recorded; the report is the sheet's pass line. Whether the optional step (a 2.21-saved project with SCALE rows OFF) was run is not stated. A functional check of the sheet's items, not a load or stress qualification; no cycle or memory figure is measured.
 
 ## This cut: 2.21 + TRACK / FOLLOW (29 October 2026)
 
@@ -364,8 +374,9 @@ so nothing meets there today.
 
 ## Open
 
-- The 30 October 2026 MKI report of TEST2 is the author's own (above): not independently
-  repeated; play time and MIDI gear not recorded.
+- The 30 October 2026 MKI report of TEST2 and the 1 November 2026 MKI report of TEST3 (the
+  same bytes) are the author's own (above): not independently repeated; play time, readings
+  and MIDI gear not recorded.
 - Owner: the approval record for 0.1.4 and POLY8's composition signature; then
   `module:verify`, `modules:pairs -- --write` and `modules:generate`.
 - `src/engine/assets/analog-bd-composition-proofs.json` is not refreshed (see the checks

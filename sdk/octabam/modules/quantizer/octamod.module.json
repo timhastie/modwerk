@@ -241,7 +241,7 @@
       "SCALE, ROOT and GLIDE are shared project settings; TRACK and FOLLOW switch single tracks off.",
       "The module adds five SEQUENCER rows (SCALE, ROOT, GLIDE, TRACK, FOLLOW), within the eight the Modwerk base gives over USB; card builds show the same five.",
       "FM Synth carries its own copy of this quantizer (the same source) and declares a conflict with this module: both would patch the same sites, and a module may not hook into another module's code, rows, tables or files (the owner, #555, 31 October 2026). Synth polyphony and synth-specific tuning and glide need FM Synth.",
-      "Reported working by the author on his MKI (TEST2, 30 October 2026; TESTING.md): the rows, FOLLOW acting at play, save and power-cycle, a 2.21-saved project. Audio measurements, chip timing and complete memory bounds remain unmeasured."
+      "Reported working by the author on his MKI twice, on the same bytes: TEST2 on 30 October 2026 and TEST3 (the module rebuilt on current main, byte-identical) on 1 November 2026 (TESTING.md): the rows, FOLLOW acting at play, save and power-cycle; the optional 2.21-saved-project step not stated. Play time and readings were not recorded. Audio measurements, chip timing and complete memory bounds remain unmeasured."
     ]
   },
   "resources": {
@@ -288,11 +288,12 @@
   },
   "tests": {
     "report": "TESTING.md",
-    "summary": "0.1.4 imports Tim Hastie's 2.21 quantizer with the TRACK / FOLLOW rows byte for byte. Card-build and USB packages built on this Mac from the user's own 1.40C; the emulator gates are recorded in TESTING.md. The author reports this cut's image (TEST2, MAIN 22541cd6...) working on his MKI on 30 October 2026, every item of its test sheet (TESTING.md); his TEST1 report (26 October 2026) covered the v2.20 cut. Chip timing and complete memory bounds remain unmeasured.",
+    "summary": "0.1.4 imports Tim Hastie's 2.21 quantizer with the TRACK / FOLLOW rows byte for byte. Card-build and USB packages built on this Mac from the user's own 1.40C; the emulator gates are recorded in TESTING.md. The author reports this cut's image working on his MKI twice, its test sheet passing each time (the optional step not stated; TESTING.md): TEST2 (MAIN 22541cd6..., upgrade file ec4b811f...) on 30 October 2026 and TEST3, the same bytes rebuilt on current main, on 1 November 2026 (TESTING.md); his TEST1 report (26 October 2026) covered the v2.20 cut. Chip timing and complete memory bounds remain unmeasured.",
     "hardwareStatus": "reported",
     "evidenceRevision": "363861e31ee963c478fab2b190a0fabe1d7ce37b",
     "gates": [
-      "Hardware report for this source and image: timhastie, MKI, 2026-10-30 (reported; TESTING.md)"
+      "Hardware report for this source and image: timhastie, MKI, 2026-10-30 (reported; TESTING.md)",
+      "Hardware report for this source and image, repeated on the byte-identical TEST3 rebuild (upgrade file ec4b811f..., 449,848 B): timhastie, MKI, 2026-11-01 (reported; TESTING.md)"
     ],
     "documentation": {
       "tutorial": {
